@@ -46,16 +46,6 @@ const getTagData = (results, type, resultSource) => {
   return tagData;
 }
 
-<<<<<<< HEAD
-export const filterSearchResults = (searchResults, searchInput) => {
-  const results = [];
-
-  for (let key in searchResults) {
-    const result = searchResults[key];
-
-    const resultData = {
-      // priority: 3, 
-=======
 export const filterSearchResults = (searchResults, searchInput, searchResultType) => {
   const results = [];
   const searchInputBase = searchInput.toLowerCase();
@@ -67,26 +57,17 @@ export const filterSearchResults = (searchResults, searchInput, searchResultType
     const resultData = {
       // priority: 3, 
       type: searchResultType,
->>>>>>> 20c3251fd1644a17fc2e585067deac6b449c8c28
       source: result, 
       tags: [] 
     };
 
     // If search input matches the result string from the beginning
-<<<<<<< HEAD
-    if (result.substring(0, searchInput.length) === searchInput) {
-=======
     if (result.substring(0, searchInput.length).toLowerCase() === searchInputBase) {
->>>>>>> 20c3251fd1644a17fc2e585067deac6b449c8c28
       resultData.tags = [
         { 
           matched: true, 
           type: Enum.SearchMatchType.FirstMatch, 
-<<<<<<< HEAD
-          source: searchInput,
-=======
           source: result.substring(0, searchInput.length),
->>>>>>> 20c3251fd1644a17fc2e585067deac6b449c8c28
           key: "0",
         },
         { 
@@ -105,11 +86,7 @@ export const filterSearchResults = (searchResults, searchInput, searchResultType
 
     // If the search input is a word/phrase (or several) in the result string
     resultData.tags = getTagData(
-<<<<<<< HEAD
-      result.matchAll(new RegExp(`\\b${escapeRegex(searchInput)}\\b`, 'g')),
-=======
       resultBase.matchAll(new RegExp(`\\b${escapeRegex(searchInputBase)}\\b`, 'g')),
->>>>>>> 20c3251fd1644a17fc2e585067deac6b449c8c28
       Enum.SearchMatchType.WordMatch,
       result
     );
@@ -123,11 +100,7 @@ export const filterSearchResults = (searchResults, searchInput, searchResultType
 
     // If the result string matches ANY occurrence of the search input
     resultData.tags = getTagData(
-<<<<<<< HEAD
-      result.matchAll(new RegExp(escapeRegex(searchInput), 'g')),
-=======
       resultBase.matchAll(new RegExp(escapeRegex(searchInputBase), 'g')),
->>>>>>> 20c3251fd1644a17fc2e585067deac6b449c8c28
       Enum.SearchMatchType.AnyMatch,
       result
     );
