@@ -22,6 +22,8 @@ const mergeClass = (base, imported, state={}) => {
       // otherwise merge the final className in the current directory
       } else if (key === "self") {
         baseDir[key] = twMerge(base_val, imported_val);
+      } else {
+        baseDir[key] = imported_val;
       }
     }
   }

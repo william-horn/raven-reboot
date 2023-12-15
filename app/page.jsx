@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Text from '@/components/Typography/Text'
-import Button from '@/components/Buttons/Button'
 
 /*
   This is the home page component, meaning it should remain a server-side component. Therefore,
@@ -8,13 +7,29 @@ import Button from '@/components/Buttons/Button'
   between the user and the button, and nest the button in said client component.
 */
 // import Button from '@/components/Buttons/Button'
-import ClientComponent from '@/components/ClientComponent'
+// import ClientComponent from '@/components/ClientComponent'
+import SearchBar from '@/components/Searchbar'
+import emptyFunc from '@/util/emptyFunc'
 
 export default function Home() {
-
   return (
-    <main>
-      <ClientComponent/>
+    <main className="h-screen">
+      <div className="w-[30%] mx-auto">
+        <SearchBar 
+        // displayHistorySize={100}
+        // displayResultsSize={100}
+        // historyResultIcon
+        // onHistoryResultIconClick={emptyFunc}
+        className={{
+          historyList: {
+            inner: {
+              resultButton: {},
+              historyResultButton: {}
+            }
+          }
+        }}
+        />
+      </div>
     </main>
   )
 }
