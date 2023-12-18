@@ -10,12 +10,13 @@ import Text from '@/components/Typography/Text'
 // import ClientComponent from '@/components/ClientComponent'
 import SearchBar from '@/components/Searchbar'
 import emptyFunc from '@/util/emptyFunc'
+import Heading from '@/components/Typography/Heading'
 
 export default function Home() {
   return (
     <main className="h-screen">
       <div className="w-[30%] mx-auto">
-        
+        <Heading>Analytics</Heading>
       </div>
     </main>
   )

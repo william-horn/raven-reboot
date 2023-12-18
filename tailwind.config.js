@@ -8,7 +8,9 @@ module.exports = {
   theme: {
     extend: {
       backgroundColor: {
-        "page": "var(--bg-color-page)",
+        "logo": "var(--color-logo-primary)",
+        "primary": "var(--bg-color-primary)",
+        "secondary": "var(--bg-color-secondary)",
         "button-primary": "var(--button-color-primary)",
         "button-hover-primary": "var(--button-hover-color-primary)",
         "search-bar": "var(--bg-color-search-bar)",
@@ -17,10 +19,17 @@ module.exports = {
         "search-bar-result-hover": "var(--bg-color-hover-search-bar-result)",
       },
 
+      fontFamily: {
+        "logo": "var(--logo-font)",
+        "logo-2": "var(--logo-font-2)",
+      },
+
       textColor: {
         "primary": "var(--text-color-primary)",
         "secondary": "var(--text-color-secondary)",
         "search-bar-result": "var(--text-color-search-bar-result)",
+        "logo-secondary": "var(--color-logo-secondary)",
+        "logo": "var(--color-logo-primary)",
         "search-bar-input": "var(--text-color-search-bar-input)",
         "search-history-result": "var(--text-color-search-history-result)",
         "muted": "var(--text-color-muted)",

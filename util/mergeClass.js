@@ -17,14 +17,15 @@ const mergeClass = (base, imported, state={}) => {
 
       // otherwise if prop is an object inside base and imported class, then recursively iterate over the imported prop object
       } else if (typeof imported_val === "object" && typeof base_val === "object") {
-        recursiveMerge(base_val, imported_val);
+        baseDir[key] = {...base_val};
+        recursiveMerge(baseDir[key], imported_val);
 
       // otherwise merge the final className in the current directory
       } else if (key === "self") {
         baseDir[key] = twMerge(base_val, imported_val);
-
-      // copy over all custom non-className entries
+        
       } else {
+
         baseDir[key] = imported_val;
       }
     }
@@ -33,12 +34,15 @@ const mergeClass = (base, imported, state={}) => {
   // merge base styles with imported styles
   recursiveMerge(final, imported);
 
-  // override styles based on state
-  if (state._isHovered) {
-    recursiveMerge(final, final.__hovered);
-  }
+  if (state.__dropdownSelected) {
+    recursiveMerge(final, final.__dropdownSelected);
+  } 
 
-  if (state._isSelected) {
+  if (state.__groupSelected) {
+    recursiveMerge(final, final.__groupSelected);
+  }
+  
+  if (state.__selected) {
     recursiveMerge(final, final.__selected);
   }
 

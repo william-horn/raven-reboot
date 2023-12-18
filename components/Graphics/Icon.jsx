@@ -5,6 +5,7 @@ const Icon = ({
   src, 
   alt, 
   utility=false,
+  fillWhenEmpty=false,
   className: importedClassName={},
   // preset,
   // ...rest
@@ -41,9 +42,10 @@ const Icon = ({
   // );
 
   let className = {
-    self: "relative overflow-hidden inline-block align-middle min-w-[1.25rem] min-h-[1.25rem] w-5 h-5",
+    self: "relative overflow-hidden inline-block align-middle min-w-[1.25rem] min-h-[1.25rem] w-5 h-5 select-none",
 
     image: {
+      // fillWhenEmpty: false,
       self: "invert"
     }
   };
@@ -53,24 +55,37 @@ const Icon = ({
     importedClassName
   );
 
-  return (
-    src
-      ? <span 
-          className={className.self}>
-            <Image
+  src = typeof className.src !== "undefined" ? className.src : src;
+
+  if (src === "fill") {
+    fillWhenEmpty = true;
+    src = false;
+  }
+
+  const renderIcon = (src) => (
+    <span 
+    className={className.self}>
+      {
+        src
+          ? <Image
             className={className.image.self}
             fill
-            src={className.src || src}
+            src={src}
             sizes={
               utility
                 ? "(min-width: 1024px) 192px, (min-width: 640px) 96px, 48px"
                 : "(min-width: 1024px) 512px, (min-width: 640px) 256px, 128px"
             }
-            alt={alt || "icon alongside text"}
+            alt={alt || "icon"}
             />
-          </span>
-        : <></>
-  )
+          : <></>
+      }
+    </span>
+  );
+
+  return (
+    fillWhenEmpty ? renderIcon(src) : (src ? renderIcon(src) : <></>)
+  );
 }
 
 export default Icon

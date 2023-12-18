@@ -43,9 +43,15 @@
   }
 
   .theme-dark {
-    --color-logo: orange;
+    --logo-font: 'Titan One', sans-serif;
+    --logo-font-2: 'Paytone One', sans-serif;
 
-    --bg-color-page: #2a2a32;
+    --bg-color-primary: #2a2a32;
+    --bg-color-secondary: #1c1d25;
+
+    /* --color-logo-primary: #94b8c7; */
+    --color-logo-primary: #a7a4ab;
+    --color-logo-secondary: #f36161;
 
     --bg-color-search-bar: #404049;
     --bg-color-search-bar-list: #404049;
@@ -60,7 +66,7 @@
     --button-color-secondary: blue;
     --button-hover-color-primary: #505059;
 
-    --text-color-primary: white;
+    --text-color-primary: #d1d1d1;
     --text-color-secondary: orange;
     --text-color-muted: gray;
     --text-color-error: red;

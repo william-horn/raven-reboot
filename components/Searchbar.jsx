@@ -4,9 +4,8 @@
 import { twMerge } from "tailwind-merge";
 import Icon from './Graphics/Icon';
 import stringIsEmpty from '@/util/stringIsEmpty';
-import Button from './Buttons/Button';
 import removeExtraWhitespace from '@/util/removeExtraWhitespace';
-import { useLocalStorageRequest, useLocalStorageState } from '@/hooks/useLocalStorageRequest';
+import { useLocalStorageState } from '@/hooks/useLocalStorageRequest';
 import { filterSearchResults } from "@/util/filterSearchResults";
 import Enum from '../enum';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,7 +13,8 @@ import { useState, useRef, useEffect } from 'react';
 import mergeClass from '@/util/mergeClass';
 import emptyFunc from "@/util/emptyFunc";
 import Text from "./Typography/Text";
-import ImageButton from './Buttons/ImageButton';
+import { StatelessButton, StatefulButton } from "./Buttons/Buttons";
+import { StatefulImageButton, StatelessImageButton } from './Buttons/ImageButton';
 
 const SearchBar = ({
   className: importedClassName={},
@@ -194,7 +194,7 @@ const SearchBar = ({
       <div key={key} className="flex items-center">
         {
           resultData.type === Enum.SearchResultType.History.value
-            ? <ImageButton
+            ? <StatefulImageButton
               onClick={() => {
                 updateSearchHistory(prev => {
                   let finalResults = prev[historyDomain];
@@ -208,16 +208,16 @@ const SearchBar = ({
                 });
               }}
               className={className.historyList.inner.resultButton.iconButton}
-              hoverImage="/icons/trash_icon.svg"
+              srcHovered="/icons/trash_icon.svg"
               src="/icons/history_icon.svg"
               />
-            : <ImageButton
+            : <StatelessImageButton
               onClick={() => onSearchResultQuery(resultData.source)}
               className={className.historyList.inner.resultButton.iconButton}
               src="/icons/search_icon.svg"
               />
         }
-        <Button 
+        <StatelessButton 
         key={key}
         onClick={() => onSearchResultQuery(resultData.source)}
         className={
@@ -245,7 +245,7 @@ const SearchBar = ({
               }
             })
           }
-        </Button>
+        </StatelessButton>
       </div>
     );
   };
@@ -255,22 +255,29 @@ const SearchBar = ({
     // pull from search result arrays
     const historyLogs = (getSearchHistory(historyDomain) || []);
     const otherLogs = [
-      "testing",
-      "this is some test seed data",
-      "where do i find the nearest mall",
-      "malistare's boots of wissom",
-      "moolinda woo's robe of song",
-      "dragonspyre's cap of mourning",
-      "stormkeeper's staff",
-      "where do i find stats page?",
-      "is this a new website",
-      "who created this website?",
-      "can i hack on this game",
-      "where might i find the final boss?",
-      "boss fights",
-      "pack drops",
-      "minion drops",
-      "what minions drop aeon gear?"
+      "Able Ranger's Wayfinder (Level 110+)",
+      "Allfather's Gungnir (Level 130+)",
+      "Baron's Staff of Command",
+      "Blade of the Silent Knight (Level 10+)",
+      "Blazing Naginata (Level 100+)",
+      "Bonebreaker Rod of Cold",
+      "Celestian Neon Axe (Level 120+)",
+      "Cobbler Elf Hammer (Level 110+)",
+      "Crimson Pandamonium Jian (Any Level)",
+      "Darkwraith's Scythe of Penance (Level 40+)",
+      "Deathmetal Skull (Level 50+)",
+      "Desert Lodestar Staff (Level 30+)",
+      "Dragoon's Rapier (Level 30+)",
+      "Ebony Pandamonium Jian (Level 110+)",
+      "Ebony Pandamonium Jian (Level 70+)",
+      "Dragonbite Bow (Level 110+)",
+      "Eye of the Soothsayer (Level 90+)",
+      "Fire Serpent's Obsidian Fang (Level 70+)",
+      "Enchanter's New Horizon Wand",
+      "Engineer's Hexacorder",
+      "Evoker's Stalwart Stave",
+      "Frosty Stare Tiki Torch (Level 50+)",
+      "Glinting Dragon Lance (Level 60+)",
     ]; 
 
     // convert search result arrays to arrays of result data
@@ -326,12 +333,6 @@ const SearchBar = ({
     setSearchState(Enum.SearchState.Typing.value);
     setSearchInput(searchFieldRef.current.value);
   }
-
-  // if (searchState === Enum.SearchState.Focused.value) {
-  //   className.self = twMerge(className.self, "rounded-b-none");
-  // }
-
-  console.log("Search state: ", searchState);
 
   return (
     <div
