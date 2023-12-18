@@ -27,7 +27,7 @@ export default function Home() {
             Raven is a modern app for Wizard101 players, which is designed to make technical information about 
             the game more accessible. We primarily focus on calculating drop rate percentages for mobs, packs, 
             etc, but anything in the game that is deducible we try to provide data for. We also have areas where 
-            users can post any interesting discovery they've made in the game that is worth sharing (technical or not).
+            users can post any interesting discovery they've made in the game that is worth sharing.
           </Text>
         </div>
       </div>
