@@ -2,8 +2,10 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Wireframe from '@/components/Wireframe'
 import Text from '@/components/Typography/Text'
+import Image from "next/image";
 import MainNav from '@/components/MainLayout/MainNav'
 import Heading from '@/components/Typography/Heading'
+import Link from "next/link";
 import AccountAccessContainer from '@/components/MainLayout/AccountAccessContainer'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -30,11 +32,22 @@ export default function RootLayout({ children }) {
       <body className={inter.className + " theme-dark bg-primary"}>
         <header>
           <div className="flex justify-between bg-secondary">
-            <h1 
-            className="p-4 text-6xl text-logo font-logo-2">
-              <span className="text-logo-secondary">Ra</span>ven
-              <span className="ml-3 text-sm text-logo">A repository of statistics</span>
-            </h1>
+            {/* MAIN LOGO */}
+            <div className="flex items-center pl-3">
+              <div className="relative w-[48px] h-[48px]">
+                <Image
+                fill
+                src="/images/logo3-128.png"
+                sizes="50vw"
+                className="translate-y-1 pointer-events-none select-none"
+                />
+              </div>
+              <h1 
+              className="p-4 text-6xl text-logo-third font-logo-2">
+                <span className="text-logo-secondary">Ra</span>ven
+                <span className="ml-3 text-sm tracking-wide text-logo">A repository of <Link href="https://www.wizard101.com/" className="underline">Wizard101</Link> statistics</span>
+              </h1>
+            </div>
             <AccountAccessContainer/>
           </div>
         </header>

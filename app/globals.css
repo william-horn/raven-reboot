@@ -52,12 +52,14 @@
     /* --color-logo-primary: #94b8c7; */
     --color-logo-primary: #a7a4ab;
     --color-logo-secondary: #f36161;
+    --color-logo-third: #ce9454;
 
     --bg-color-search-bar: #404049;
     --bg-color-search-bar-list: #404049;
     --bg-color-search-bar-result: #404049;
     --bg-color-hover-search-bar-result: #33333b;
 
+    --text-color-href-primary: #cc7aff;
     --text-color-search-bar-result: white;
     --text-color-search-bar-input: #d9d8df;
     --text-color-search-history-result: #dbdbdb;

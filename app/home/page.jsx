@@ -11,38 +11,54 @@ import Text from '@/components/Typography/Text'
 import SearchBar from '@/components/Searchbar'
 import emptyFunc from '@/util/emptyFunc'
 import Heading from '@/components/Typography/Heading'
+import Icon from '@/components/Graphics/Icon'
+
+const CardText = ({children}) => (
+  <Text className={{self: "text-center text-primary leading-6 text-xl tracking-wide mt-10"}}>
+    {children}
+  </Text>
+);
+
+const HL1 = ({children, color="text-logo-third", underline, bold}) => (
+  <span className={color + (underline ? " underline" : "") + (bold ? " font-bold" : "")}>
+    {children}
+  </span>
+);
+
+const HL2 = ({children, ...rest}) => (
+  <HL1 color="text-logo-secondary" {...rest}>
+    {children}
+  </HL1>
+);
 
 export default function Home() {
   return (
     <main className="h-screen">
 
-      <div className="mx-auto bg-secondary w-[45%] rounded mt-20 p-5 my-20">
-        <div className="py-5">
-          <Heading 
-          className={{ self: "text-center text-3xl pb-6 font-extralight" }}>
-            Welcome to Raven!
-          </Heading>
+      {/* INTRO SECTION */}
+      <div className="mx-auto bg-secondary md:w-[45%] w-full rounded mt-20 mb-28">
+        <div className="p-10">
+          <div className="relative w-[128px] h-[128px] mx-auto mb-10">
+            <Image
+            fill
+            src="/images/logo3-128.png"
+            sizes="100vw"
+            className=" drop-shadow-[0_0_20px_#554b3a] select-none pointer-events-none animate-pulse"
+            />
+          </div>
 
-          <Text className={{self: "text-center text-primary leading-6"}}>
-            Raven is a modern app for Wizard101 players, which is designed to make technical information about 
-            the game more accessible. We primarily focus on calculating drop rate percentages for mobs, packs, 
-            etc, but anything in the game that is deducible we try to provide data for. We also have areas where 
-            users can post any interesting discovery they've made in the game that is worth sharing.
-          </Text>
+          <CardText><HL2 bold>Raven</HL2> is a special project created by <span className="font-bold text-logo-third">William J. Horn</span> to make esoteric Wizard101 stats, such as drop rates, more accessible to the public.</CardText>
+          <CardText>We primarily track <HL1 bold>drop rates.</HL1> Drop rates are the percentage chance of receiving a specific item every time you open a Chest, kill a Mob, open a Pack, etc.</CardText>
+
         </div>
       </div>
 
 
       <div className="w-full py-8 mx-auto bg-secondary">
         <div className="text-center">
-          <Heading className={{self: "font-bold text-xl" }}>Where to Start</Heading>
+          <Heading className={{self: "font-bold text-xl pb-10" }}>Where to Start</Heading>
           <Text>I dunno</Text>
-          <Text className={{self: "w-[50%] mx-auto leading-6" }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, odio asperiores. 
-            Vitae iure adipisci mollitia fuga assumenda ad maxime consequatur, soluta delectus, placeat 
-            quisquam repellendus dolorum? Rerum, recusandae similique sunt laboriosam amet impedit sequi at 
-            accusantium. Illo, ipsam nam eum sapiente, suscipit maiores hic culpa vel accusantium eius molestias fuga.
-          </Text>
+          <Text className={{self: "w-[50%] mx-auto leading-6" }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, odio asperiores. </Text>
         </div>
       </div>
     </main>

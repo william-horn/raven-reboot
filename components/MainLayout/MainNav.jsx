@@ -19,7 +19,7 @@ const className = {
   // Page navigation //
 
   pageNavButtons: {
-    self: "flex-row",
+    self: "flex flex-row flex-1",
     buttons: {
       self: "gap-1",
       __selected: {
@@ -35,8 +35,8 @@ const MainNav = function({
   const path = usePathname();
   
   return (
-    <nav className="sticky top-0 bg-secondary">
-      <div className="flex justify-between gap-2 px-3 py-2">
+    <nav className="sticky top-0 bg-secondary z-[99999]">
+      <div className="flex flex-wrap justify-center gap-2 px-3 py-2">
         {/* <ul className="flex gap-2">
           <li>
             <Button
@@ -84,10 +84,10 @@ const MainNav = function({
         >
           <StatefulLinkButton id="home" leftIcon="/icons/home_icon.svg" href="/home">Home</StatefulLinkButton>
           <StatefulLinkButton id="about" leftIcon="/icons/menu_book_icon.svg" href="/about">About Raven</StatefulLinkButton>
-          <StatefulLinkButton id="analytics" leftIcon="/icons/analytics_icon.svg" href="/analytics">Analytics</StatefulLinkButton>
+          <StatefulLinkButton id="statistics" leftIcon="/icons/analytics_icon.svg" href="/statistics">Statistics</StatefulLinkButton>
         </ButtonGroup>
 
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2">
           <DropdownSelection
           placeholder="Category"
           rightIcon="/icons/arrow_down_icon.svg"

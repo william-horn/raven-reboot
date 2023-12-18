@@ -25,6 +25,8 @@ module.exports = {
       },
 
       textColor: {
+        "logo-third": "var(--color-logo-third)",
+        "href-primary": "var(--text-color-href-primary)",
         "primary": "var(--text-color-primary)",
         "secondary": "var(--text-color-secondary)",
         "search-bar-result": "var(--text-color-search-bar-result)",

@@ -183,7 +183,7 @@ const SearchBar = ({
   className = mergeClass(
     className,
     importedClassName,
-    { _isSelected: searchState !== Enum.SearchState.Idle.value }
+    { __selected: searchState !== Enum.SearchState.Idle.value }
   );
 
   // Render out a single search result
