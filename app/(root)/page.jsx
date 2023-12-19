@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import Text from '@/components/Typography/Text'
+
 
 /*
   This is the home page component, meaning it should remain a server-side component. Therefore,
@@ -8,16 +7,14 @@ import Text from '@/components/Typography/Text'
 */
 // import Button from '@/components/Buttons/Button'
 // import ClientComponent from '@/components/ClientComponent'
-import SearchBar from '@/components/Searchbar'
-import emptyFunc from '@/util/emptyFunc'
-import Heading from '@/components/Typography/Heading'
 
-export default function Home() {
+const LandingPage = function() {
+
   return (
-    <main className="h-screen">
-      <div className="w-[30%] mx-auto">
-        <Heading>Analytics</Heading>
-      </div>
-    </main>
+    <div>
+      <h1>Live Landing Page</h1>
+    </div>
   )
 }
+
+export default LandingPage;

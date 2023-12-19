@@ -4,7 +4,7 @@ import { useState } from "react";
 import mergeClass from "@/util/mergeClass";
 import Icon from "../Graphics/Icon";
 import emptyFunc from "@/util/emptyFunc";
-import { StatefulButton, StatelessButton } from "./Buttons";
+import { StatelessButton } from "./Buttons";
 
 let className = {
   // button styles

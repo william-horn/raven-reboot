@@ -25,7 +25,7 @@ const SearchBar = ({
   historyDomain=Enum.StorageKeys.SearchHistoryDomain.Primary.value,
 
   historySize=100,
-  displayResultsSize=3,
+  displayResultsSize=10,
   displayHistorySize=3,
 
   // historyResultIcon,
@@ -95,6 +95,19 @@ const SearchBar = ({
   // When the search bar is focused
   const onSearchFocus = () => {
     setSearchState(Enum.SearchState.Focused.value);
+  }
+
+  const removeFromHistory = (resultStr) => {
+    updateSearchHistory(prev => {
+      let finalResults = prev[historyDomain];
+      
+      finalResults.splice(
+        finalResults.indexOf(resultStr), 
+        1
+      );
+
+      return {...prev, [historyDomain]: finalResults }
+    });
   }
 
   const filterSearch = (searchQuery) => {
@@ -192,42 +205,35 @@ const SearchBar = ({
     
     return (
       <div key={key} className="flex items-center">
+
         {
+          // Render interactive result icon for result history
           resultData.type === Enum.SearchResultType.History.value
             ? <StatefulImageButton
-              onClick={() => {
-                updateSearchHistory(prev => {
-                  let finalResults = prev[historyDomain];
-                  
-                  finalResults.splice(
-                    finalResults.indexOf(resultData.source), 
-                    1
-                  );
-      
-                  return {...prev, [historyDomain]: finalResults }
-                });
-              }}
+              onClick={() => removeFromHistory(resultData.source)}
               className={className.historyList.inner.resultButton.iconButton}
               srcHovered="/icons/trash_icon.svg"
               src="/icons/history_icon.svg"
               />
+
+            // Render stateless icon for other search results
             : <StatelessImageButton
               onClick={() => onSearchResultQuery(resultData.source)}
               className={className.historyList.inner.resultButton.iconButton}
               src="/icons/search_icon.svg"
               />
         }
+
+        {/* Render search result button */}
         <StatelessButton 
         key={key}
         onClick={() => onSearchResultQuery(resultData.source)}
-        className={
-          mergeClass(
-            className.historyList.inner.resultButton, 
-            resultData.type === Enum.SearchResultType.History.value 
-              ? className.historyList.inner.historyResult
-              : className.historyList.inner.databaseResult
-          )
-        }>
+        className={mergeClass(
+          className.historyList.inner.resultButton, 
+          resultData.type === Enum.SearchResultType.History.value 
+            ? className.historyList.inner.historyResult
+            : className.historyList.inner.databaseResult
+        )}>
           {
             resultData.tags.map(tagData => {
               switch (tagData.type) {

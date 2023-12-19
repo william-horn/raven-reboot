@@ -109,8 +109,6 @@ const DropdownSelection = function({
   }, []);
   // <<
 
-  console.log("menu open: ", menuOpen);
-
   // useEffect(() => {
   //   console.log("selected: ", selectedId);
   //   console.log("registered: ", registeredIds.current);

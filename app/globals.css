@@ -8,40 +8,6 @@
 
   } */
 
-  input {
-    all: unset;
-  }
-
-  h1, h2, h3, h4, h5, h6, p {
-    color: white;
-  }
-
-  .wireframe * {
-    outline: 1px solid red !important;
-  } 
-
-    /* width */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 15px rgba(47, 47, 51, 0.7); 
-    border-radius: 10px;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #5f677e; 
-    border-radius: 10px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #5f677e; 
-  }
-
   .theme-dark {
     --logo-font: 'Titan One', sans-serif;
     --logo-font-2: 'Paytone One', sans-serif;
@@ -72,6 +38,40 @@
     --text-color-secondary: orange;
     --text-color-muted: gray;
     --text-color-error: red;
+  }
+
+  input {
+    all: unset;
+  }
+
+  h1, h2, h3, h4, h5, h6, p {
+    color: var(--text-color-primary);
+  }
+
+  .wireframe * {
+    outline: 1px solid red !important;
+  } 
+
+    /* width */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 15px rgba(47, 47, 51, 0.7); 
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #5f677e; 
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #5f677e; 
   }
 }
 
