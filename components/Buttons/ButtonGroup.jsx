@@ -47,6 +47,7 @@ const ButtonGroup = function({
     importedClassName,
   );
 
+  // catch default selected buttons being greater than the selection limit
   if (selectionLimit > -1 && defaultSelect.length > selectionLimit) {
     throw Error("In <ButtonGroup>: Initially selected options '[" + defaultSelect + "]' cannot exceed selection limit of '" + selectionLimit + "'");
   }
@@ -74,16 +75,16 @@ const ButtonGroup = function({
   }
 
   useEffect(() => {
-    // console.log("active: ", activeIds);
-    // console.log("data: ", groupButtonData.current);
-    // console.log("registered: ", registeredIds.current);
+    console.log("active: ", activeIds);
+    console.log("data: ", groupButtonData.current);
+    console.log("registered: ", registeredIds.current);
 
     const invalidId = defaultSelect.find(id => !registeredIds.current[id]);
 
     if (invalidId) {
       throw Error(`Id '${invalidId}' found in 'defaultSelect[]' prop but not in children`);
     }
-  });
+  }, [defaultSelect]);
 
   return (
     <ButtonGroupProvider

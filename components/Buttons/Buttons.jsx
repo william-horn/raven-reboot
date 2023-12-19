@@ -20,13 +20,14 @@ import emptyFunc from "@/util/emptyFunc";
 import { usePathname } from "next/navigation";
 import { useButtonGroupContext } from "@/providers/ButtonGroupProvider";
 import { useDropdownSelectionContext } from "@/providers/DropdownSelectionProvider";
+import { v4 as uuidv4 } from 'uuid';
 
 // ============================ //
 // ----- COMPONENT STYLES ----- //
 // ============================ //
 const className = {
   // the outer-most element of the button, or "master element"
-  self: "bg-button-primary text-primary inline-flex items-center align-middle rounded transition-all w-fit text-sm px-1 hover:bg-button-hover-primary",
+  self: "bg-button-primary text-primary inline-flex items-center align-middle rounded justify-center transition-colors w-fit text-sm px-1 hover:bg-button-hover-primary",
 
   // the inner-container sitting between the outer-layer and button content
   inner: {
@@ -50,6 +51,26 @@ const className = {
   __selected: {
     self: "bg-green-500 hover:bg-green-600"
   }
+}
+
+// alias for button base class (in case another 'className' is used in a local namespace)
+const baseClass = className;
+
+// button style presets for ease of use
+export const ButtonPresets = {
+
+  blendIn: ((className={
+    self: "bg-transparent hover:bg-transparent rounded-none",
+
+    inner: { 
+      self: "p-0" 
+    }
+  }) => mergeClass(baseClass, className))(),
+
+  sharpBorder: ((className={
+    self: "rounded-none",
+  }) => mergeClass(baseClass, className))(),
+
 }
 
 // ============================= //
@@ -80,39 +101,52 @@ const renderButtonContent = (leftIcon, rightIcon, className, children) => <>
 // ----------------------------------- //
 // -------- BUTTON CONTROLLER -------- //
 // ----------------------------------- //
-const useButtonController = (buttonProps) => {
-  const buttonGroupContext = useButtonGroupContext();
-  const dropdownSelectionContext = useDropdownSelectionContext();
+/*
+  ! IN DEVELOPMENT: 'useStateController()'
 
+  This hook should allow you to group together components, letting them
+  share a common state and reacting based on that state. All components can
+  interact with each other and change each others state.
+*/
   // TODO:
   /*
     Find way to generalize this function a bit more in the future. Lots of similarities between
     button group context and dropdown selection context. Look into later.
   */
+const useButtonController = (buttonProps) => {
+  const buttonGroupContext = useButtonGroupContext();
+  const dropdownSelectionContext = useDropdownSelectionContext();
 
-  buttonProps = (buttonGroupContext && !buttonProps.ignoreContext)
-    // merge remaining button group props
-    ? {...buttonGroupContext.rest, ...buttonProps}
-    : (dropdownSelectionContext && !buttonProps.ignoreContext)
+  let currentContext = { rest: {} };
 
-      // merge remaining dropdown selection menu props
-      ? {...dropdownSelectionContext.rest, ...buttonProps}
-      : buttonProps;
+  const ignoreContext = buttonProps.ignoreContext;
 
+  if (!ignoreContext) {
+    if (buttonGroupContext) {
+      currentContext = buttonGroupContext;
+
+    } else if (dropdownSelectionContext) {
+      currentContext =  dropdownSelectionContext;
+
+    }
+  }
+
+  buttonProps = {...currentContext.rest, ...buttonProps};
 
   // pull out common props
   const {
-    importedClassName,
-    importedState,
+    importedClassName: importedClassName,
+    importedState: importedState,
 
-    leftIcon,
-    rightIcon,
-    rightIconSelected,
-    leftIconSelected,
-    rightIconHovered,
-    leftIconHovered,
+    leftIcon: leftIcon,
+    rightIcon: rightIcon,
+    rightIconSelected: rightIconSelected,
+    leftIconSelected: leftIconSelected,
+    rightIconHovered: rightIconHovered,
+    leftIconHovered: leftIconHovered,
 
-    ignoreContext,
+    ignoreContext: _ignoreContext,
+
     ...restButtonProps
   } = buttonProps;
 
@@ -205,6 +239,20 @@ const useButtonController = (buttonProps) => {
       registeredIds,
     } = buttonGroupContext;
 
+    // catch invalid props
+    if (!buttonProps.id) {
+      /*
+        ! note: 
+        setting a default 'id' prop for ButtonGroup members will result in ALL buttons behaving as one single button.
+        the same is true if multiple different buttons receive the same 'id' value. this will essentially group their
+        behavior.
+      */
+      restButtonProps.id = "default_button";
+      buttonProps.id = restButtonProps.id;
+      console.warn("ButtonGroup components must be given a unique 'id' prop in order to function correctly");
+      // throw Error("ButtonGroup components must be given an 'id' prop");
+    }
+
     const {
       // this default is unique to button being used as button group member, so define it here
       // ! i don't think we need this anymore due to 'processClick' being used
@@ -218,11 +266,6 @@ const useButtonController = (buttonProps) => {
       // value
       ...restButtonData
     } = restButtonProps;
-
-    // button must have an 'id' prop if used inside a button group
-    if (!buttonProps.id) {
-      throw Error("ButtonGroup components must be given an 'id' prop");
-    }
 
     /*
       this is the main state object for the button. state will cascade starting from 
@@ -399,6 +442,9 @@ const useButtonController = (buttonProps) => {
 */
 export const StatelessButton = function({
   children,
+
+  // * if you want a component-specific default, set them here and then pass
+  // * manually to 'useButtonController'
   className: importedClassName={},
   state: importedState={},
   // onClick=console.log,

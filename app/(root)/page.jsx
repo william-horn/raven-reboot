@@ -7,12 +7,14 @@
 */
 // import Button from '@/components/Buttons/Button'
 // import ClientComponent from '@/components/ClientComponent'
+import TestComponent from "@/components/TestComponent";
 
 const LandingPage = function() {
 
   return (
     <div>
       <h1>Live Landing Page</h1>
+      <TestComponent/>
     </div>
   )
 }
