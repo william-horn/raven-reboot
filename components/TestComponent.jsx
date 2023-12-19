@@ -10,7 +10,7 @@
 //   ButtonPresets
 // } from "./Buttons/Buttons";
 
-import { useComponentContext } from "@/providers/TestProvider";
+import { useComponentContext } from "@/providers/Providers";
 import { getGroupContext } from "@/util/contextController";
 
 import Enum from "@/enum";
@@ -26,7 +26,7 @@ const TestComponent = () => {
 
   // console.log(Enum.ProviderNames.getEnumItems());
 
-  const context = getGroupContext(true);
+  const context = getGroupContext();
 
   console.log("current context: ", context);
 

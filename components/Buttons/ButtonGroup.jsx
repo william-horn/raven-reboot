@@ -2,7 +2,7 @@
 
 import mergeClass from "@/util/mergeClass";
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
-import ButtonGroupProvider from "@/providers/ButtonGroupProvider";
+import Providers from "@/providers/Providers";
 import emptyFunc from "@/util/emptyFunc";
 
 const ButtonGroup = function({ 
@@ -87,7 +87,7 @@ const ButtonGroup = function({
   }, [defaultSelect]);
 
   return (
-    <ButtonGroupProvider
+    <Providers.ButtonGroup
     value={{
       onClick,
       selectionLimit,
@@ -108,7 +108,7 @@ const ButtonGroup = function({
       <div className={className.self}>
         {children}
       </div>
-    </ButtonGroupProvider>
+    </Providers.ButtonGroup>
   );
 };
 

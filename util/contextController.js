@@ -1,6 +1,6 @@
 "use client";
 
-import { useComponentContext } from "@/providers/TestProvider";
+import { useComponentContext } from "@/providers/Providers";
 import Enum from "@/enum";
 
 const {

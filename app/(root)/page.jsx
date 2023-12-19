@@ -8,16 +8,18 @@
 // import Button from '@/components/Buttons/Button'
 // import ClientComponent from '@/components/ClientComponent'
 import TestComponent from "@/components/TestComponent";
-import Providers from "@/providers/TestProvider";
+import Providers from "@/providers/Providers";
 
 const LandingPage = function() {
 
   return (
     <div>
       <h1>Live Landing Page</h1>
-      <Providers.FirstProvider value={{ id: "first" }}>
-        <TestComponent/>
-      </Providers.FirstProvider>
+      {/* <Providers.FirstProvider value={{ id: "first" }}>
+        <Providers.SecondProvider value={{ id: "second" }}>
+          <TestComponent/>
+        </Providers.SecondProvider>
+      </Providers.FirstProvider> */}
 
       <Providers.SecondProvider value={{ id: "second" }}>
         <TestComponent/>

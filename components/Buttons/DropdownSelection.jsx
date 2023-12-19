@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import DropdownSelectionProvider from "@/providers/DropdownSelectionProvider";
+import Providers from "@/providers/Providers";
 import mergeClass from "@/util/mergeClass";
 import emptyFunc from "@/util/emptyFunc";
 import { StatelessButton } from "./Buttons";
@@ -116,7 +116,7 @@ const DropdownSelection = function({
   // });
 
   return (
-    <DropdownSelectionProvider
+    <Providers.DropdownSelection
     value={{
       selectedId,
       setSelectedId,
@@ -149,7 +149,7 @@ const DropdownSelection = function({
           </div>
         </div>
       </div>
-    </DropdownSelectionProvider>
+    </Providers.DropdownSelection>
   );
 }
 
