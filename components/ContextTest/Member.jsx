@@ -1,12 +1,16 @@
+"use client";
 
-import { useButtonGroupContext } from "@/providers/ButtonGroupProvider";
-import { useDropdownSelectionContext } from "@/providers/DropdownSelectionProvider";
+import { useComponentContext } from "@/providers/TestProvider";
+import Enum from "@/enum";
+
+const ProviderNamesEnum = Enum.ProviderNames;
 
 const groupContexts = {
   // contexts that can't be combined with each other
   mutuallyExclusive: {
-    "ButtonGroup": useButtonGroupContext,
-    "DropdownSelection": useDropdownSelectionContext
+    [ProviderNamesEnum.FirstProvider.getName()]: useComponentContext(ProviderNamesEnum.FirstProvider),
+    [ProviderNamesEnum.SecondProvider.getName()]: useComponentContext(ProviderNamesEnum.SecondProvider),
+    [ProviderNamesEnum.ThirdProvider.getName()]: useComponentContext(ProviderNamesEnum.ThirdGroup)
   },
 
   // contexts that can be combined
@@ -101,4 +105,18 @@ const useStateController = (props) => {
       console.warn("Group members must be given a unique 'id' prop to function as expected");
     }
   }
+}
+
+export const Component = function({
+  children
+}) {
+
+
+
+  return (
+    <div>
+      <p>Random Component</p>
+      {children}
+    </div>
+  );
 }

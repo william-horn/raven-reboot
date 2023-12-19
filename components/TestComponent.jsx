@@ -1,26 +1,34 @@
 "use client";
 
-import ButtonGroup from "./Buttons/ButtonGroup";
+// import ButtonGroup from "./Buttons/ButtonGroup";
 
-import { 
-  StatelessButton,
-  StatefulButton,
-  StatelessLinkButton,
-  StatefulLinkButton,
-  ButtonPresets
-} from "./Buttons/Buttons";
+// import { 
+//   StatelessButton,
+//   StatefulButton,
+//   StatelessLinkButton,
+//   StatefulLinkButton,
+//   ButtonPresets
+// } from "./Buttons/Buttons";
+
+import { useComponentContext } from "@/providers/TestProvider";
+
+import Enum from "@/enum";
 
 const TestComponent = () => {
+  const context1 = useComponentContext(Enum.ProviderNames.FirstProvider);
+  const context2 = useComponentContext(Enum.ProviderNames.SecondProvider);
+  const context3 = useComponentContext(Enum.ProviderNames.ThirdProvider);
+
+  console.log("First context: ", context1);
+  console.log("Second context: ", context2);
+  console.log("Third context: ", context3);
+
+
+  // console.log(Enum.ProviderNames.getEnumItems());
 
   return (
     <div>
-      <StatelessButton>Test</StatelessButton>
-
-      <h1>Button Group:</h1>
-      <ButtonGroup onClick={(data) => console.log("btn data: ", data)}>
-        <StatelessButton id="one" something="lol" className={ButtonPresets.blendIn}>Test</StatelessButton>
-        <StatelessButton id="two" className={ButtonPresets.sharpBorder}>Test</StatelessButton>
-      </ButtonGroup>
+      <h1>Test component</h1>
     </div>
   );
 };
