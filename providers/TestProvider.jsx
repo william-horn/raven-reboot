@@ -6,18 +6,19 @@ const ProviderNameEnums = Enum.ProviderNames.getEnumItems();
 const contexts = {};
 const Providers = {};
 
-const ProviderExport = (context, props) => (
-  <context.Provider value={props.value}>
-    {props.children}
-  </context.Provider>
-);
-
 for (let contextName in ProviderNameEnums) {
   const ProviderName = ProviderNameEnums[contextName].value;
   const context = createContext();
 
+  // initialize context namespace
   contexts[ProviderName] = context;
-  Providers[ProviderName] = props => ProviderExport(context, props)
+
+  // component instantiater
+  Providers[ProviderName] = ({ children, value }) => (
+    <context.Provider value={value}>
+      {children}
+    </context.Provider>
+  );
 }
 
 export const useComponentContext = ProviderNameEnum => useContext(contexts[ProviderNameEnum.value]);
