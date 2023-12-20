@@ -1,19 +1,14 @@
 import { EnumCollection, EnumItem } from './Enum';
 
 const ProviderNames = new EnumCollection({
+  // * value: provider name
   // production
   ButtonGroup: new EnumItem({ value: 'ButtonGroup', name: 'ButtonGroup' }),
-  DropdownSelection: new EnumItem({ value: 'DropdownSelection', name: 'DropdownSelection' }),
+  DropdownSelection: new EnumItem({ value: 'DropdownSelection' }),
   // test providers
-  FirstProvider: new EnumItem({ value: 'FirstProvider', name: 'FirstProviderName' }),
-  SecondProvider: new EnumItem({ value: 'SecondProvider', name: 'SecondProviderName' }),
-  ThirdProvider: new EnumItem({ value: 'ThirdProvider', name: undefined }),
-}, {
-  itemMethods: {
-    getName() {
-      return this.name || "NO_NAME";
-    }
-  }
-})
+  FirstProvider: new EnumItem({ value: 'FirstProvider' }),
+  SecondProvider: new EnumItem({ value: 'SecondProvider' }),
+  ThirdProvider: new EnumItem({ value: 'ThirdProvider' }),
+});
 
 export default ProviderNames;
