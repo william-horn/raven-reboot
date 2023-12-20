@@ -9,8 +9,14 @@
 // import ClientComponent from '@/components/ClientComponent'
 import TestComponent from "@/components/TestComponent";
 import Providers from "@/providers/Providers";
+import { useState, useRef } from "react";
 
 const LandingPage = function() {
+  const activeData = useRef({});
+  const registeredIds = useRef({});
+  
+  const className = { self: "bg-red-500" };
+  const importedState = { __groupSelected: true };
 
   return (
     <div>
@@ -21,15 +27,24 @@ const LandingPage = function() {
         </Providers.SecondProvider>
       </Providers.FirstProvider> */}
 
-      <Providers.SecondProvider value={{ id: "second" }}>
+      {/* <Providers.SecondProvider value={{ id: "second" }}>
         <TestComponent/>
       </Providers.SecondProvider>
 
       <Providers.ThirdProvider value={{ id: "third" }}>
         <TestComponent/>
-      </Providers.ThirdProvider>
+      </Providers.ThirdProvider> */}
 
       {/* <TestComponent/> */}
+      <Providers.FirstProvider 
+      value={{ 
+        registeredIds,
+        activeData,
+        className,
+        importedState
+      }}>
+        <TestComponent/>
+      </Providers.FirstProvider>
     </div>
   )
 }

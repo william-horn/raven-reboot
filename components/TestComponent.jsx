@@ -10,10 +10,57 @@
 //   ButtonPresets
 // } from "./Buttons/Buttons";
 
-import { useComponentContext } from "@/providers/Providers";
-import { getGroupContext } from "@/util/contextController";
-
+import { useContextController } from "@/util/contextController";
+import mergeClass from "@/util/mergeClass";
 import Enum from "@/enum";
+
+const TestButton = ({
+  children,
+  className: importedClassName={},
+  state: importedState={},
+  ...rest
+}) => {
+
+  const className = {
+    self: "text-lg text-white"
+  }
+
+  const controller = useContextController({
+    importedClassName,
+    importedState,
+    ...rest
+  });
+
+  const finalStyles = mergeClass(
+    className,
+    controller.importedClassName,
+    controller.importedState
+  );
+
+  console.log("during BAD update:");
+  controller.__updateState({ __newState: "YAS" });
+  controller.__updateActiveData();
+  console.log("active: ", controller.__provider.activeData.current);
+
+  console.log("during GOOD update:");
+  controller.__updateState({ __testState: true });
+  controller.__updateActiveData();
+  console.log("active: ", controller.__provider.activeData.current);
+
+  console.log("during GOOD update 2:");
+  controller.__updateState({ __testState: false });
+  controller.__updateActiveData();
+  console.log("active: ", controller.__provider.activeData.current);
+
+  return (
+    <button
+    className={finalStyles.self}
+    // onClick={controller.onClick}
+    >
+      {children}
+    </button>
+  )
+}
 
 const TestComponent = () => {
   // const context1 = useComponentContext(Enum.ProviderNames.FirstProvider);
@@ -26,13 +73,16 @@ const TestComponent = () => {
 
   // console.log(Enum.ProviderNames.getEnumItems());
 
-  const context = getGroupContext();
 
-  console.log("current context: ", context);
 
   return (
     <div>
-      <h1>Test component</h1>
+      <TestButton
+      className={{self: "bg-blue-500 w-[100px] h-[30px]"}}
+      id="default"
+      >
+        Hello World
+      </TestButton>
     </div>
   );
 };

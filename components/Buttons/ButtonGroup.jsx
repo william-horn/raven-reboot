@@ -7,7 +7,8 @@ import emptyFunc from "@/util/emptyFunc";
 
 const ButtonGroup = function({ 
   children,
-  className: importedClassName,
+  className: importedClassName={},
+  state: importedState={},
 
   // handlers, global
   onClick=emptyFunc,
@@ -19,8 +20,6 @@ const ButtonGroup = function({
   unselectLastChoice=false,
   defaultSelect=[],
   selectionLimit=-1,
-
-  state={},
 
   ...rest
 }) {
@@ -40,7 +39,7 @@ const ButtonGroup = function({
   // Button group state (active buttons)
   const [activeIds, setActiveIds] = useState(defaultSelect);
   const registeredIds = useRef({});
-  const groupButtonData = useRef({});
+  const activeData = useRef({});
 
   className = mergeClass(
     className,
@@ -76,7 +75,7 @@ const ButtonGroup = function({
 
   useEffect(() => {
     console.log("active: ", activeIds);
-    console.log("data: ", groupButtonData.current);
+    console.log("data: ", activeData.current);
     console.log("registered: ", registeredIds.current);
 
     const invalidId = defaultSelect.find(id => !registeredIds.current[id]);
@@ -99,9 +98,9 @@ const ButtonGroup = function({
       onSelectionLimitReached,
       onUnselect,
       registeredIds,
-      groupButtonData,
+      activeData,
       className,
-      state,
+      importedState,
       rest
     }}
     >

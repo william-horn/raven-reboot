@@ -32,6 +32,11 @@ const DropdownSelection = function({
     Tried using 'useLayoutEffect()' to wait for data to load in before causing a re-paint,
     but the effect was the same since we still have no default content to render in the
     meantime.
+
+    * possible solution?:
+
+    Just pass whatever the default id is from the provider, down to all the sub-components. 
+    If the id matches then have the sub-component update the provider.
   */
 
   // initialize state hooks

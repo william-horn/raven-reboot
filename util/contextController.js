@@ -19,7 +19,29 @@ const groupContexts = {
   mutuallyExclusive: {
     [enum_FirstProvider.value]: {
       useContext: () => useComponentContext(enum_FirstProvider),
-      methods: {}
+      methods: {
+        __getEventData() {
+          return {
+            firstProvider: true,
+            state: this.__getState()
+          }
+        },
+
+        __setStateInitial() {
+          this.__setState({
+            __testState: false,
+            __testActive: false,
+          });
+        },
+
+        __updateActiveData() {
+          if (this.__getState().__testState) {
+            this.__provider.activeData.current[this.id] = this.__getEventData();
+          } else {
+            delete this.__provider.activeData.current[this.id];
+          }
+        },
+      }
     },
 
     [enum_SecondProvider.value]: {
@@ -38,7 +60,23 @@ const groupContexts = {
         __getEventData() {
           return {
             inGroup: true,
-            state: this.importedState,
+            state: this.__getState(),
+          }
+        },
+
+        __setStateInitial() {
+          this.__setState({
+            __groupSelected: this.__provider.findActiveId(this.id).found,
+            ...this.__provider.importedState,
+            ...this.__props.importedState
+          });
+        },
+
+        __updateActiveData() {
+          if (this.__getState().__groupSelected) {
+            this.__provider.activeData.current[this.id] = this.__getEventData();
+          } else {
+            delete this.__provider.activeData.current[this.id];
           }
         },
 
@@ -47,14 +85,8 @@ const groupContexts = {
         },
 
         onClick() {
-          this.__props.onClick(this.__getEventData())
-          this.__provider.onClick
-          /*
-            this => {
-              props,
-              provider
-            }
-          */
+          this.__props.onClick(this.__getEventData()) // local click
+          this.__provider.onClick(this.__getEventData()) // group click
         }
       }
     },
@@ -89,10 +121,11 @@ export const getCurrentContext = (props={}) => {
   } = groupContexts;
 
   const finalContext = {
-    ...props,
-    __props: props,
-    __provider: {},
-    __handlers: {
+    ...props,             // contains all UPDATED props
+
+    __props: props,       // contains all ORIGINAL props merged with provider context
+    __provider: {},       // contains provider context
+    __handlers: {         // contains handler functions for context methods (several may exist for nested contexts)
       /*  
         onClick: [
           () => {...},
@@ -100,10 +133,73 @@ export const getCurrentContext = (props={}) => {
         ]
       */
     },
-    __hasContext: false,
+
+    __hasContext: false,  // if a context exists
+
+    /*
+      returns the object that gets passed to event handler callback functions.
+      can be re-defined inside context 'method' fields.
+    */
+    __getEventData() {
+      return {
+        message: "no context"
+      }
+    },
+
+    __getState() {
+      return this.importedState;
+    },
+
+    __setState(newState) {
+      this.importedState = newState;
+    },
+
+    __updateState(updatedState) {
+      this.__setState({
+        ...this.__getState(), 
+        ...updatedState
+      });
+    },
+
+    __setStateInitial() {
+      this.__setState({
+        __selected: false,
+      });
+    },
+
+    __updateActiveData() {
+      if (!this.__hasContext) {
+        console.warn("Cannot update active data - no context available");
+        return;
+      }
+    },
+
+    // merge className objects from provider and component
+    __collapseClassName() {
+      if (!this.__hasContext) {
+        console.warn("Cannot collapse className - no context available");
+        return;
+      }
+
+      this.importedClassName = mergeClass(
+        // * note: 'finalContext.__provider.className' should always be an object. default is {}
+        this.__provider.className,
+        this.importedClassName
+      );
+    },
+
+    __registerComponent() {
+      if (!this.__hasContext) {
+        console.warn("Cannot register component - no context in which to register");
+        return;
+      }
+
+      this.__provider.registeredIds.current[this.id] = this.__getEventData();
+    }
   };
 
   if (props.ignoreContext) {
+    finalContext.__setStateInitial();
     return finalContext;
   }
 
@@ -160,42 +256,28 @@ export const getCurrentContext = (props={}) => {
     }
   }
 
+  /*
+    update 'finalContext.importedState' to whatever the default initial state is.
+    if no context or props.ignoreContext:
+      initial state is { __selected: false }
+    else:
+      initial state is whatever the new method returns, or { __selected: false } if none is defined.
+  */
+  finalContext.__setStateInitial();
   return finalContext;
 }
 
-const useStateController = (props, middleware) => {
+export const useContextController = (props) => {
   const currentContext = getCurrentContext(props);
 
-  if (currentContext.__hasContext) {
-    currentContext.importedClassName = mergeClass(
-      currentContext.__provider.importedClassName,
-      currentContext.__props.importedClassName
-    );
+  // merge provider class names with direct component class names
+  currentContext.__collapseClassName();
 
-    currentContext.__provider.registeredIds.current[currentContext.id] = currentContext.__getEventData();
-  }
+  // update active data based on this component's state
+  currentContext.__updateActiveData();
+
+  // all group providers should have a 'registeredIds' fields, holding all event data for all sub-components.
+  currentContext.__registerComponent();
 
   return currentContext;
-}
-
-const TestButton = ({
-  children,
-  className: importedClassName={},
-  state: importedState={},
-  ...rest
-}) => {
-
-  const controller = useStateController({
-    importedClassName,
-    importedState,
-    ...rest
-  });
-
-  return (
-    <button
-    onClick={controller.onClick}
-    >
-      {children}
-    </button>
-  )
 }
