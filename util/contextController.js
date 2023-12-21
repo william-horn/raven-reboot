@@ -41,6 +41,11 @@ const groupContexts = {
             delete this.__provider.activeData.current[this.id];
           }
         },
+
+        onClick() {
+          console.log("SYSTEM CLICK");
+          this.__props.onClick({ data: "yes" });
+        }
       }
     },
 
@@ -195,11 +200,22 @@ export const getCurrentContext = (props={}) => {
       }
 
       this.__provider.registeredIds.current[this.id] = this.__getEventData();
+    },
+
+    __validateProps() {
+      if (!this.id) {
+        console.warn("No 'id' prop was given to sub-component - assigning 'default_id' by default.");
+        this.id = "default_id";
+      }
+    },
+
+    onClick() {
+      this.__props.onClick(this.__getEventData());
+      // console.log(this);
     }
   };
 
   if (props.ignoreContext) {
-    finalContext.__setStateInitial();
     return finalContext;
   }
 
@@ -227,8 +243,11 @@ export const getCurrentContext = (props={}) => {
       finalContext.__hasContext = true;
 
       // copy method names over to finalContext, and let those functions be called on 'finalContext'
+      // for (let methodName in contextData.methods) {
+      //   finalContext[methodName] = (...args) => contextData.methods[methodName].call(finalContext, ...args);
+      // }
       for (let methodName in contextData.methods) {
-        finalContext[methodName] = (...args) => contextData.methods[methodName].call(finalContext, ...args);
+        finalContext[methodName] = contextData.methods[methodName];
       }
     }
   }
@@ -256,19 +275,17 @@ export const getCurrentContext = (props={}) => {
     }
   }
 
-  /*
-    update 'finalContext.importedState' to whatever the default initial state is.
-    if no context or props.ignoreContext:
-      initial state is { __selected: false }
-    else:
-      initial state is whatever the new method returns, or { __selected: false } if none is defined.
-  */
-  finalContext.__setStateInitial();
   return finalContext;
 }
 
 export const useContextController = (props) => {
   const currentContext = getCurrentContext(props);
+
+  // set the initial default state with or without context
+  currentContext.__setStateInitial();
+
+  // ensure all prop rules are obeyed
+  currentContext.__validateProps();
 
   // merge provider class names with direct component class names
   currentContext.__collapseClassName();

@@ -12,12 +12,6 @@ import Providers from "@/providers/Providers";
 import { useState, useRef } from "react";
 
 const LandingPage = function() {
-  const activeData = useRef({});
-  const registeredIds = useRef({});
-  
-  const className = { self: "bg-red-500" };
-  const importedState = { __groupSelected: true };
-
   return (
     <div>
       <h1>Live Landing Page</h1>
@@ -36,15 +30,15 @@ const LandingPage = function() {
       </Providers.ThirdProvider> */}
 
       {/* <TestComponent/> */}
-      <Providers.FirstProvider 
+      {/* <Providers.FirstProvider 
       value={{ 
         registeredIds,
         activeData,
         className,
         importedState
-      }}>
+      }}> */}
         <TestComponent/>
-      </Providers.FirstProvider>
+      {/* </Providers.FirstProvider> */}
     </div>
   )
 }

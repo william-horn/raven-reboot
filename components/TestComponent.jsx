@@ -12,6 +12,8 @@
 
 import { useContextController } from "@/util/contextController";
 import mergeClass from "@/util/mergeClass";
+import Providers from "@/providers/Providers";
+import { useRef } from "react";
 import Enum from "@/enum";
 
 const TestButton = ({
@@ -40,22 +42,23 @@ const TestButton = ({
   console.log("during BAD update:");
   controller.__updateState({ __newState: "YAS" });
   controller.__updateActiveData();
-  console.log("active: ", controller.__provider.activeData.current);
+  // console.log("controller: ", controller);
+  console.log("active: ", controller.__provider.activeData?.current);
 
   console.log("during GOOD update:");
   controller.__updateState({ __testState: true });
   controller.__updateActiveData();
-  console.log("active: ", controller.__provider.activeData.current);
+  console.log("active: ", controller.__provider.activeData?.current);
 
   console.log("during GOOD update 2:");
   controller.__updateState({ __testState: false });
   controller.__updateActiveData();
-  console.log("active: ", controller.__provider.activeData.current);
+  console.log("active: ", controller.__provider.activeData?.current);
 
   return (
     <button
     className={finalStyles.self}
-    // onClick={controller.onClick}
+    onClick={() => controller.onClick()}
     >
       {children}
     </button>
@@ -72,17 +75,31 @@ const TestComponent = () => {
   // console.log("Third context: ", context3);
 
   // console.log(Enum.ProviderNames.getEnumItems());
-
+  const activeData = useRef({});
+  const registeredIds = useRef({});
+  
+  const className = { self: "bg-red-500" };
+  const importedState = { __groupSelected: true };
 
 
   return (
     <div>
-      <TestButton
-      className={{self: "bg-blue-500 w-[100px] h-[30px]"}}
-      id="default"
-      >
-        Hello World
-      </TestButton>
+      <Providers.FirstProvider 
+      value={{ 
+        registeredIds,
+        activeData,
+        className,
+        importedState
+      }}>
+        <TestButton
+        // ignoreContext
+        onClick={d => console.log("got data: ", d)}
+        className={{self: "bg-blue-500 w-[100px] h-[30px]"}}
+        id="default"
+        >
+          Hello World
+        </TestButton>
+      </Providers.FirstProvider>
     </div>
   );
 };
