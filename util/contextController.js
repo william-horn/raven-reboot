@@ -248,9 +248,7 @@ export const getCurrentContext = (props={}) => {
     },
 
     __setStateInitial() {
-      this.__setState({
-        __selected: false,
-      });
+      this.__setState(this.importedState);
     },
 
     __updateActiveData() {
@@ -389,6 +387,7 @@ export const useContextController = (props) => {
 
   // set the initial default state with or without context
   currentContext.__setStateInitial();
+  console.log("initial state: ", currentContext.__getState())
 
   // merge provider class names with direct component class names
   currentContext.__collapseClassName();

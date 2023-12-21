@@ -73,9 +73,12 @@ const TestComponent = () => {
 
   return (
     <div>
-      <StatefulButton
-      onClick={d => console.log(d)}
-      >Test</StatefulButton>
+      <ButtonGroup>
+        <StatefulButton
+        onClick={d => console.log(d)}
+        >Test</StatefulButton>
+      </ButtonGroup>
+
       <ButtonGroup
       // selectionLimit={1}
       // defaultSelect={["asd"]}

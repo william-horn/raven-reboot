@@ -143,7 +143,12 @@ export const StatefulButton = function({
   const [hovered, setHovered] = useState(false);
 
   const _onClick = (eventData) => {
+    const isSelected = !selected;
+    setSelected(isSelected);
+    eventData.state.__selected = selected;
+    onClick(eventData);
   }
+  console.log("state: ", selected);
 
   return (
     <StatelessButton
