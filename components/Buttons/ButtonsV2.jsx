@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useContextController } from "@/util/contextController";
 import Icon from "../Graphics/Icon";
 import mergeClass from "@/util/mergeClass";
+import emptyFunc from "@/util/emptyFunc";
 
 // ============================ //
 // ----- COMPONENT STYLES ----- //
@@ -131,3 +132,28 @@ export const StatelessButton = function({
   )
 };
 
+export const StatefulButton = function({
+  children,
+  onClick=emptyFunc,
+  defaultSelected=false,
+  ...rest
+}) {
+
+  const [selected, setSelected] = useState(defaultSelected);
+  const [hovered, setHovered] = useState(false);
+
+  const _onClick = (eventData) => {
+  }
+
+  return (
+    <StatelessButton
+    // onMouseEnter={() => setHovered(true)}
+    // onMouseLeave={() => setHovered(false)}
+    onClick={_onClick}
+    state={{ __selected: selected, __hovered: hovered }}
+    {...rest}
+    >
+      {children}
+    </StatelessButton>
+  )
+};

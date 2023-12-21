@@ -57,7 +57,7 @@ const groupContexts = {
       methods: {
         __getEventData() {
           const eventData = this.eventData || {};
-          
+
           return {
             inGroup: true,
             state: this.__getState(),
@@ -227,6 +227,7 @@ export const getCurrentContext = (props={}) => {
 
       return {
         message: "no context",
+        state: this.__getState(),
         ...eventData
       }
     },
@@ -289,9 +290,12 @@ export const getCurrentContext = (props={}) => {
       }
     },
 
+    // todo: generalize selected states to make this cleaner
     __isSelected() {
       const state = this.__getState();
-      return state.__selected || state.__groupSelected;
+      return state.__selected 
+        || state.__groupSelected
+        || state.__locallySelected;
     },
 
     onClick() {

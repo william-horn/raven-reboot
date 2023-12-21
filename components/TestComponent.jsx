@@ -15,7 +15,7 @@ import { useContextController } from "@/util/contextController";
 import mergeClass from "@/util/mergeClass";
 import Providers from "@/providers/Providers";
 import { useRef } from "react";
-import { StatelessButton } from "./Buttons/ButtonsV2";
+import { StatelessButton, StatefulButton } from "./Buttons/ButtonsV2";
 import Enum from "@/enum";
 
 const className = {
@@ -73,6 +73,9 @@ const TestComponent = () => {
 
   return (
     <div>
+      <StatefulButton
+      onClick={d => console.log(d)}
+      >Test</StatefulButton>
       <ButtonGroup
       // selectionLimit={1}
       // defaultSelect={["asd"]}
