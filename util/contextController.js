@@ -59,6 +59,11 @@ const groupContexts = {
       methods: {}
     },
 
+    /*
+      * // ================================ // *
+      * // --------- BUTTON GROUP --------- // *
+      * // ================================ // *
+    */
     [enum_ButtonGroup.value]: {
       useContext: () => useComponentContext(enum_ButtonGroup),
       methods: {
@@ -69,11 +74,19 @@ const groupContexts = {
           }
         },
 
+        __collapseClassName() {
+          this.importedClassName = mergeClass(
+            this.__provider.className.buttons,
+            this.importedClassName
+          );
+        },
+
         __setStateInitial() {
           this.__setState({
             __groupSelected: this.__provider.findActiveId(this.id).found,
             ...this.__provider.importedState,
-            ...this.__props.importedState
+            ...this.__props.importedState,
+            // __groupSelected: this.__provider.findActiveId(this.id).found,
           });
         },
 
@@ -85,13 +98,79 @@ const groupContexts = {
           }
         },
 
-        onHover() {
-          this.__props.onHover(this.__getEventData())
-        },
-
         onClick() {
-          this.__props.onClick(this.__getEventData()) // local click
-          this.__provider.onClick(this.__getEventData()) // group click
+          const buttonGroup = this.__provider;
+          
+          // import props from ButtonGroup provider
+          const {
+            selectionLimit,
+            activeIds,
+            unselectLastChoice,
+            activeData,
+            onSelectionLimitReached,
+            updateActiveIds,
+          } = buttonGroup;
+
+          const {
+            onSelect=()=>true,
+            onUnselect=()=>true,
+            onClick=()=>true,
+          } = this.__props;
+
+          const selected = !this.__getState().__groupSelected;
+          console.log("Selected: ", selected, this.__getState());
+
+          /*
+            short-hand functions for firing button group callbacks and
+            direct button events.
+
+            * note: you must return 'true' from within a callback given directly to the button 
+            * in order for the callback to bubble back up to the button group callback.
+          */
+          const fireOnSelect = (...args) => {
+            if (onSelect(...args)) buttonGroup.onSelect(...args);
+          }
+        
+          const fireOnUnselect = (...args) => {
+            if (onUnselect(...args)) buttonGroup.onUnselect(...args);
+          }
+      
+          const fireOnClick = (...args) => {
+            if (onClick(...args)) buttonGroup.onClick(...args);
+          }
+  
+          if (selectionLimit > -1 && activeIds.length >= selectionLimit && selected) {
+            if (unselectLastChoice) {
+              const unselectedButtonId = activeIds[activeIds.length - 1];
+      
+              if (unselectedButtonId !== this.id) {
+                const unselectedButtonData = activeData.current[unselectedButtonId];
+                unselectedButtonData.state.__groupSelected = false;
+                
+                fireOnUnselect(unselectedButtonData);
+                updateActiveIds(unselectedButtonId, unselectedButtonData.state.__groupSelected);
+              }
+      
+            } else {
+    
+              onSelectionLimitReached(this.__getEventData());
+              return;
+            }
+          }
+    
+          this.__updateState({
+            __groupSelected: selected
+          });
+
+          fireOnClick(this.__getEventData());
+      
+          if (selected) {
+            fireOnSelect(this.__getEventData());
+          } else {
+            fireOnUnselect(this.__getEventData());
+          }
+      
+          updateActiveIds(this.id, selected);
         }
       }
     },
@@ -130,6 +209,7 @@ export const getCurrentContext = (props={}) => {
 
     __props: props,       // contains all ORIGINAL props merged with provider context
     __provider: {},       // contains provider context
+    __contextMethods: {},
     __handlers: {         // contains handler functions for context methods (several may exist for nested contexts)
       /*  
         onClick: [
@@ -204,15 +284,27 @@ export const getCurrentContext = (props={}) => {
 
     __validateProps() {
       if (!this.id) {
-        console.warn("No 'id' prop was given to sub-component - assigning 'default_id' by default.");
-        this.id = "default_id";
+        console.warn("No 'id' prop was given to sub-component - assigning 'default' by default.");
+        this.id = "default";
       }
     },
 
     onClick() {
       this.__props.onClick(this.__getEventData());
-      // console.log(this);
-    }
+    },
+
+    /*
+      * note: if you need to merge default methods with custom set methods, you can do:
+
+      myMethod() {
+        if (this.__contextMethods.myMethod()) {
+          * (default behavior here)
+        }
+      }
+
+      this also means you will need to remove the code that over-writes all default
+      methods with the custom context methods.
+    */
   };
 
   if (props.ignoreContext) {
@@ -241,6 +333,7 @@ export const getCurrentContext = (props={}) => {
       finalContext.__props = {...context.rest, ...props};
       finalContext.__provider = context;
       finalContext.__hasContext = true;
+      finalContext.__contextMethods = contextData.methods;
 
       // copy method names over to finalContext, and let those functions be called on 'finalContext'
       // for (let methodName in contextData.methods) {
@@ -281,11 +374,11 @@ export const getCurrentContext = (props={}) => {
 export const useContextController = (props) => {
   const currentContext = getCurrentContext(props);
 
-  // set the initial default state with or without context
-  currentContext.__setStateInitial();
-
   // ensure all prop rules are obeyed
   currentContext.__validateProps();
+
+  // set the initial default state with or without context
+  currentContext.__setStateInitial();
 
   // merge provider class names with direct component class names
   currentContext.__collapseClassName();

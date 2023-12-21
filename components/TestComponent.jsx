@@ -10,11 +10,16 @@
 //   ButtonPresets
 // } from "./Buttons/Buttons";
 
+import ButtonGroup from "./Buttons/ButtonGroup";
 import { useContextController } from "@/util/contextController";
 import mergeClass from "@/util/mergeClass";
 import Providers from "@/providers/Providers";
 import { useRef } from "react";
 import Enum from "@/enum";
+
+const className = {
+  self: "text-lg text-white"
+}
 
 const TestButton = ({
   children,
@@ -22,10 +27,6 @@ const TestButton = ({
   state: importedState={},
   ...rest
 }) => {
-
-  const className = {
-    self: "text-lg text-white"
-  }
 
   const controller = useContextController({
     importedClassName,
@@ -39,21 +40,8 @@ const TestButton = ({
     controller.importedState
   );
 
-  console.log("during BAD update:");
-  controller.__updateState({ __newState: "YAS" });
-  controller.__updateActiveData();
   // console.log("controller: ", controller);
-  console.log("active: ", controller.__provider.activeData?.current);
-
-  console.log("during GOOD update:");
-  controller.__updateState({ __testState: true });
-  controller.__updateActiveData();
-  console.log("active: ", controller.__provider.activeData?.current);
-
-  console.log("during GOOD update 2:");
-  controller.__updateState({ __testState: false });
-  controller.__updateActiveData();
-  console.log("active: ", controller.__provider.activeData?.current);
+  // console.log("final styles: ", finalStyles);
 
   return (
     <button
@@ -75,31 +63,48 @@ const TestComponent = () => {
   // console.log("Third context: ", context3);
 
   // console.log(Enum.ProviderNames.getEnumItems());
-  const activeData = useRef({});
-  const registeredIds = useRef({});
+  // const activeData = useRef({});
+  // const registeredIds = useRef({});
   
-  const className = { self: "bg-red-500" };
-  const importedState = { __groupSelected: true };
+  // const className = { self: "bg-red-500" };
+  // const importedState = { __groupSelected: true };
 
 
   return (
     <div>
-      <Providers.FirstProvider 
-      value={{ 
-        registeredIds,
-        activeData,
-        className,
-        importedState
-      }}>
+      <ButtonGroup
+      // selectionLimit={1}
+      defaultSelect={["asd"]}
+      unselectLastChoice
+      onClick={(data) => console.log("group click: ", data)}
+      // value={{ 
+      //   registeredIds,
+      //   activeData,
+      //   className,
+      //   importedState
+      // }}
+      >
         <TestButton
         // ignoreContext
         onClick={d => console.log("got data: ", d)}
-        className={{self: "bg-blue-500 w-[100px] h-[30px]"}}
-        id="default"
+        onSelect={() => console.log("selected 5")}
+        className={{self: "bg-blue-500 w-[100px]"}}
+        // id="default"
         >
           Hello World
         </TestButton>
-      </Providers.FirstProvider>
+
+        <TestButton
+        // ignoreContext
+        onClick={d => {console.log("got data: ", d); return true}}
+        className={{self: "bg-blue-500 w-[100px]"}}
+        onSelect={() => console.log("SELECTED FIRST TIME")}
+        state={{__groupSelected: false}}
+        id="asd"
+        >
+          Goodbye World
+        </TestButton>
+      </ButtonGroup>
     </div>
   );
 };

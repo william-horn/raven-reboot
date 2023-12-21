@@ -29,22 +29,22 @@ const ButtonGroup = function({
     self: "flex flex-col gap-2 custom-button-group",
 
     buttons: {
-      self: "",
+      self: "font-bold text-red-500",
       __groupSelected: {
-        self: "bg-blue-500 hover:bg-blue-400"
+        self: "bg-green-500 hover:bg-green-400"
       }
     },
   }
-
-  // Button group state (active buttons)
-  const [activeIds, setActiveIds] = useState(defaultSelect);
-  const registeredIds = useRef({});
-  const activeData = useRef({});
 
   className = mergeClass(
     className,
     importedClassName,
   );
+
+  // Button group state (active buttons)
+  const [activeIds, setActiveIds] = useState(defaultSelect);
+  const registeredIds = useRef({});
+  const activeData = useRef({});
 
   // catch default selected buttons being greater than the selection limit
   if (selectionLimit > -1 && defaultSelect.length > selectionLimit) {
@@ -59,7 +59,9 @@ const ButtonGroup = function({
   const updateActiveIds = (id, isActive) => {
     if (isActive) {
       setActiveIds(prev => {
-        prev.push(id);
+        if (!prev.find(_id => _id === id)) {
+          prev.push(id);
+        }
         return [...prev];
       });
 
@@ -77,7 +79,9 @@ const ButtonGroup = function({
     console.log("active: ", activeIds);
     console.log("data: ", activeData.current);
     console.log("registered: ", registeredIds.current);
+  });
 
+  useEffect(() => {
     const invalidId = defaultSelect.find(id => !registeredIds.current[id]);
 
     if (invalidId) {

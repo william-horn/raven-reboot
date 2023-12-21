@@ -44,7 +44,7 @@ const DropdownSelection = function({
   const [menuOpen, setMenuOpen] = useState(false);
   // const [firstRender, setFirstRender] = useState(false);
 
-  const selectedItemData = useRef(defaultData);
+  const activeData = useRef({active: defaultData});
   const registeredIds = useRef({});
   const dropdownContainer = useRef(null);
 
@@ -128,7 +128,7 @@ const DropdownSelection = function({
       menuOpen,
       setMenuOpen,
       className,
-      selectedItemData,
+      activeData,
       registeredIds,
       state,
       ...rest
@@ -145,7 +145,7 @@ const DropdownSelection = function({
         className={className.dropButton}
         {...rest}
         >
-          { selectedItemData.current.text || placeholder }
+          { activeData.current.active.text || placeholder }
         </StatelessButton>
 
         <div className={className.outerList.self}>
