@@ -2,13 +2,11 @@
 
 import { useComponentContext } from "@/providers/Providers";
 import Enum from "@/enum";
-import emptyFunc from "./emptyFunc";
+import emptyFunc, { truthyFunc } from "./emptyFunc";
 import mergeClass from "./mergeClass";
 
 const {
   FirstProvider: enum_FirstProvider,
-  SecondProvider: enum_SecondProvider,
-  ThirdProvider: enum_ThirdProvider,
 
   ButtonGroup: enum_ButtonGroup,
   DropdownSelection: enum_DropdownSelection,
@@ -44,19 +42,9 @@ const groupContexts = {
 
         onClick() {
           console.log("SYSTEM CLICK");
-          this.__props.onClick({ data: "yes" });
+          this.__props.onClick({ data: "test" });
         }
       }
-    },
-
-    [enum_SecondProvider.value]: {
-      useContext: () => useComponentContext(enum_SecondProvider),
-      methods: {}
-    },
-
-    [enum_ThirdProvider.value]: {
-      useContext: () => useComponentContext(enum_ThirdProvider),
-      methods: {}
     },
 
     /*
@@ -68,9 +56,12 @@ const groupContexts = {
       useContext: () => useComponentContext(enum_ButtonGroup),
       methods: {
         __getEventData() {
+          const eventData = this.eventData || {};
+          
           return {
             inGroup: true,
             state: this.__getState(),
+            ...eventData
           }
         },
 
@@ -87,6 +78,9 @@ const groupContexts = {
             ...this.__provider.importedState,
             ...this.__props.importedState,
             // __groupSelected: this.__provider.findActiveId(this.id).found,
+          });
+          this.__updateState({
+            __selected: this.__getState().__groupSelected,
           });
         },
 
@@ -111,14 +105,17 @@ const groupContexts = {
             updateActiveIds,
           } = buttonGroup;
 
+          /*
+            * note: for future micro-optimization, conditionally check if these 
+            * functions exist instead of giving them a default function.
+          */
           const {
-            onSelect=()=>true,
-            onUnselect=()=>true,
-            onClick=()=>true,
+            onSelect=truthyFunc,
+            onUnselect=truthyFunc,
+            onClick=truthyFunc,
           } = this.__props;
 
           const selected = !this.__getState().__groupSelected;
-          console.log("Selected: ", selected, this.__getState());
 
           /*
             short-hand functions for firing button group callbacks and
@@ -194,7 +191,7 @@ const groupContexts = {
   return {
     props: {...context.rest, ...props},     // final props
     payload: context,                       // data from context provider
-    methods: context.methods,                // methods attached to context
+    methods: context.methods,               // methods attached to context
   }
 */
 export const getCurrentContext = (props={}) => {
@@ -226,8 +223,11 @@ export const getCurrentContext = (props={}) => {
       can be re-defined inside context 'method' fields.
     */
     __getEventData() {
+      const eventData = this.eventData || {};
+
       return {
-        message: "no context"
+        message: "no context",
+        ...eventData
       }
     },
 
@@ -287,6 +287,11 @@ export const getCurrentContext = (props={}) => {
         console.warn("No 'id' prop was given to sub-component - assigning 'default' by default.");
         this.id = "default";
       }
+    },
+
+    __isSelected() {
+      const state = this.__getState();
+      return state.__selected || state.__groupSelected;
     },
 
     onClick() {
@@ -375,6 +380,7 @@ export const useContextController = (props) => {
   const currentContext = getCurrentContext(props);
 
   // ensure all prop rules are obeyed
+  // * note: validateProps should be called first to set/validate default props
   currentContext.__validateProps();
 
   // set the initial default state with or without context

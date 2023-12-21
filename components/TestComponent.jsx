@@ -15,6 +15,7 @@ import { useContextController } from "@/util/contextController";
 import mergeClass from "@/util/mergeClass";
 import Providers from "@/providers/Providers";
 import { useRef } from "react";
+import { StatelessButton } from "./Buttons/ButtonsV2";
 import Enum from "@/enum";
 
 const className = {
@@ -74,7 +75,7 @@ const TestComponent = () => {
     <div>
       <ButtonGroup
       // selectionLimit={1}
-      defaultSelect={["asd"]}
+      // defaultSelect={["asd"]}
       unselectLastChoice
       onClick={(data) => console.log("group click: ", data)}
       // value={{ 
@@ -84,26 +85,21 @@ const TestComponent = () => {
       //   importedState
       // }}
       >
-        <TestButton
-        // ignoreContext
-        onClick={d => console.log("got data: ", d)}
-        onSelect={() => console.log("selected 5")}
-        className={{self: "bg-blue-500 w-[100px]"}}
-        // id="default"
+        <StatelessButton
+        onClick={data => console.log("click data: ", data)}
+        eventData={{something: "lol"}}
+        className={{
+          self: "text-white",
+          leftIcon: { 
+            src: "/icons/star_icon.svg" 
+          },
+          __selected: {
+            leftIcon: { src: "/icons/profile_icon.svg" }
+          }
+        }}
         >
-          Hello World
-        </TestButton>
-
-        <TestButton
-        // ignoreContext
-        onClick={d => {console.log("got data: ", d); return true}}
-        className={{self: "bg-blue-500 w-[100px]"}}
-        onSelect={() => console.log("SELECTED FIRST TIME")}
-        state={{__groupSelected: false}}
-        id="asd"
-        >
-          Goodbye World
-        </TestButton>
+          First
+        </StatelessButton>
       </ButtonGroup>
     </div>
   );

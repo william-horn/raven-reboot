@@ -29,7 +29,7 @@ const ButtonGroup = function({
     self: "flex flex-col gap-2 custom-button-group",
 
     buttons: {
-      self: "font-bold text-red-500",
+      self: "",
       __groupSelected: {
         self: "bg-green-500 hover:bg-green-400"
       }
