@@ -1,10 +1,11 @@
+import Page from "@/components/Page";
 
 const AboutPage = function() {
   
   return (
-    <div>
+    <Page>
       <h1>Live About Page</h1>
-    </div>
+    </Page>
   );
 }
 

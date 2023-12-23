@@ -1,10 +1,12 @@
 
+import Page from "@/components/Page";
+
 const StatsPage = function() {
   
   return (
-    <div>
+    <Page>
       <h1>Live Stats Page</h1>
-    </div>
+    </Page>
   );
 }
 

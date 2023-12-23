@@ -173,7 +173,7 @@ const SearchBar = ({
         self: "overflow-y-auto overflow-x-clip max-h-[200px]",
         resultButton: {
           //text-search-bar-result bg-search-bar-result hover:bg-search-bar-result-hover
-          self: "w-full text-left text-search-bar-result bg-search-bar-result font-medium transition-colors duration-200 rounded hover:bg-search-bar-result-hover hover:underline",
+          self: "w-full text-left justify-start text-search-bar-result bg-search-bar-result font-medium transition-colors duration-200 rounded hover:bg-search-bar-result-hover hover:underline",
           iconButton: {
             self: "hover:bg-transparent h-fit",
             inner: {
