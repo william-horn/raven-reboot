@@ -11,7 +11,7 @@ import Enum from '../enum';
 import { v4 as uuidv4 } from 'uuid';
 import { useState, useRef, useEffect } from 'react';
 import mergeClass from '@/util/mergeClass';
-import emptyFunc from "@/util/emptyFunc";
+import emptyFunc from "@/util/defaultFunctions";
 import Text from "./Typography/Text";
 import { StatelessButton, StatefulButton } from "./Buttons/Buttons";
 import { StatefulImageButton, StatelessImageButton } from './Buttons/ImageButton';
@@ -94,7 +94,7 @@ const SearchBar = ({
 
   // When the search bar is focused
   const onSearchFocus = () => {
-    setSearchState(Enum.SearchState.Focused.value);
+    setSearchState(Enum.SearchState.Typing.value);
   }
 
   const removeFromHistory = (resultStr) => {

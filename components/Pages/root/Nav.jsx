@@ -1,12 +1,21 @@
 
+"use client";
 
-export const Nav = function({
+import { StatelessButton } from "@/components/Buttons/Buttons";
+import { useRouter, usePathname } from "next/navigation";
+
+const Nav = function({
   children
 }) {
+  const path = usePathname();
 
   return (
-    <nav>
-      <h2>Live Navbar</h2>
+    <nav className="sticky top-0 bg-secondary z-[99999]">
+      <div className="flex flex-wrap justify-center gap-2 px-3 py-2">
+        
+      </div>
     </nav>
   );
 }
+
+export default Nav;

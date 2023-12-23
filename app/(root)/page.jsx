@@ -10,36 +10,13 @@
 import TestComponent from "@/components/TestComponent";
 import Providers from "@/providers/Providers";
 import { useState, useRef } from "react";
+import Page from "@/components/Page";
 
 const LandingPage = function() {
   return (
-    <div>
-      <h1>Live Landing Page</h1>
-      {/* <Providers.FirstProvider value={{ id: "first" }}>
-        <Providers.SecondProvider value={{ id: "second" }}>
-          <TestComponent/>
-        </Providers.SecondProvider>
-      </Providers.FirstProvider> */}
-
-      {/* <Providers.SecondProvider value={{ id: "second" }}>
-        <TestComponent/>
-      </Providers.SecondProvider>
-
-      <Providers.ThirdProvider value={{ id: "third" }}>
-        <TestComponent/>
-      </Providers.ThirdProvider> */}
-
-      {/* <TestComponent/> */}
-      {/* <Providers.FirstProvider 
-      value={{ 
-        registeredIds,
-        activeData,
-        className,
-        importedState
-      }}> */}
-        <TestComponent/>
-      {/* </Providers.FirstProvider> */}
-    </div>
+    <Page>
+      
+    </Page>
   )
 }
 

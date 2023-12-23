@@ -2,8 +2,8 @@
 
 import { useComponentContext } from "@/providers/Providers";
 import Enum from "@/enum";
-import emptyFunc, { truthyFunc } from "./emptyFunc";
-import mergeClass from "./mergeClass";
+import emptyFunc, { truthyFunc } from "@/util/defaultFunctions";
+import mergeClass from "@/util/mergeClass";
 
 const {
   FirstProvider: enum_FirstProvider,
@@ -16,6 +16,7 @@ const groupContexts = {
   // contexts that can't be combined with each other
   mutuallyExclusive: {
     [enum_FirstProvider.value]: {
+      provider: enum_FirstProvider,
       useContext: () => useComponentContext(enum_FirstProvider),
       methods: {
         __getEventData() {
@@ -53,15 +54,16 @@ const groupContexts = {
       * // ================================ // *
     */
     [enum_ButtonGroup.value]: {
+      provider: enum_ButtonGroup,
       useContext: () => useComponentContext(enum_ButtonGroup),
       methods: {
         __getEventData() {
-          const eventData = this.eventData || {};
-
           return {
             inGroup: true,
+            value: this.value,
             state: this.__getState(),
-            ...eventData
+            controller: this,
+            ...this.eventData
           }
         },
 
@@ -78,9 +80,6 @@ const groupContexts = {
             ...this.__provider.importedState,
             ...this.__props.importedState,
             // __groupSelected: this.__provider.findActiveId(this.id).found,
-          });
-          this.__updateState({
-            __selected: this.__getState().__groupSelected,
           });
         },
 
@@ -172,9 +171,71 @@ const groupContexts = {
       }
     },
 
+    /*
+      * // ================================ // *
+      * // ------ DROPDOWN SELECTION ------ // *
+      * // ================================ // *
+    */
     [enum_DropdownSelection.value]: {
+      provider: enum_DropdownSelection,
       useContext: () => useComponentContext(enum_DropdownSelection),
-      methods: {}
+      methods: {
+        __getEventData() {
+          return {
+            inDropdown: true,
+            value: this.value,
+            text: this.text,
+            state: this.__getState(),
+            controller: this,
+            ...this.eventData
+          }
+        },
+
+        __collapseClassName() {
+          this.importedClassName = mergeClass(
+            this.__provider.className.menuItems,
+            this.importedClassName
+          );
+        },
+
+        __setStateInitial() {
+          this.__setState({
+            __dropdownSelected: this.__provider.selectedId === this.id,
+            ...this.__provider.importedState,
+            ...this.__props.importedState,
+          });
+        },
+
+        __updateActiveData() {
+          if (this.__getState().__dropdownSelected) {
+            this.__provider.activeData.current.active = this.__getEventData();
+          }
+        },
+
+        onClick() {
+          const dropdownGroup = this.__provider;
+
+          const {
+            activeData,
+            setSelectedId,
+            setMenuOpen,
+          } = dropdownGroup;
+
+          const {
+            onClick=truthyFunc,
+          } = this.__props;
+
+          if (!this.__getState().__dropdownSelected) {
+            activeData.current.active = this.__getEventData();
+            setSelectedId(this.id);
+            setMenuOpen(false);
+            onClick(this.__getEventData());
+            // selectedItemData.current = buttonData;
+            // group_setSelectedId(buttonProps.id);
+            // group_setMenuOpen(false);
+          }
+        }
+      }
     }
   },
 
@@ -194,7 +255,7 @@ const groupContexts = {
     methods: context.methods,               // methods attached to context
   }
 */
-export const getCurrentContext = (props={}) => {
+export const useCurrentContext = (props={}) => {
 
   const { 
     mutuallyExclusive: mutuallyExclusiveContexts, 
@@ -203,10 +264,11 @@ export const getCurrentContext = (props={}) => {
 
   const finalContext = {
     ...props,             // contains all UPDATED props
+    eventData: props.eventData || {},
 
     __props: props,       // contains all ORIGINAL props merged with provider context
     __provider: {},       // contains provider context
-    __contextMethods: {},
+    // __contextMethods: {},
     __handlers: {         // contains handler functions for context methods (several may exist for nested contexts)
       /*  
         onClick: [
@@ -223,12 +285,14 @@ export const getCurrentContext = (props={}) => {
       can be re-defined inside context 'method' fields.
     */
     __getEventData() {
-      const eventData = this.eventData || {};
+      // const eventData = this.eventData || {};
 
       return {
-        message: "no context",
+        status: "no context",
+        value: this.value,
         state: this.__getState(),
-        ...eventData
+        controller: this,
+        ...this.eventData
       }
     },
 
@@ -241,10 +305,11 @@ export const getCurrentContext = (props={}) => {
     },
 
     __updateState(updatedState) {
-      this.__setState({
-        ...this.__getState(), 
-        ...updatedState
-      });
+      for (let key in updatedState) {
+        this.importedState[key] = updatedState[key];
+      }
+
+      this.importedState.__selected = this.__isSelected();
     },
 
     __setStateInitial() {
@@ -253,7 +318,7 @@ export const getCurrentContext = (props={}) => {
 
     __updateActiveData() {
       if (!this.__hasContext) {
-        console.warn("Cannot update active data - no context available");
+        // console.warn("Cannot update active data - no context available");
         return;
       }
     },
@@ -261,7 +326,7 @@ export const getCurrentContext = (props={}) => {
     // merge className objects from provider and component
     __collapseClassName() {
       if (!this.__hasContext) {
-        console.warn("Cannot collapse className - no context available");
+        // console.warn("Cannot collapse className - no context available");
         return;
       }
 
@@ -274,7 +339,7 @@ export const getCurrentContext = (props={}) => {
 
     __registerComponent() {
       if (!this.__hasContext) {
-        console.warn("Cannot register component - no context in which to register");
+        // console.warn("Cannot register component - no context in which to register");
         return;
       }
 
@@ -282,7 +347,7 @@ export const getCurrentContext = (props={}) => {
     },
 
     __validateProps() {
-      if (!this.id) {
+      if (!this.id && this.__hasContext) {
         console.warn("No 'id' prop was given to sub-component - assigning 'default' by default.");
         this.id = "default";
       }
@@ -291,13 +356,40 @@ export const getCurrentContext = (props={}) => {
     // todo: generalize selected states to make this cleaner
     __isSelected() {
       const state = this.__getState();
-      return state.__selected 
-        || state.__groupSelected
-        || state.__locallySelected;
+      return state.__groupSelected
+        || state.__locallySelected
+        || state.__dropdownSelected
+        || false;
+    },
+
+    __getRestProps() {
+      // default to rest props from button components
+      const {
+        onClick,
+        onSelect,
+        onUnselect,
+        eventData,
+        ignoreContext,
+        importedState,
+        importedClassName,
+        leftIcon,
+        rightIcon,
+        leftIconSelected,
+        rightIconSelected,
+        leftIconHovered,
+        rightIconHovered,
+        id,
+        value,
+        ...rest
+      } = this.__props;
+
+      return rest;
     },
 
     onClick() {
-      this.__props.onClick(this.__getEventData());
+      if (this.__props.onClick) {
+        this.__props.onClick(this.__getEventData());
+      }
     },
 
     /*
@@ -340,7 +432,8 @@ export const getCurrentContext = (props={}) => {
       finalContext.__props = {...context.rest, ...props};
       finalContext.__provider = context;
       finalContext.__hasContext = true;
-      finalContext.__contextMethods = contextData.methods;
+      finalContext.__contextData = contextData;
+      // finalContext.__contextMethods = contextData.methods;
 
       // copy method names over to finalContext, and let those functions be called on 'finalContext'
       // for (let methodName in contextData.methods) {
@@ -379,7 +472,7 @@ export const getCurrentContext = (props={}) => {
 }
 
 export const useContextController = (props) => {
-  const currentContext = getCurrentContext(props);
+  const currentContext = useCurrentContext(props);
 
   // ensure all prop rules are obeyed
   // * note: validateProps should be called first to set/validate default props
@@ -387,7 +480,11 @@ export const useContextController = (props) => {
 
   // set the initial default state with or without context
   currentContext.__setStateInitial();
-  console.log("initial state: ", currentContext.__getState())
+
+  // once initial state is selected, set the "any" state selected prop
+  currentContext.__updateState({
+    __selected: currentContext.__isSelected()
+  });
 
   // merge provider class names with direct component class names
   currentContext.__collapseClassName();

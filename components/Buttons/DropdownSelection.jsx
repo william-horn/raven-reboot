@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import Providers from "@/providers/Providers";
 import mergeClass from "@/util/mergeClass";
-import emptyFunc from "@/util/emptyFunc";
+import emptyFunc from "@/util/defaultFunctions";
 import { StatelessButton } from "./Buttons";
 
 const DropdownSelection = function({
@@ -50,7 +50,7 @@ const DropdownSelection = function({
 
   // all component styles
   let className = {
-    self: "w-[200px] bg-button-primary rounded relative hover:bg-button-hover-primary",
+    self: "w-fit bg-button-primary rounded relative hover:bg-button-hover-primary",
 
     dropButton: {
       self: "w-full justify-center",
@@ -59,7 +59,7 @@ const DropdownSelection = function({
         self: "w-full"
       },
 
-      __selected: {
+      __dropdownSelected: {
         self: "rounded-b-none bg-button-primary hover:bg-button-hover-primary"
       }
     },
@@ -79,7 +79,7 @@ const DropdownSelection = function({
       self: "flex-col w-full flex"
     },
 
-    __selected: {
+    __dropdownSelected: {
       outerList: {
         self: "flex"
       }
@@ -89,7 +89,7 @@ const DropdownSelection = function({
   className = mergeClass(
     className,
     importedClassName,
-    { __selected: menuOpen }
+    { __dropdownSelected: menuOpen }
   );
 
   const onMenuClick = () => {
@@ -114,11 +114,11 @@ const DropdownSelection = function({
   }, []);
   // <<
 
-  // useEffect(() => {
-  //   console.log("selected: ", selectedId);
-  //   console.log("registered: ", registeredIds.current);
-  //   console.log("active data: ", selectedItemData.current);
-  // });
+  useEffect(() => {
+    console.log("selected: ", selectedId);
+    console.log("registered: ", registeredIds.current);
+    console.log("active data: ", activeData.current);
+  });
 
   return (
     <Providers.DropdownSelection
@@ -141,7 +141,7 @@ const DropdownSelection = function({
         ignoreContext
         onClick={onMenuClick}
         onMouseEnter={toggleOnHover ? showDropdown : emptyFunc}
-        state={{__selected: menuOpen}}
+        state={{__dropdownSelected: menuOpen}}
         className={className.dropButton}
         {...rest}
         >

@@ -3,7 +3,7 @@
 import mergeClass from "@/util/mergeClass";
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import Providers from "@/providers/Providers";
-import emptyFunc from "@/util/emptyFunc";
+import emptyFunc from "@/util/defaultFunctions";
 
 const ButtonGroup = function({ 
   children,

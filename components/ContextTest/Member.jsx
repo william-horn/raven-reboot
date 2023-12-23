@@ -1,7 +1,7 @@
 "use client";
 
 import Enum from "@/enum";
-import { getGroupContext } from "@/util/contextController";
+import { getGroupContext } from "@/hooks/useContextController";
 
 export const Component = function({
   children

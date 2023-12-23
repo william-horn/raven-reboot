@@ -8,9 +8,14 @@ const Text = React.forwardRef(function({
   ...rest
 }, ref) {
 
-  const className = mergeClass({
+  let className = {
     self: "custom-text leading-6 text-white align-middle text-sm block"
-  }, importedClassName);
+  };
+
+  className = mergeClass(
+    className,
+    importedClassName
+  );
 
   // todo: adapt line height to text size
 
