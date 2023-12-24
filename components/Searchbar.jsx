@@ -21,15 +21,15 @@ const SearchBar = ({
   placeholder="Search...", 
 
   onSearch=search => console.log('searched for: ', search),
+  onFetch=emptyFunc,
+
+  __temp_db=[],
 
   historyDomain=Enum.StorageKeys.SearchHistoryDomain.Primary.value,
 
   historySize=100,
   displayResultsSize=10,
   displayHistorySize=3,
-
-  // historyResultIcon,
-  // searchResultIcon,
 
   leftIcon="/icons/search_icon.svg",
   rightIcon,
@@ -161,14 +161,22 @@ const SearchBar = ({
   }
 
   let className = {
-    self: "relative rounded bg-search-bar",
+    self: "relative rounded bg-search-bar z-[999]",
+
+    leftIcon: {
+      self: "",
+    },
+
+    rightIcon: {
+      self: ""
+    },
 
     searchTextbox: {
-      self: "w-full h-full mx-2 text-search-bar-result"
+      self: "w-full h-full mx-2 text-search-bar-result transition-colors"
     },
 
     historyList: {
-      self: "absolute w-full rounded-b-md top-full z-[1000] bg-search-bar",
+      self: "absolute w-full rounded-b-md top-full z-[10000] bg-search-bar",
       inner: {
         self: "overflow-y-auto overflow-x-clip max-h-[200px]",
         resultButton: {
@@ -189,8 +197,13 @@ const SearchBar = ({
     },
 
     __selected: {
-      self: "rounded-b-none"
+      self: "rounded-b-none drop-shadow-[0_4px_5px_#1c1c1c]"
     }
+  }
+
+  // todo: add conditional classNames for different search states later
+  if (searchState === Enum.SearchState.Idle.value) {
+    className.searchTextbox.self = twMerge(className.searchTextbox.self, "text-muted");
   }
 
   className = mergeClass(
@@ -260,31 +273,16 @@ const SearchBar = ({
   const getSearchResults = (searchInput) => {
     // pull from search result arrays
     const historyLogs = (getSearchHistory(historyDomain) || []);
-    const otherLogs = [
-      "Able Ranger's Wayfinder (Level 110+)",
-      "Allfather's Gungnir (Level 130+)",
-      "Baron's Staff of Command",
-      "Blade of the Silent Knight (Level 10+)",
-      "Blazing Naginata (Level 100+)",
-      "Bonebreaker Rod of Cold",
-      "Celestian Neon Axe (Level 120+)",
-      "Cobbler Elf Hammer (Level 110+)",
-      "Crimson Pandamonium Jian (Any Level)",
-      "Darkwraith's Scythe of Penance (Level 40+)",
-      "Deathmetal Skull (Level 50+)",
-      "Desert Lodestar Staff (Level 30+)",
-      "Dragoon's Rapier (Level 30+)",
-      "Ebony Pandamonium Jian (Level 110+)",
-      "Ebony Pandamonium Jian (Level 70+)",
-      "Dragonbite Bow (Level 110+)",
-      "Eye of the Soothsayer (Level 90+)",
-      "Fire Serpent's Obsidian Fang (Level 70+)",
-      "Enchanter's New Horizon Wand",
-      "Engineer's Hexacorder",
-      "Evoker's Stalwart Stave",
-      "Frosty Stare Tiki Torch (Level 50+)",
-      "Glinting Dragon Lance (Level 60+)",
-    ]; 
+    const otherLogs = __temp_db;
+
+    /*
+      otherLogs = [
+        {
+          title: "",
+          tags: "",
+        }
+      ]
+    */
 
     // convert search result arrays to arrays of result data
     const historyResults = filterSearchResults(
@@ -336,7 +334,10 @@ const SearchBar = ({
   }
 
   const onSearchTyping = () => {
-    setSearchState(Enum.SearchState.Typing.value);
+    if (searchState !== Enum.SearchState.Typing.value) {
+      setSearchState(Enum.SearchState.Typing.value);
+    }
+    
     setSearchInput(searchFieldRef.current.value);
   }
 
@@ -346,7 +347,7 @@ const SearchBar = ({
     className={className.self}>
       
       <div className="flex items-center p-2">
-        <Icon src={leftIcon}/>
+        <Icon src={leftIcon} className={className.leftIcon}/>
 
         <input 
         ref={searchFieldRef} 
@@ -358,7 +359,7 @@ const SearchBar = ({
         placeholder={placeholder} 
         />
 
-        <Icon src={rightIcon}/>
+        <Icon src={rightIcon} className={className.rightIcon}/>
       </div>
 
       {renderSearchResults()}

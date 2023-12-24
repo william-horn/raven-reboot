@@ -4,9 +4,9 @@
 
 @layer base {
 
-  /* :root {
-
-  } */
+  :root {
+    --text-small: 1rem;
+  }
 
   .theme-dark {
     --logo-font: 'Titan One', sans-serif;
@@ -34,9 +34,12 @@
     --button-color-secondary: blue;
     --button-hover-color-primary: #505059;
 
-    --text-color-primary: #d1d1d1;
+    --text-color-heading-primary: #d1d1d1;
+    --text-color-heading-muted: #959595;
+
+    --text-color-primary: #e3e3e3;
     --text-color-secondary: orange;
-    --text-color-muted: gray;
+    --text-color-muted: #959595;
     --text-color-error: red;
   }
 

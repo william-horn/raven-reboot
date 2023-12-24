@@ -53,7 +53,7 @@ const DropdownSelection = function({
     self: "w-fit bg-button-primary rounded relative hover:bg-button-hover-primary",
 
     dropButton: {
-      self: "w-full justify-center",
+      self: "w-full h-full justify-center",
 
       inner: {
         self: "w-full"
@@ -81,7 +81,7 @@ const DropdownSelection = function({
 
     __dropdownSelected: {
       outerList: {
-        self: "flex"
+        self: "flex drop-shadow-[0_4px_5px_#1c1c1c]"
       }
     }
   }

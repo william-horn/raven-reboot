@@ -25,6 +25,8 @@ module.exports = {
       },
 
       textColor: {
+        "heading-muted": "var(--text-color-heading-muted)",
+        "heading-primary": "var(--text-color-heading-primary)",
         "logo-third": "var(--color-logo-third)",
         "href-primary": "var(--text-color-href-primary)",
         "primary": "var(--text-color-primary)",

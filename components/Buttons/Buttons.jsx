@@ -14,7 +14,7 @@ import compileButtonPresets from "@/util/compileButtonPresets";
 const className = {
   // the outer-most element of the button, or "master element"
   // used to have "align-middle" in here
-  self: "bg-button-primary text-primary inline-flex items-center rounded justify-center transition-colors w-fit text-sm px-1 hover:bg-button-hover-primary",
+  self: "bg-button-primary text-primary inline-flex items-center rounded justify-center transition-colors w-fit text-sm px-1 hover:bg-button-hover-primary font-medium",
 
   // the inner-container sitting between the outer-layer and button content
   inner: {

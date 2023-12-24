@@ -3,7 +3,8 @@ import mergeClass from "@/util/mergeClass";
 
 const Heading = ({ 
   children, 
-  h2=true,
+  center,
+  h2,
   h3,
   h4,
   h5,
@@ -13,8 +14,12 @@ const Heading = ({
   
   // todo: adapt line height to text size
   let className = {
-    self: "custom-heading leading-6 py-2 text-primary text-lg font-bold"
+    self: `custom-heading leading-6 py-2 text-heading-primary text-lg font-bold`
   };
+
+  if (center) {
+    importedClassName.self += " text-center";
+  }
 
   className = mergeClass(
     className,
@@ -27,6 +32,8 @@ const Heading = ({
     if (h4) return <h4 className={className.self}>{children}</h4>
     if (h5) return <h5 className={className.self}>{children}</h5>
     if (h6) return <h6 className={className.self}>{children}</h6>
+
+    return <h2 className={className.self}>{children}</h2>;
   }
 
   return getHeadingTag();

@@ -1,16 +1,19 @@
 
+import { twMerge } from "tailwind-merge";
 
 const Page = function({
   children,
+  className="",
 }) {
   return (
-    <main className="h-screen">
+    <main className={twMerge("h-screen", className)}>
       {children}
     </main>
   );
 };
 
 const Content = function({
+  className="",
   children,
   max,
   large,
@@ -19,20 +22,20 @@ const Content = function({
   xsmall
 }) {
 
-  const Cmax = <div className="w-full">{children}</div>;
-  const Clarge = <div className="w-full xl:w-[80%] lg:w-[85%] md:w-[95%] sm:w-[95%] mx-auto">{children}</div>;
-  const Cmedium = <div className="w-full xl:w-[70%] lg:w-[80%] md:w-[80%] sm:w-[85%] mx-auto">{children}</div>;
-  const Csmall = <div className="w-full xl:w-[40%] lg:w-[45%] md:w-[55%] sm:w-[65%] mx-auto">{children}</div>;
-  const Cxsmall = <div className="mx-auto xl:w-[30%] lg:w-[35%] md:w-[40%] sm:w-[50%] w-full">{children}</div>;
+  const C_max = <div className={"w-full px-2 " + className}>{children}</div>;
+  const C_large = <div className={"w-full xl:w-[80%] lg:w-[85%] md:w-[95%] sm:w-[95%] mx-auto px-2 " + className}>{children}</div>;
+  const C_medium = <div className={"w-full xl:w-[70%] lg:w-[80%] md:w-[80%] sm:w-[85%] mx-auto px-2 " + className}>{children}</div>;
+  const C_small = <div className={"w-full xl:w-[40%] lg:w-[45%] md:w-[55%] sm:w-[65%] mx-auto px-2 " + className}>{children}</div>;
+  const C_xsmall = <div className={"mx-auto xl:w-[30%] lg:w-[35%] md:w-[40%] sm:w-[50%] w-full px-2 " + className}>{children}</div>;
 
   const getContentDiv = () => {
-    if (max) return Cmax;
-    if (large) return Clarge;
-    if (medium) return Cmedium;
-    if (small) return Csmall;
-    if (xsmall) return Cxsmall;
+    if (max) return C_max;
+    if (large) return C_large;
+    if (medium) return C_medium;
+    if (small) return C_small;
+    if (xsmall) return C_xsmall;
 
-    return Clarge;
+    return C_large;
   }
 
   return getContentDiv();
