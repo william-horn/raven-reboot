@@ -12,6 +12,7 @@ const DropdownSelection = function({
   toggleOnHover=false,
   toggleOnClick=true,
   placeholder="Select an Option",
+  onClick=emptyFunc,
   defaultData={},
   // rightIconSelected,
   // leftIconSelected,
@@ -80,8 +81,9 @@ const DropdownSelection = function({
     },
 
     __dropdownSelected: {
+      self: "drop-shadow-[0_4px_5px_#1c1c1c]",
       outerList: {
-        self: "flex drop-shadow-[0_4px_5px_#1c1c1c]"
+        self: "flex"
       }
     }
   }
@@ -129,6 +131,7 @@ const DropdownSelection = function({
       setMenuOpen,
       className,
       activeData,
+      onClick,
       registeredIds,
       state,
       ...rest

@@ -6,7 +6,7 @@ const Page = function({
   className="",
 }) {
   return (
-    <main className={twMerge("h-screen", className)}>
+    <main className={twMerge("min-h-screen", className)}>
       {children}
     </main>
   );

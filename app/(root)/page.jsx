@@ -8,13 +8,15 @@
 
 import Page from "@/components/Page";
 // import SearchBar from "@/components/Searchbar";
-import SearchContent from "@/components/Pages/root/SearchContent";
+import SearchContent from "@/app/(root)/SearchContent";
 import Heading from "@/components/Typography/Heading";
 import Text from "@/components/Typography/Text";
 import DropdownSelection from "@/components/Buttons/DropdownSelection";
 import { StatelessButton } from "@/components/Buttons/Buttons";
 
 const LandingPage = function() {
+
+  
   return (
     <Page>
       <Page.Content small className="mt-20">

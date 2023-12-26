@@ -3,10 +3,10 @@ import "../globals.css";
 import Link from "next/link";
 
 import Wireframe from "@/components/Wireframe";
-import Nav from "@/components/Pages/root/Nav";
-import Header from "@/components/Pages/root/Header";
+import Nav from "@/app/(root)/Nav";
+import Header from "@/app/(root)/Header";
 import Heading from "@/components/Typography/Heading";
-import Footer from "@/components/Pages/root/Footer";
+import Footer from "@/app/(root)/Footer";
 import Text from "@/components/Typography/Text";
 
 const RootLayout = function({ children }) {

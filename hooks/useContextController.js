@@ -225,11 +225,15 @@ const groupContexts = {
             onClick=truthyFunc,
           } = this.__props;
 
+          const fireOnClick = () => {
+            if (onClick(this.__getEventData())) dropdownGroup.onClick(this.__getEventData());
+          }
+
           if (!this.__getState().__dropdownSelected) {
             activeData.current.active = this.__getEventData();
             setSelectedId(this.id);
             setMenuOpen(false);
-            onClick(this.__getEventData());
+            fireOnClick();
             // selectedItemData.current = buttonData;
             // group_setSelectedId(buttonProps.id);
             // group_setMenuOpen(false);
