@@ -8,8 +8,8 @@ export async function POST(req) {
 
   await connectMongoDB();
 
-  // await Creature.create(body);
-  await Creature.insertMany(body);
+  await Creature.create(body);
+  // await Creature.insertMany(body);
 
   return NextResponse.json({
     status: "Creature data was successfully created"

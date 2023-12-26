@@ -32,7 +32,7 @@ const LandingPage = function() {
         <Text 
         center 
         className={{ self: "mb-3 italic text-muted" }}>
-          Begin searching Raven's database for statistics on a given item.
+          Begin searching Raven&apos;s database for statistics on a given item.
         </Text>
       </Page.Content>
       

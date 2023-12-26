@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const connectMongoDB = async () => {
   try {
 
-    const DEV = false; //process.env.NODE_ENV === "development";
+    const DEV = process.env.NODE_ENV === "development";
 
     // mongoose.set("strictQuery", false);
 

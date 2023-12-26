@@ -14,8 +14,8 @@ import { StatelessButton } from "@/components/Buttons/Buttons";
 import { filterSearchResults } from "@/util/filterSearchResults";
 import Enum from "@/enum";
 import { v4 as uuidv4 } from "uuid";
-import creatureData from "../../db/creature-data.json";
-import formatCreatureData from "@/util/formatCreatureData";
+// import creatureData from "../../db/creature-data.json";
+// import formatCreatureData from "@/util/formatCreatureData";
 
 const className = {
   SearchResultPartition: {
