@@ -2,7 +2,7 @@
 import "../globals.css";
 import Link from "next/link";
 
-import Wireframe from "@/components/Wireframe";
+// import Wireframe from "@/components/Wireframe";
 import Nav from "@/app/(root)/Nav";
 import Header from "@/app/(root)/Header";
 import Heading from "@/components/Typography/Heading";

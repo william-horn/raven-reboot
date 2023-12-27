@@ -94,6 +94,10 @@
     margin-left: 1rem;
   }
 
+  .wiz-description-box a {
+    text-decoration: underline;
+  }
+
   .wiz-description-box ul li {
     margin-top: 0.3rem;
     margin-left: 1rem;

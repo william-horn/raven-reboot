@@ -20,7 +20,7 @@ import { parse as htmlToJSON, stringify as jsonToHTML} from "himalaya";
 
 const className = {
   SearchResultPartition: {
-    self: "p-5 rounded result-1 bg-button-primary group-hover:bg-button-hover-primary w-full",
+    self: "p-5 rounded result-1 bg-button-primary group-hover:bg-button-hover-primary w-full flex flex-col",
 
     headingSection: {
       self: "flex heading-section",
@@ -36,7 +36,7 @@ const className = {
     },
 
     contentSection: {
-      self: "content-section",
+      self: "content-section hover:overflow-y-auto overflow-y-hidden",
       text: {
         self: "text-md"
       }
@@ -97,7 +97,8 @@ const SearchResultList = function({
 
 const SearchResultPartition = function({
   children,
-  resultData
+  resultData,
+  resultTags,
 }) {
   const styles = className.SearchResultPartition;
 
@@ -105,7 +106,24 @@ const SearchResultPartition = function({
     <div className={styles.self}>
       <div className={styles.headingSection.self}>
         <Heading h3 className={styles.headingSection.heading}>
-          {resultData.name}
+          {/* {resultData.name} */}
+          {
+            resultTags.map(tagData => {
+              switch (tagData.type) {
+                case Enum.SearchMatchType.FirstMatch:
+                  return <span key={tagData.key} className="text-[#d58eff] font-bold">{tagData.source}</span>
+
+                case Enum.SearchMatchType.WordMatch:
+                  return <span key={tagData.key} className="text-[#fff7b9] font-bold">{tagData.source}</span>
+
+                case Enum.SearchMatchType.AnyMatch:
+                  return <span key={tagData.key} className="text-[#a7ff73] font-bold">{tagData.source}</span>
+
+                case Enum.SearchMatchType.Normal:
+                  return <span key={tagData.key}>{tagData.source}</span>
+              }
+            })
+          }
         </Heading>
 
         <Icon 
@@ -124,11 +142,12 @@ const SearchResultPartition = function({
 const SearchResult = function({
   children,
   resultData,
+  resultTags
 }) {
   return (
-    <div className="flex gap-2 rounded cursor-pointer search-result group w-[60%] xl:w-[70%] lg:w-[70%] md:w-[80%]" tabIndex="-1">
+    <div className="flex gap-2 rounded cursor-pointer search-result group w-full xl:w-[70%] lg:w-[70%] md:w-[80%] max-h-[20rem]" tabIndex="-1">
       <Link href="/about" className="flex w-full gap-2 rounded cursor-pointer search-result group">
-        <SearchResultPartition resultData={resultData}/>
+        <SearchResultPartition resultData={resultData} resultTags={resultTags}/>
         {/* <SearchResultSection resultData={newResultData.section2}/> */}
      </Link>
     </div>
@@ -146,33 +165,6 @@ const SearchContent = function({
   const searchData = useRef(null);
   
   const styles = className.SearchContent;
-
-  // useEffect(() => {
-  //   const formattedData = [];
-
-  //   for (let key in creatureData) {
-  //     formattedData.push(formatCreatureData(creatureData[key]));
-  //   }
-
-  //   const postData = async () => {
-  //     try {
-  //       const res = await fetch("/api/creatures", {
-  //         method: "POST",
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify(formattedData)
-  //       }); 
-
-  //       const data = await res.json();
-
-  //       console.log("Post: ", data);
-
-  //     } catch(err) {
-  //       console.log(err);
-  //     }
-  //   }
-
-  //   postData();
-  // }, []);
 
   const runSearch = (result) => {
     if (loading) {
@@ -196,6 +188,21 @@ const SearchContent = function({
         searchData.current = data;
         setLoading(false);
       })
+  }
+
+  const renderSearchResults = () => {
+    if (searchData.current) {
+      const results = filterSearchResults(searchData.current, searchQuery, Enum.SearchResultType.Database)
+        .slice(0, 10)
+        .map(resultData => {
+          return <SearchResult key={uuidv4()} resultData={resultData.data} resultTags={resultData.tags}/>
+        });
+
+      return results;
+
+    } else {
+      return <></>
+    }
   }
 
   return (
@@ -234,7 +241,7 @@ const SearchContent = function({
           loading 
             ? <Text 
               className={{ 
-                self: "text-2xl text-center animate-pulse rounded w-fit p-4 mx-auto" 
+                self: "text-2xl text-center animate-pulse rounded w-fit p-4 mx-auto mb-7" 
               }}>
                 Loading...
               </Text>
@@ -255,13 +262,7 @@ const SearchContent = function({
           }
 
           {/* Display search results */}
-          {
-            searchData.current
-              ? filterSearchResults(searchData.current, searchQuery, Enum.SearchResultType.Database).slice(0, 10).map(resultData => {
-                  return <SearchResult key={uuidv4()} resultData={resultData.data}/>
-                })
-              : <></>
-          }
+          {renderSearchResults()}
         </SearchResultList>
 
       </Page.Content>
