@@ -17,6 +17,7 @@ import ProviderNames from "@/enum/ProviderNames";
 import Providers from "@/providers/Providers";
 import Creature from "@/models/creatures";
 import connectMongoDB from "@/libs/mongodb";
+
 // export const getStaticProps = async () => {
 //   const res = await fetch("/api/creatures?limit=-1");
 //   const fetched__creatureData = await res.json();
@@ -26,26 +27,26 @@ import connectMongoDB from "@/libs/mongodb";
 //   }
 // }
 
-const fetchData = async (endpoint) => {
-  const res = await fetch(`http://localhost:3000/api/${endpoint}`);
-  const data = await res.json();
+// const fetchData = async (endpoint) => {
+//   const res = await fetch(`http://localhost:3000/api/${endpoint}`);
+//   const data = await res.json();
 
-  const results = [];
+//   const results = [];
 
-  for (let key in data) {
-    const val = data[key];
-    results[key] = val.name;
-  }
+//   for (let key in data) {
+//     const val = data[key];
+//     results[key] = val.name;
+//   }
 
-  return results;
-}
+//   return results;
+// }
 
 const toSearchResultData = (data) => {
   const t = [];
 
   for (let i = 0; i < data.length; i++) {
     const v = data[i];
-    t[i] = { name: v.name, index: i };
+    t[i] = v.name;
   }
 
   return t;
@@ -54,15 +55,11 @@ const toSearchResultData = (data) => {
 const LandingPage = async function() {
   // const creatureData = await fetchData("creatures?limit=500");
   // console.log(creatureData);
-
   await connectMongoDB();
 
-  let creatureData = await Creature.find({})
-    .limit();
-
+  let creatureData = await Creature.find().limit().select("name");
   creatureData = toSearchResultData(creatureData);
 
-  // const creatureData = ["lol"];
   
   return (
     <Page>

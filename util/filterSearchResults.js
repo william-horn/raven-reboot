@@ -48,15 +48,19 @@ const getTagData = (results, type, resultSource) => {
 
 export const filterSearchResults = (searchResults, searchInput, searchResultType) => {
   const results = [];
-  const isHistoryResult = searchResultType === Enum.SearchResultType.History.value;
+  // const isHistoryResult = searchResultType === Enum.SearchResultType.History.value;
   const searchInputBase = searchInput.toLowerCase();
 
   for (let key in searchResults) {
-    const resultName = isHistoryResult ? searchResults[key] : searchResults[key].name;
+    // const resultName = isHistoryResult ? searchResults[key] : searchResults[key].name;
+    // const resultBase = resultName.toLowerCase();
+    const isResultData = typeof searchResults[key] === "object";
+    const resultName = isResultData ? searchResults[key].name : searchResults[key];
     const resultBase = resultName.toLowerCase();
 
     const resultData = {
       // priority: 3, 
+      data: searchResults[key],
       index: key,
       type: searchResultType,
       source: resultName, 

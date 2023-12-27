@@ -9,17 +9,18 @@ import Heading from "@/components/Typography/Heading";
 import Icon from "@/components/Graphics/Icon";
 import DropdownSelection from "@/components/Buttons/DropdownSelection";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { StatelessButton } from "@/components/Buttons/Buttons";
 import { filterSearchResults } from "@/util/filterSearchResults";
 import Enum from "@/enum";
 import { v4 as uuidv4 } from "uuid";
+import { parse as htmlToJSON, stringify as jsonToHTML} from "himalaya";
 // import creatureData from "../../db/creature-data.json";
 // import formatCreatureData from "@/util/formatCreatureData";
 
 const className = {
   SearchResultPartition: {
-    self: "p-3 rounded result-1 bg-button-primary group-hover:bg-button-hover-primary w-full",
+    self: "p-5 rounded result-1 bg-button-primary group-hover:bg-button-hover-primary w-full",
 
     headingSection: {
       self: "flex heading-section",
@@ -29,7 +30,7 @@ const className = {
       },
 
       headingIcon: {
-        self: "ml-2 w-9 h-9",
+        self: "ml-2 w-7 h-7 min-w-fit min-h-fit",
         image: { self: "invert-0" }
       }
     },
@@ -88,7 +89,7 @@ const SearchResultList = function({
   children,
 }) {
   return (
-    <div className="flex flex-col gap-3 search-result-list">
+    <div className="flex flex-col items-center gap-3 search-result-list">
       {children}
     </div>
   );
@@ -104,16 +105,17 @@ const SearchResultPartition = function({
     <div className={styles.self}>
       <div className={styles.headingSection.self}>
         <Heading h3 className={styles.headingSection.heading}>
-          {resultData.title}
+          {resultData.name}
         </Heading>
 
         <Icon 
-        src="/icons/amulet_icon.png"
+        src="/icons/enemy_icon.png"
         className={styles.headingSection.headingIcon}/>
       </div>
 
       <div className={styles.contentSection.self}>
-        <Text className={styles.contentSection.text}>This item is no longer available</Text>
+        {/* <Text className={styles.contentSection.text}>{JSON.stringify(resultData.description)}</Text> */}
+        <div className="wiz-description-box" dangerouslySetInnerHTML={{ __html: jsonToHTML(resultData.description) }}></div>
       </div>
     </div>
   );
@@ -124,9 +126,9 @@ const SearchResult = function({
   resultData,
 }) {
   return (
-    <div className="flex gap-2 rounded cursor-pointer search-result group">
-      <Link href="/about" className="flex gap-2 rounded cursor-pointer search-result group w-fit">
-        <SearchResultPartition resultData={newResultData.section1}/>
+    <div className="flex gap-2 rounded cursor-pointer search-result group w-[60%] xl:w-[70%] lg:w-[70%] md:w-[80%]" tabIndex="-1">
+      <Link href="/about" className="flex w-full gap-2 rounded cursor-pointer search-result group">
+        <SearchResultPartition resultData={resultData}/>
         {/* <SearchResultSection resultData={newResultData.section2}/> */}
      </Link>
     </div>
@@ -138,8 +140,10 @@ const SearchContent = function({
   fromResults=["Empty"],
 }) {
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchPending, setSearchPending] = useState("");
+  const [searchQuery, setSearchQuery] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const searchData = useRef(null);
   
   const styles = className.SearchContent;
 
@@ -170,11 +174,35 @@ const SearchContent = function({
   //   postData();
   // }, []);
 
+  const runSearch = (result) => {
+    if (loading) {
+      console.log("Rejecting search until previous has loaded...");
+      return;
+    };
+
+    console.log("Preparing search for... ", result);
+    
+    setSearchQuery(result);
+    setLoading(true);
+  }
+
+  if (searchQuery && loading) { 
+    console.log("Searched: ", searchQuery);
+
+    fetch(`/api/creatures?matchName=${searchQuery}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log("Got: ", data);
+        searchData.current = data;
+        setLoading(false);
+      })
+  }
+
   return (
     <Page.Content max>
 
       {/* Search config/input section */}
-      <Page.Content small className="mb-10">
+      <Page.Content small className="mb-16">
         <div className="flex flex-row w-full gap-2">
 
           {/* Select search category */}
@@ -193,21 +221,47 @@ const SearchContent = function({
           {/* Main Raven search field */}
           <SearchBar
           fromResults={fromResults}
-          onSearch={(result) => setSearchQuery(result)}
+          onSearch={(result) => runSearch(result)}
           className={styles.searchBar}/>
         </div>
       </Page.Content>
 
 
       {/* Search result section */}
-      <Page.Content medium>
+      <Page.Content medium className="mb-10">
+
+        {
+          loading 
+            ? <Text 
+              className={{ 
+                self: "text-2xl text-center animate-pulse rounded w-fit p-4 mx-auto" 
+              }}>
+                Loading...
+              </Text>
+            : <></>
+        }
 
         <SearchResultList>
-          {/* {
-            filterSearchResults(DB_DATA, searchResult, Enum.SearchResultType.Database).map(resultData => {
-              return <SearchResult key={uuidv4()} resultData={{ title: resultData.source, desc: "No description" }}/>
-            }) 
-          } */}
+          {/* Display number of search results */}
+          {
+            searchData.current
+              ? <Text 
+              className={{ 
+                self: "italic mb-4" 
+              }}>
+                {searchData.current.length} search result{searchData.current.length > 1 ? 's' : ''}.
+              </Text>
+              : <></>
+          }
+
+          {/* Display search results */}
+          {
+            searchData.current
+              ? filterSearchResults(searchData.current, searchQuery, Enum.SearchResultType.Database).slice(0, 10).map(resultData => {
+                  return <SearchResult key={uuidv4()} resultData={resultData.data}/>
+                })
+              : <></>
+          }
         </SearchResultList>
 
       </Page.Content>

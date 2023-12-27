@@ -48,6 +48,7 @@ const SearchBar = ({
   const [searchInput, setSearchInput] = useState("");
   const searchBarRef = useRef(null);
   const searchFieldRef = useRef(null);
+  // const searchResultList = useRef([]);
 
   // TODO: add focus mover for search results
   const moveSearchResultFocus = (event) => {
@@ -101,7 +102,7 @@ const SearchBar = ({
     setSearchState(Enum.SearchState.Typing.value);
   }
 
-  const removeFromHistory = (resultStr) => {
+  const removeFromHistory = ({ resultStr }) => {
     updateSearchHistory(prev => {
       let finalResults = prev[historyDomain];
       
@@ -114,10 +115,10 @@ const SearchBar = ({
     });
   }
 
-  const filterSearch = (searchQuery) => {
+  const filterSearch = (resultData) => {
     unfocusSearch();
 
-    const filteredQuery = removeExtraWhitespace(searchQuery);
+    const filteredQuery = removeExtraWhitespace(resultData.source);
 
     // Check for whitespace-exclusive searches
     if (stringIsEmpty(filteredQuery)) {
@@ -125,42 +126,62 @@ const SearchBar = ({
     }
 
     // Update search history
-    updateSearchHistory(prev => {
-      let finalResults = prev[historyDomain] || [];
-      const duplicateIndex = finalResults.indexOf(filteredQuery);
+    // if (!stringIsEmpty(filteredQuery)) {
+      updateSearchHistory(prev => {
+        let finalResults = prev[historyDomain] || [];
+        const duplicateIndex = finalResults.indexOf(filteredQuery);
 
-      // Check for duplicate searches. If duplicate is found, just re-order the search results
-      if (duplicateIndex > -1) {
-        finalResults.splice(duplicateIndex, 1);
-        finalResults.unshift(filteredQuery);
+        // Check for duplicate searches. If duplicate is found, just re-order the search results
+        if (duplicateIndex > -1) {
+          finalResults.splice(duplicateIndex, 1);
+          finalResults.unshift(filteredQuery);
 
-      } else {
-        finalResults = [filteredQuery, ...finalResults]; 
-      }
+        } else {
+          finalResults = [filteredQuery, ...finalResults]; 
+        }
 
-      // Clip search results to history size limit
-      if (finalResults.length > historySize) {
-        finalResults = finalResults.slice(0, historySize);
-      }
-      
-      return {...prev, [historyDomain]: finalResults };
-    });
+        // Clip search results to history size limit
+        if (finalResults.length > historySize) {
+          finalResults = finalResults.slice(0, historySize);
+        }
+        
+        return {...prev, [historyDomain]: finalResults };
+      });
+    // }
+
+    // if (resultData) {
+    //   // if the user searched from clicking on a recommended search result
+    //   resultData = {
+    //     // quickLink: resultData.type !== Enum.SearchResultType.History.value,
+    //     quickLink: resultData.type !== Enum.SearchResultType.History.value,
+    //     results: [resultData]
+    //   }
+
+    // // if the user searched from pressing enter
+    // } else {
+    //   resultData = { 
+    //     quickLink: false,
+    //     results: searchResultList.current
+    //   }
+    // }
     
     onSearch(filteredQuery);
   }
 
   // When a search is invoked through the search result drop-down menu
-  const onSearchResultQuery = (result) => {
-    searchFieldRef.current.value = result;
-    setSearchInput(result);
-    filterSearch(result);
+  const onSearchResultQuery = (resultData) => {
+    const source = resultData.source;
+    searchFieldRef.current.value = source;
+
+    setSearchInput(source);
+    filterSearch(resultData);
   }
 
   // When a search is submitted in the search bar
   const onEnter = (event) => {
     if (event.key === Enum.Keys.Enter.value) {
       // filterSearch(searchFieldRef.current.value);
-      filterSearch(searchInput);
+      filterSearch({ source: searchInput });
     }
   }
 
@@ -185,7 +206,7 @@ const SearchBar = ({
         self: "overflow-y-auto overflow-x-clip max-h-[200px]",
         resultButton: {
           //text-search-bar-result bg-search-bar-result hover:bg-search-bar-result-hover
-          self: "w-full text-left justify-start text-search-bar-result bg-search-bar-result font-medium transition-colors duration-200 rounded hover:bg-search-bar-result-hover hover:underline",
+          self: "w-full text-left justify-start text-search-bar-result bg-search-bar-result font-medium transition-colors duration-200 rounded hover:bg-search-bar-result-hover hover:underline mr-2",
           iconButton: {
             self: "hover:bg-transparent h-fit",
             inner: {
@@ -227,7 +248,7 @@ const SearchBar = ({
           // Render interactive result icon for result history
           resultData.type === Enum.SearchResultType.History.value
             ? <StatefulImageButton
-              onClick={() => removeFromHistory(resultData.source)}
+              onClick={() => removeFromHistory(resultData)}
               className={className.historyList.inner.resultButton.iconButton}
               srcHovered="/icons/trash_icon.svg"
               src="/icons/history_icon.svg"
@@ -235,7 +256,7 @@ const SearchBar = ({
 
             // Render stateless icon for other search results
             : <StatelessImageButton
-              onClick={() => onSearchResultQuery(resultData.source)}
+              onClick={() => onSearchResultQuery(resultData)}
               className={className.historyList.inner.resultButton.iconButton}
               src="/icons/search_icon.svg"
               />
@@ -244,7 +265,7 @@ const SearchBar = ({
         {/* Render search result button */}
         <StatelessButton 
         key={key}
-        onClick={() => onSearchResultQuery(resultData.source)}
+        onClick={() => onSearchResultQuery(resultData)}
         className={mergeClass(
           className.historyList.inner.resultButton, 
           resultData.type === Enum.SearchResultType.History.value 
@@ -310,6 +331,8 @@ const SearchBar = ({
     .slice(0, displayResultsSize)
     // .sort((a, b) => b.priority - a.priority);
 
+    // searchResultList.current = allResults;
+    // console.log("results: ", allResults);
     return allResults;
   }
 
