@@ -15,6 +15,7 @@ import { filterSearchResults } from "@/util/filterSearchResults";
 import Enum from "@/enum";
 import { v4 as uuidv4 } from "uuid";
 import { parse as htmlToJSON, stringify as jsonToHTML} from "himalaya";
+import { useSearchParams, useRouter } from "next/navigation";
 // import creatureData from "../../db/creature-data.json";
 // import formatCreatureData from "@/util/formatCreatureData";
 
@@ -159,9 +160,14 @@ const SearchContent = function({
   fromResults=["Empty"],
 }) {
 
-  const [searchQuery, setSearchQuery] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const params = useSearchParams();
+  const router = useRouter();
+  const loadedSearch = params.get('search');
 
+  // console.log("search param: ", loadedSearch);
+
+  const [searchQuery, setSearchQuery] = useState(loadedSearch);
+  const [loading, setLoading] = useState(loadedSearch !== null);
   const searchData = useRef(null);
   
   const styles = className.SearchContent;
@@ -176,6 +182,8 @@ const SearchContent = function({
     
     setSearchQuery(result);
     setLoading(true);
+
+    router.replace(`?search=${result}`);
   }
 
   if (searchQuery && loading) { 
@@ -209,7 +217,7 @@ const SearchContent = function({
     <Page.Content max>
 
       {/* Search config/input section */}
-      <Page.Content small className="mb-16">
+      <Page.Content small className="mb-14">
         <div className="flex flex-row w-full gap-2">
 
           {/* Select search category */}
@@ -241,7 +249,7 @@ const SearchContent = function({
           loading 
             ? <Text 
               className={{ 
-                self: "text-2xl text-center animate-pulse rounded w-fit p-4 mx-auto mb-7" 
+                self: "text-2xl text-center animate-pulse rounded w-fit p-4 mx-auto mb-7 -mt-4" 
               }}>
                 Loading...
               </Text>

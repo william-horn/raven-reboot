@@ -102,7 +102,9 @@ const SearchBar = ({
     setSearchState(Enum.SearchState.Typing.value);
   }
 
-  const removeFromHistory = ({ resultStr }) => {
+  const removeFromHistory = (resultData) => {
+    const resultStr = resultData.source;
+    
     updateSearchHistory(prev => {
       let finalResults = prev[historyDomain];
       
