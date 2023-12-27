@@ -156,7 +156,7 @@ const SearchResult = function({
 
 const SearchContent = function({
   children,
-  fromResults=["Empty"],
+  getResults,
 }) {
 
   const params = useSearchParams();
@@ -167,6 +167,7 @@ const SearchContent = function({
 
   const [searchQuery, setSearchQuery] = useState(loadedSearch);
   const [loading, setLoading] = useState(loadedSearch !== null);
+  const [creatureData, setCreatureData] = useState(["Loading..."]);
   const searchData = useRef(null);
   
   const styles = className.SearchContent;
@@ -191,11 +192,18 @@ const SearchContent = function({
     fetch(`/api/creatures?matchName=${searchQuery}`)
       .then(res => res.json())
       .then(data => {
-        console.log("Got: ", data);
+        // console.log("Got: ", data);
         searchData.current = data;
         setLoading(false);
       })
   }
+
+  useEffect(() => {
+    getResults()
+      .then(data => {
+        setCreatureData(data);
+      });
+  }, []);
 
   const renderSearchResults = () => {
     if (searchData.current) {
@@ -234,7 +242,7 @@ const SearchContent = function({
 
           {/* Main Raven search field */}
           <SearchBar
-          fromResults={fromResults}
+          fromResults={creatureData}
           onSearch={(result) => runSearch(result)}
           className={styles.searchBar}/>
         </div>

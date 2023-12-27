@@ -52,14 +52,26 @@ const toSearchResultData = (data) => {
   return t;
 }
 
-const LandingPage = async function() {
+const LandingPage = function() {
   // const creatureData = await fetchData("creatures?limit=500");
   // console.log(creatureData);
-  await connectMongoDB();
 
-  let creatureData = await Creature.find().limit().select("name");
-  creatureData = toSearchResultData(creatureData);
+  const getCreatureData = async () => {
+    "use server";
+    
+    await connectMongoDB();
 
+    const cd = await Creature
+      .find()
+      .limit()
+      .select("name");
+
+    return toSearchResultData(cd);
+  }
+
+  // let creatureData = await Creature.find().limit().select("name");
+  // creatureData = toSearchResultData(creatureData);
+  // let creatureData = ["lol"];
   
   return (
     <Page>
@@ -80,7 +92,7 @@ const LandingPage = async function() {
         </Text>
       </Page.Content>
       
-      <SearchContent fromResults={creatureData}/>
+      <SearchContent getResults={getCreatureData}/>
     </Page>
   )
 }
