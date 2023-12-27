@@ -42,6 +42,10 @@ const mergeClass = (base, imported, state={}) => {
     recursiveMerge(final, final.__dropdownSelected);
   } 
 
+  if (state.__menuItemSelected) {
+    recursiveMerge(final, final.__menuItemSelected);
+  }
+
   if (state.__groupSelected) {
     recursiveMerge(final, final.__groupSelected);
   }

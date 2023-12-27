@@ -6,8 +6,6 @@ import emptyFunc, { truthyFunc } from "@/util/defaultFunctions";
 import mergeClass from "@/util/mergeClass";
 
 const {
-  FirstProvider: enum_FirstProvider,
-
   ButtonGroup: enum_ButtonGroup,
   DropdownSelection: enum_DropdownSelection,
 } = Enum.ProviderNames;
@@ -15,39 +13,6 @@ const {
 const groupContexts = {
   // contexts that can't be combined with each other
   mutuallyExclusive: {
-    [enum_FirstProvider.value]: {
-      provider: enum_FirstProvider,
-      useContext: () => useComponentContext(enum_FirstProvider),
-      methods: {
-        __getEventData() {
-          return {
-            firstProvider: true,
-            state: this.__getState()
-          }
-        },
-
-        __setStateInitial() {
-          this.__setState({
-            __testState: false,
-            __testActive: false,
-          });
-        },
-
-        __updateActiveData() {
-          if (this.__getState().__testState) {
-            this.__provider.activeData.current[this.id] = this.__getEventData();
-          } else {
-            delete this.__provider.activeData.current[this.id];
-          }
-        },
-
-        onClick() {
-          console.log("SYSTEM CLICK");
-          this.__props.onClick({ data: "test" });
-        }
-      }
-    },
-
     /*
       * // ================================ // *
       * // --------- BUTTON GROUP --------- // *
@@ -201,6 +166,7 @@ const groupContexts = {
         __setStateInitial() {
           this.__setState({
             __dropdownSelected: this.__provider.selectedId === this.id,
+            __menuItemSelected: this.__provider.activeData.current.active.id === this.id,
             ...this.__provider.importedState,
             ...this.__props.importedState,
           });
@@ -229,7 +195,7 @@ const groupContexts = {
             if (onClick(this.__getEventData())) dropdownGroup.onClick(this.__getEventData());
           }
 
-          if (!this.__getState().__dropdownSelected) {
+          if (!this.__getState().__dropdownSelected && !this.__getState().__menuItemSelected) {
             activeData.current.active = this.__getEventData();
             setSelectedId(this.id);
             setMenuOpen(false);

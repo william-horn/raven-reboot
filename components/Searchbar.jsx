@@ -21,9 +21,9 @@ const SearchBar = ({
   placeholder="Search...", 
 
   onSearch=search => console.log('searched for: ', search),
-  onFetch=emptyFunc,
-
-  __temp_db=[],
+  onTyping=emptyFunc,
+  onFetchSearchResults=emptyFunc,
+  fromResults=[],
 
   historyDomain=Enum.StorageKeys.SearchHistoryDomain.Primary.value,
 
@@ -38,6 +38,10 @@ const SearchBar = ({
   const [getSearchHistory, updateSearchHistory] = useLocalStorageState(
     Enum.StorageKeys.SearchHistory.value, { [historyDomain]: [] }
   );
+
+  const [getSearchCache, updateSearchCache] = useLocalStorageState(
+    "raven:search-cache", []
+  )
 
   // Create search state for when the search bar is interacted with
   const [searchState, setSearchState] = useState(Enum.SearchState.Idle.value);
@@ -273,7 +277,6 @@ const SearchBar = ({
   const getSearchResults = (searchInput) => {
     // pull from search result arrays
     const historyLogs = (getSearchHistory(historyDomain) || []);
-    const otherLogs = __temp_db;
 
     /*
       otherLogs = [
@@ -294,7 +297,7 @@ const SearchBar = ({
     .sort((a, b) => b.priority - a.priority);
 
     const otherResults = filterSearchResults(
-      otherLogs,
+      fromResults,
       searchInput,
       Enum.SearchResultType.Database.value
     ).sort((a, b) => b.priority - a.priority);
@@ -338,7 +341,10 @@ const SearchBar = ({
       setSearchState(Enum.SearchState.Typing.value);
     }
     
-    setSearchInput(searchFieldRef.current.value);
+    const currentInput = searchFieldRef.current.value;
+
+    setSearchInput(currentInput);
+    onTyping(currentInput);
   }
 
   return (

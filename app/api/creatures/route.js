@@ -28,14 +28,11 @@ export async function POST(req) {
 export async function GET(req) {
   try {
     await connectMongoDB();
-
     const params = req.nextUrl.searchParams;
 
-    const queryParams = {
-      limit: params.get('limit') || 1
-    }
+    let query_limit = params.get('limit');
 
-    const creature = await Creature.find({}).limit(queryParams.limit);
+    let creature = await Creature.find({}).limit(query_limit);
 
     return NextResponse.json(
       creature, 

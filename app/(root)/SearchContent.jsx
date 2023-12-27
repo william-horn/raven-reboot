@@ -47,7 +47,11 @@ const className = {
       self: "",
 
       dropButton: {
-        self: "text-lg sm:min-w-[4rem] md:min-w-[6rem] lg:min-w-[8rem] px-5 w-fit"
+        self: "text-lg sm:min-w-[4rem] md:min-w-[6rem] lg:min-w-[8rem] px-2 w-fit",
+        rightIcon: { src: "/icons/arrow_down_icon.svg" },
+        __dropdownSelected: {
+          rightIcon: { src: "/icons/arrow_up_icon.svg" },
+        }
       },
 
       menuItems: { 
@@ -55,7 +59,7 @@ const className = {
       },
 
       outerList: {
-        self: "min-w-fit"
+        self: "min-w-fit min-h-fit"
       },
     },
 
@@ -131,9 +135,12 @@ const SearchResult = function({
 
 const SearchContent = function({
   children,
+  fromResults=["Empty"],
 }) {
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchPending, setSearchPending] = useState("");
+  
   const styles = className.SearchContent;
 
   // useEffect(() => {
@@ -172,18 +179,20 @@ const SearchContent = function({
 
           {/* Select search category */}
           <DropdownSelection 
-          defaultData={{ text: "All", value: "all" }}
+          defaultData={{ id: "creatures", text: "Creatures", value: "creatures" }}
           className={styles.searchDropdown}>
 
-            <StatelessButton id="all" text="All" value="all">All</StatelessButton>
+            {/* <StatelessButton id="all" text="All" value="all">All</StatelessButton> */}
             <StatelessButton id="creatures" text="Creatures" value="creatures">Creatures</StatelessButton>
-            <StatelessButton id="packs" text="Packs" value="packs">Packs</StatelessButton>
-            <StatelessButton id="items" text="Items" value="items">Items</StatelessButton>
+            <Text className={{ self: "italic font-light text-center mt-2" }}>Other search options not available yet</Text>
+            {/* <StatelessButton id="packs" text="Packs" value="packs">Packs</StatelessButton>
+            <StatelessButton id="items" text="Items" value="items">Items</StatelessButton> */}
 
           </DropdownSelection>
 
           {/* Main Raven search field */}
           <SearchBar
+          fromResults={fromResults}
           onSearch={(result) => setSearchQuery(result)}
           className={styles.searchBar}/>
         </div>

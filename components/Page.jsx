@@ -1,14 +1,19 @@
 
 import { twMerge } from "tailwind-merge";
+// import ProviderNames from "@/enum/ProviderNames";
+// import Providers from "@/providers/Providers";
 
 const Page = function({
   children,
   className="",
+  providerValue={}
 }) {
   return (
-    <main className={twMerge("min-h-screen", className)}>
-      {children}
-    </main>
+    // <Providers.CurrentPage value={providerValue}>
+      <main className={twMerge("min-h-screen", className)}>
+        {children}
+      </main>
+    // </Providers.CurrentPage>
   );
 };
 

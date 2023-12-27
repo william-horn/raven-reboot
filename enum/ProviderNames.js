@@ -2,13 +2,12 @@ import { EnumCollection, EnumItem } from './Enum';
 
 const ProviderNames = new EnumCollection({
   // * value: provider name
-  // production
+  // UTILITY PROVIDERS
   ButtonGroup: new EnumItem({ value: 'ButtonGroup', name: 'ButtonGroup' }),
   DropdownSelection: new EnumItem({ value: 'DropdownSelection' }),
-  // test providers
-  FirstProvider: new EnumItem({ value: 'FirstProvider' }),
-  SecondProvider: new EnumItem({ value: 'SecondProvider' }),
-  ThirdProvider: new EnumItem({ value: 'ThirdProvider' }),
+
+  // PAGE PROVIDERS
+  CurrentPage: new EnumItem({ value: 'CurrentPage' }),
 });
 
 export default ProviderNames;

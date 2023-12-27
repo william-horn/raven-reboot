@@ -48,32 +48,34 @@ const getTagData = (results, type, resultSource) => {
 
 export const filterSearchResults = (searchResults, searchInput, searchResultType) => {
   const results = [];
+  const isHistoryResult = searchResultType === Enum.SearchResultType.History.value;
   const searchInputBase = searchInput.toLowerCase();
 
   for (let key in searchResults) {
-    const result = searchResults[key];
-    const resultBase = result.toLowerCase();
+    const resultName = isHistoryResult ? searchResults[key] : searchResults[key].name;
+    const resultBase = resultName.toLowerCase();
 
     const resultData = {
       // priority: 3, 
+      index: key,
       type: searchResultType,
-      source: result, 
+      source: resultName, 
       tags: [] 
     };
 
     // If search input matches the result string from the beginning
-    if (result.substring(0, searchInput.length).toLowerCase() === searchInputBase) {
+    if (resultName.substring(0, searchInput.length).toLowerCase() === searchInputBase) {
       resultData.tags = [
         { 
           matched: true, 
           type: Enum.SearchMatchType.FirstMatch, 
-          source: result.substring(0, searchInput.length),
+          source: resultName.substring(0, searchInput.length),
           key: "0",
         },
         { 
           matched: false, 
           type: Enum.SearchMatchType.Normal, 
-          source: result.substring(searchInput.length),
+          source: resultName.substring(searchInput.length),
           key: "1",
         }
       ];
@@ -88,7 +90,7 @@ export const filterSearchResults = (searchResults, searchInput, searchResultType
     resultData.tags = getTagData(
       resultBase.matchAll(new RegExp(`\\b${escapeRegex(searchInputBase)}\\b`, 'g')),
       Enum.SearchMatchType.WordMatch,
-      result
+      resultName
     );
 
     if (resultData.tags.length > 0) {
@@ -102,7 +104,7 @@ export const filterSearchResults = (searchResults, searchInput, searchResultType
     resultData.tags = getTagData(
       resultBase.matchAll(new RegExp(escapeRegex(searchInputBase), 'g')),
       Enum.SearchMatchType.AnyMatch,
-      result
+      resultName
     );
 
     if (resultData.tags.length > 0) {
