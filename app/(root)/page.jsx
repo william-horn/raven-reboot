@@ -10,6 +10,7 @@ import Page from "@/components/Page";
 // import SearchBar from "@/components/Searchbar";
 import SearchContent from "@/app/(root)/SearchContent";
 import Heading from "@/components/Typography/Heading";
+import Image from "next/image";
 import Text from "@/components/Typography/Text";
 import DropdownSelection from "@/components/Buttons/DropdownSelection";
 import { StatelessButton } from "@/components/Buttons/Buttons";
@@ -74,8 +75,14 @@ const LandingPage = function() {
   // let creatureData = ["lol"];
   
   return (
-    <Page>
-      <Page.Content small className="mt-20">
+    <Page className="relative pt-20">
+      {/* <Image
+      fill
+      src="/images/dragon-mouth-cave-bg.jpg"
+      className="absolute"
+      /> */}
+
+      <Page.Content small className="z-[10] relative">
         
         <Heading 
         center 

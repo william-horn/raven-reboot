@@ -12,13 +12,16 @@
     --logo-font: 'Titan One', sans-serif;
     --logo-font-2: 'Paytone One', sans-serif;
 
-    --bg-color-primary: #2a2a32;
+    --bg-color-primary: #0c0c0c;
+    /* --bg-color-primary: #2a2a32; */
     --bg-color-secondary: #1c1d25;
 
     /* --color-logo-primary: #94b8c7; */
     --color-logo-primary: #a7a4ab;
     --color-logo-secondary: #f36161;
     --color-logo-third: #ce9454;
+
+    --bg-color-scroll-bar: #505059;
 
     --bg-color-search-bar: #404049;
     --bg-color-search-bar-list: #404049;
@@ -30,9 +33,10 @@
     --text-color-search-bar-input: #d9d8df;
     --text-color-search-history-result: #dbdbdb;
 
-    --button-color-primary: #404049;
+    /* --button-color-primary: #404049; */
+    --button-color-primary: #181817;
     --button-color-secondary: blue;
-    --button-hover-color-primary: #505059;
+    --button-hover-color-primary: #272729;
 
     --text-color-heading-primary: #d1d1d1;
     --text-color-heading-muted: #959595;
@@ -45,6 +49,10 @@
 
   input {
     all: unset;
+  }
+
+  input::placeholder {
+    color: var(--text-color-muted);
   }
 
   h1, h2, h3, h4, h5, h6, p {
@@ -68,15 +76,15 @@
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #5f677e; 
-    border-radius: 10px;
+    /* background: #5f677e;  */
+    background: var(--bg-color-scroll-bar);
+    /* border-radius: 10px; */
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #5f677e; 
+    background: var(--bg-color-scroll-bar); 
   }
-
 
 
   .wiz-description-box {

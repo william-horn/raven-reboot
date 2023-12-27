@@ -21,7 +21,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 const className = {
   SearchResultPartition: {
-    self: "p-5 rounded result-1 bg-button-primary group-hover:bg-button-hover-primary w-full flex flex-col",
+    self: "p-5 rounded result-1 bg-[#0c0c0c] group-hover:bg-[#121212] w-full flex flex-col transition-colors",
 
     headingSection: {
       self: "flex heading-section",
@@ -63,10 +63,14 @@ const className = {
       outerList: {
         self: "min-w-fit min-h-fit"
       },
+
+      __dropdownSelected: {
+        self: "drop-shadow-[0_4px_10px_black]",
+      }
     },
 
     searchBar: {
-      self: "p-1 flex-1",
+      self: "p-1 flex-1 bg-button-primary",
       leftIcon: {
         self: "w-6 h-6"
       },
@@ -74,12 +78,18 @@ const className = {
         self: "text-lg font-bold"
       },
       historyList: {
-        self: " -translate-x-1",
+        self: "-translate-x-1 bg-button-primary",
         inner: {
           resultButton: {
-            self: "text-lg"
+            self: "text-lg bg-transparent",
+            iconButton: {
+              self: "bg-transparent",
+            }
           }
         }
+      },
+      __selected: {
+        self: "drop-shadow-[0_4px_10px_black]"
       }
     }
   }
@@ -221,7 +231,7 @@ const SearchContent = function({
   }
 
   return (
-    <Page.Content max>
+    <Page.Content max className="relative z-[10]">
 
       {/* Search config/input section */}
       <Page.Content small className="mb-14">

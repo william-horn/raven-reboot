@@ -40,7 +40,7 @@ const Nav = function({
   const path = usePathname();
 
   return (
-    <nav className="sticky top-0 bg-secondary z-[99999]">
+    <nav className="sticky top-0 bg-primary z-[99999]">
       <NavSection>
         <NavLink leftIcon="/icons/home_icon.svg" href="/">Home</NavLink>
         <NavLink leftIcon="/icons/menu_book_icon.svg" href="/about">About Us</NavLink>

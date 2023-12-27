@@ -8,6 +8,7 @@ import Heading from "@/components/Typography/Heading";
 import { useSearchParams, useParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 import getWikiUrlFromName from "@/util/getWikiUrlFromName";
+import Icon from "@/components/Graphics/Icon";
 
 
 const StatsRow = function({
@@ -138,6 +139,28 @@ const CreaturePage = function() {
     }
   }
 
+  console.log(creatureData.drops);
+
+  if (!loaded) {
+    return <Page>
+      <Page.Content max className="min-h-screen px-0">
+        <div className=" bg-[#13141c] h-screen">
+          <div className="flex flex-row items-center justify-center w-full gap-2 pt-10">
+            <Heading 
+            className={{ self: "text-3xl text-center" }}>
+              Loading... 
+            </Heading>
+            
+            <Icon
+            src="/icons/loading_icon.svg"
+            className={{ self: "animate-spin w-8 h-8" }}
+            />
+          </div>
+        </div>
+      </Page.Content>
+    </Page>
+  }
+
   return (
     <Page>
       <Page.Content max className="min-h-screen px-0">
@@ -162,11 +185,11 @@ const CreaturePage = function() {
                   alt=''
                   src="/images/monster_placeholder_image.png"
                   fill
-                  className="p-8"
+                  className="p-2 rounded-[50%] shadow-[0_0_10px_black]"
                   />
                 </div>
 
-                <div className="mt-2">
+                <div className="mt-4">
                   <Text className={{ self: "text-3xl text-muted font-normal rounded text-center p-2 font-logo" }}>Rank: <span className={`${getColorFromRank(parseInt(creatureData.stats.rank))}`}>{creatureData.stats.rank}</span></Text>
                   <Text className={{ self: "text-3xl text-muted mb-4 font-normal rounded text-center p-2 font-logo" }}>Health: <span className="font-medium text-green-400 ">{creatureData.stats.health}</span></Text>
                 </div>
@@ -187,7 +210,11 @@ const CreaturePage = function() {
               </StatsTable>
 
               <StatsTable title="Dropped Items">
-                
+                {
+                  creatureData.drops.map(drop => {
+
+                  })
+                }
               </StatsTable>
 
             </div>
