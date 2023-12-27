@@ -12,7 +12,7 @@ import Text from "@/components/Typography/Text";
 const RootLayout = function({ children }) {
   return (
     <html lang="en">
-      <Wireframe/>
+      {/* <Wireframe/> */}
 
       {/* METADATA */}
       <head>
