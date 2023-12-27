@@ -17,7 +17,7 @@ const Footer = function({
   return (
     <footer>
 
-      <div className="bg-secondary h-28">
+      <div className="bg-primary h-28">
 
       </div>
 
