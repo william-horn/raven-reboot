@@ -25,6 +25,8 @@ const connectMongoDB = async () => {
           : process.env.MONGODB_URI,
       ).then(mongoose => mongoose);
 
+      console.log("DEV MODE: ", DEV);
+      console.log("MONGOURI: ", process.env.MONGODB_URI);
       console.log("Connected to MongoDB");
 
     } catch(error) {
