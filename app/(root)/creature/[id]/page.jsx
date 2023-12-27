@@ -48,20 +48,22 @@ const CreaturePage = function() {
   const params = useParams();
   const [loaded, setLoaded] = useState(false);
   const [creatureData, setCreatureData] = useState({
-    name: "Loading",
+    name: "[ Loading... ]",
     drops: [],
     stats: {},
-    description: "Loading"
+    description: "[ Loading... ]"
   });
 
-  if (!loaded) {
-    fetch(`/api/creatures?id=${params.id}`)
-      .then(res => res.json())
-      .then(data => {
-        setCreatureData(data);
-        setLoaded(true);
-      });
-  }
+  useEffect(() => {
+    if (!loaded) {
+      fetch(`/api/creatures?id=${params.id}`)
+        .then(res => res.json())
+        .then(data => {
+          setCreatureData(data);
+          setLoaded(true);
+        });
+    }
+  }, []);
 
   const getStats = (stats) => {
     const arr = [];
