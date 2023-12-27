@@ -15,17 +15,54 @@ const StatsRow = function({
   name,
   value
 }) {
-
-
   if (typeof value === "object") {
     value = toString(value);
+    return <></>
+  }
+
+  if (name === "rank" || name === "health") {
+    return <></>
+  }
+  
+  if (value === "[Content Not Available]") {
+    value = "N/A";
+  }
+
+  name = ({
+    "rank": "Rank",
+    "health": "Health",
+    "classification": "Class",
+    "school": "School",
+    "starting_pips": "Starting Pips",
+    "school_pips": "School Pips",
+    "out_pierce": "Pierce",
+    "out_boost": "Damage",
+    "inc_boost": "Inc. Damage Boost",
+    "inc_resist": "Resist",
+    "critical_rating": "Critical Rating",
+    "critical_block_rating": "Critical Block",
+    "inc_healing": "Inc. Healing",
+    "out_healing": "Out. Healing",
+    "shadow_pips": "Shadow Pips",
+    "cheats": "Cheats"
+  })[name] || (name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase());
+
+  let valCol; 
+
+  switch (value) {
+    case "N/A":
+      valCol = "text-muted";
+      break;
+
+    default:
+      valCol = "text-primary";
   }
 
   return (
-    <div className="flex justify-between">
-      <Text className="min-w-fit">{name}</Text>
-      <div className="bg-button-primary w-full h-[1px] mx-3 my-auto"></div>
-      <Text className={{ self: "font-normal min-w-fit" }}>{value}</Text>
+    <div className="flex flex-wrap justify-between mt-2">
+      <Text className={{ self: "text-xl min-w-fit" }}>{name}</Text>
+      <div className="bg-button-primary flex-1 h-[1px] mx-3 my-auto min-w-[10%]"></div>
+      <Text className={{ self: `font-normal min-w-fit text-xl ${valCol}` }}>{value}</Text>
     </div>
   );
 }
@@ -36,8 +73,8 @@ const StatsTable = function({
 }) {
   return (
     <div className="flex-wrap flex-1 mb-10 min-w-fit">
-      <Heading h3 className={{ self: "text-2xl text-center mb-4" }}>{title}</Heading>
-      <div className="w-[80%] mx-auto">
+      <Heading h3 className={{ self: "text-3xl text-center mb-4 underline" }}>{title}</Heading>
+      <div className="sm:w-[80%] lg:w-[60%] md:w-[75%] w-[85%] mx-auto">
         {children}
       </div>
     </div>
@@ -79,6 +116,28 @@ const CreaturePage = function() {
     return arr;
   }
 
+  const getColorFromRank = rank => {
+    // className=" text-re"
+    
+    if (rank < 3) {
+      return "text-green-400";
+    } else if (rank < 6) {
+      return "text-green-600";
+    } else if (rank < 9) {
+      return "text-lime-400";
+    } else if (rank < 12) {
+      return "text-orange-400";
+    } else if (rank < 15) {
+      return "text-orange-500";
+    } else if (rank < 18) {
+      return "text-orange-700";
+    } else if (rank < 21) {
+      return "text-red-500";
+    } else {
+      return "text-red-700";
+    }
+  }
+
   return (
     <Page>
       <Page.Content max className="min-h-screen px-0">
@@ -90,34 +149,36 @@ const CreaturePage = function() {
             <div className="flex justify-center inner-top-section">
               
               <div className="flex flex-col items-center title-headshot">
-                <Link href={getWikiUrlFromName('Creature', creatureData.name)}>
-                  <Heading 
-                  className={{ 
-                    self: "text-3xl mb-4 font-normal rounded text-center p-4 font-logo" 
-                  }}>
-                    Creature: <span className="text-[#a35bff] underline">{creatureData.name}</span>
-                  </Heading>
-                </Link>
+                
+                <Heading 
+                className={{ 
+                  self: "text-3xl text-muted mb-4 font-normal rounded text-center p-4 font-logo" 
+                }}>
+                  <Link href={getWikiUrlFromName('Creature', creatureData.name)}><span className="text-[#a35bff] underline font-sans">{creatureData.name}</span></Link>
+                </Heading>
 
-                <div className="relative w-[14rem] h-[14rem] rounded">
+                <div className="relative w-[14rem] h-[14rem]">
                   <Image
                   alt=''
                   src="/images/monster_placeholder_image.png"
                   fill
-                  className="p-2 rounded-[50%] bg-button-primary drop-shadow-[0_0_8px_black]"
+                  className="p-8"
                   />
+                </div>
+
+                <div className="mt-2">
+                  <Text className={{ self: "text-3xl text-muted font-normal rounded text-center p-2 font-logo" }}>Rank: <span className={`${getColorFromRank(parseInt(creatureData.stats.rank))}`}>{creatureData.stats.rank}</span></Text>
+                  <Text className={{ self: "text-3xl text-muted mb-4 font-normal rounded text-center p-2 font-logo" }}>Health: <span className="font-medium text-green-400 ">{creatureData.stats.health}</span></Text>
                 </div>
               </div>
 
             </div>
           </div>
 
-          <Page.Content max className="mb-20 middle-section">
-            <div className="flex flex-col inner-middle-section sm:flex-row">
+          <Page.Content large className="mb-20 middle-section">
+            <div className="flex flex-col gap-2 inner-middle-section sm:flex-row">
               
               <StatsTable title="Stats">
-                {/* <StatsRow name="Damage" value={creatureData.stats.out_boost}/>
-                <StatsRow name="Healing" value={creatureData.stats.out_healing}/> */}
                 {
                   getStats(creatureData.stats).map(data => {
                     return <StatsRow key={data[0]} name={data[0]} value={data[1]}/>
@@ -126,20 +187,18 @@ const CreaturePage = function() {
               </StatsTable>
 
               <StatsTable title="Dropped Items">
-                <Heading>Coming Soon</Heading>
+                
               </StatsTable>
 
             </div>
           </Page.Content>
 
 
-          <Page.Content max className="bottom-section">
+          <Page.Content large className="bottom-section">
             <div className="flex flex-col inner-bottom-section sm:flex-row">
               
               <StatsTable title="Drop Rates">
-                {/* <StatsRow name="Damage" value={creatureData.stats.out_boost}/>
-                <StatsRow name="Healing" value={creatureData.stats.out_healing}/> */}
-                <Heading>Coming Soon</Heading>
+                
               </StatsTable>
 
             </div>
