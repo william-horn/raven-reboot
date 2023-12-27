@@ -33,6 +33,7 @@ export async function GET(req) {
 
     let query_limit = params.get('limit');
     let match_name = params.get('matchName');
+    let query_id = params.get('id');
 
     let creature;
 
@@ -42,6 +43,10 @@ export async function GET(req) {
           "name": { "$regex": escapeRegex(match_name), "$options": "i" }
         })
         .limit(query_limit);
+
+    } else if (query_id) {
+      creature = await Creature
+        .findById(query_id);
 
     } else {
       creature = await Creature

@@ -99,9 +99,9 @@ const SearchResultList = function({
 const SearchResultPartition = function({
   children,
   resultData,
-  resultTags,
 }) {
   const styles = className.SearchResultPartition;
+  const creatureData = resultData.data;
 
   return (
     <div className={styles.self}>
@@ -109,7 +109,7 @@ const SearchResultPartition = function({
         <Heading h3 className={styles.headingSection.heading}>
           {/* {resultData.name} */}
           {
-            resultTags.map(tagData => {
+            resultData.tags.map(tagData => {
               switch (tagData.type) {
                 case Enum.SearchMatchType.FirstMatch:
                   return <span key={tagData.key} className="text-[#d58eff] font-bold">{tagData.source}</span>
@@ -134,7 +134,7 @@ const SearchResultPartition = function({
 
       <div className={styles.contentSection.self}>
         {/* <Text className={styles.contentSection.text}>{JSON.stringify(resultData.description)}</Text> */}
-        <div className="wiz-description-box" dangerouslySetInnerHTML={{ __html: jsonToHTML(resultData.description) }}></div>
+        <div className="wiz-description-box" dangerouslySetInnerHTML={{ __html: jsonToHTML(creatureData.description) }}></div>
       </div>
     </div>
   );
@@ -143,12 +143,11 @@ const SearchResultPartition = function({
 const SearchResult = function({
   children,
   resultData,
-  resultTags
 }) {
   return (
     <div className="flex gap-2 rounded cursor-pointer search-result group w-full xl:w-[70%] lg:w-[70%] md:w-[80%] max-h-[20rem]" tabIndex="-1">
-      <Link href="/about" className="flex w-full gap-2 rounded cursor-pointer search-result group">
-        <SearchResultPartition resultData={resultData} resultTags={resultTags}/>
+      <Link href={`/creature/${resultData.data._id}`} className="flex w-full gap-2 rounded cursor-pointer search-result group">
+        <SearchResultPartition resultData={resultData}/>
         {/* <SearchResultSection resultData={newResultData.section2}/> */}
      </Link>
     </div>
@@ -203,7 +202,7 @@ const SearchContent = function({
       const results = filterSearchResults(searchData.current, searchQuery, Enum.SearchResultType.Database)
         .slice(0, 10)
         .map(resultData => {
-          return <SearchResult key={uuidv4()} resultData={resultData.data} resultTags={resultData.tags}/>
+          return <SearchResult key={uuidv4()} resultData={resultData}/>
         });
 
       return results;
