@@ -19,12 +19,12 @@ const connectMongoDB = async () => {
 
       // mongoose.set("strictQuery", false);
 
-      cached.promise = mongoose.connect(DEV ? "mongodb://localhost/raven-dev" : process.env.MONGODB_URI)
+      cached.promise = mongoose.connect(DEV ? "mongodb://localhost/raven-dev" : process.env.NEXT_PUBLIC_MONGODB_URI)
         .then(mongoose => mongoose);
 
       console.log("DEV MODE: ", DEV);
       console.log("ENV: ", process.env);
-      console.log("MONGOURI: ", process.env.MONGODB_URI);
+      console.log("MONGOURI: ", process.env.NEXT_PUBLIC_MONGODB_URI);
       console.log("Connected to MongoDB");
 
     } catch(error) {
