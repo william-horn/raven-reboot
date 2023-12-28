@@ -113,7 +113,7 @@ const CreaturePage = function() {
       }
     }
 
-    console.log(arr);
+    // console.log(arr);
     return arr;
   }
 
@@ -139,7 +139,7 @@ const CreaturePage = function() {
     }
   }
 
-  console.log(creatureData.drops);
+  // console.log(creatureData.drops);
 
   if (!loaded) {
     return <Page>
@@ -164,7 +164,7 @@ const CreaturePage = function() {
   return (
     <Page>
       <Page.Content max className="min-h-screen px-0">
-        <div className=" bg-[#13141c]">
+        <div className=" bg-primary">
 
            {/* Top bar */}
           <div className="p-4 mb-8 top-section">

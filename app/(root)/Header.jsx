@@ -15,7 +15,7 @@ const Header = function({
 }) {
 
   return (
-    <header className="flex bg-primary">
+    <header className="flex bg-secondary">
 
       {/* Heading Text */}
       <h1 

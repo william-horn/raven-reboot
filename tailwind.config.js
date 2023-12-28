@@ -8,6 +8,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundColor: {
+        "search-result": "var(--bg-color-search-result)",
+        "search-result-hover": "var(--bg-color-search-result-hover)",
         "logo": "var(--color-logo-primary)",
         "primary": "var(--bg-color-primary)",
         "secondary": "var(--bg-color-secondary)",

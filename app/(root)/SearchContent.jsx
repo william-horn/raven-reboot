@@ -21,7 +21,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 const className = {
   SearchResultPartition: {
-    self: "p-5 rounded result-1 bg-[#0c0c0c] group-hover:bg-[#121212] w-full flex flex-col transition-colors",
+    self: "p-5 rounded result-1 bg-secondary group-hover:bg-search-result-hover w-full flex flex-col transition-colors",
 
     headingSection: {
       self: "flex heading-section",
@@ -113,6 +113,10 @@ const SearchResultPartition = function({
   const styles = className.SearchResultPartition;
   const creatureData = resultData.data;
 
+  // todo: eventually find the icons for these images. remove them in the meantime.
+  let desc = jsonToHTML(creatureData.description);
+  desc = desc.replaceAll(new RegExp(`<img.+?>`, 'g'), '');
+
   return (
     <div className={styles.self}>
       <div className={styles.headingSection.self}>
@@ -144,7 +148,7 @@ const SearchResultPartition = function({
 
       <div className={styles.contentSection.self}>
         {/* <Text className={styles.contentSection.text}>{JSON.stringify(resultData.description)}</Text> */}
-        <div className="wiz-description-box" dangerouslySetInnerHTML={{ __html: jsonToHTML(creatureData.description) }}></div>
+        <div className="wiz-description-box" dangerouslySetInnerHTML={{ __html: desc }}></div>
       </div>
     </div>
   );
@@ -209,6 +213,7 @@ const SearchContent = function({
   }
 
   useEffect(() => {
+    console.log("refetching creature data...");
     getResults()
       .then(data => {
         setCreatureData(data);
@@ -218,6 +223,7 @@ const SearchContent = function({
   const renderSearchResults = () => {
     if (searchData.current) {
       const results = filterSearchResults(searchData.current, searchQuery, Enum.SearchResultType.Database)
+        .sort((a, b) => b.priority - a.priority)
         .slice(0, 10)
         .map(resultData => {
           return <SearchResult key={uuidv4()} resultData={resultData}/>
@@ -281,7 +287,7 @@ const SearchContent = function({
               className={{ 
                 self: "italic mb-4" 
               }}>
-                {searchData.current.length} search result{searchData.current.length > 1 ? 's' : ''}.
+                {searchData.current.length} search result{searchData.current.length === 1 ? '' : 's'}.
               </Text>
               : <></>
           }

@@ -14,19 +14,25 @@
 
     --bg-color-primary: #0c0c0c;
     /* --bg-color-primary: #2a2a32; */
-    --bg-color-secondary: #1c1d25;
+    /* --bg-color-secondary: #1c1d25; */
+    --bg-color-secondary: #020202;
 
     /* --color-logo-primary: #94b8c7; */
     --color-logo-primary: #a7a4ab;
     --color-logo-secondary: #f36161;
     --color-logo-third: #ce9454;
 
+    /* --bg-color-search-result: #0c0c0c; */
+    --bg-color-search-result: #020202;
+    /* --bg-color-search-result-hover: #121212; */
+    --bg-color-search-result-hover: #060606;
+
     --bg-color-scroll-bar: #505059;
 
     --bg-color-search-bar: #404049;
     --bg-color-search-bar-list: #404049;
     --bg-color-search-bar-result: #404049;
-    --bg-color-hover-search-bar-result: #33333b;
+    --bg-color-hover-search-bar-result: #272729;
 
     --text-color-href-primary: #cc7aff;
     --text-color-search-bar-result: white;
