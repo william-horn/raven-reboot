@@ -177,7 +177,7 @@ const CreaturePage = function() {
                 className={{ 
                   self: "text-3xl text-muted mb-4 font-normal rounded text-center p-4 font-logo" 
                 }}>
-                  <Link href={getWikiUrlFromName('Creature', creatureData.name)}><span className="text-[#a35bff] underline font-sans">{creatureData.name}</span></Link>
+                  <a href={getWikiUrlFromName('Creature', creatureData.name)}><span className="text-[#a35bff] underline font-sans">{creatureData.name}</span></a>
                 </Heading>
 
                 <div className="relative w-[14rem] h-[14rem]">

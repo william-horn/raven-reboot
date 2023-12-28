@@ -1,11 +1,11 @@
-"use client";
+// "use client";
 
-import { 
-  StatelessButton, 
-  StatefulLink, 
-  StatelessLink,
-  ButtonPresets,
-} from "@/components/Buttons/Buttons";
+// import { 
+//   StatelessButton, 
+//   StatefulLink, 
+//   StatelessLink,
+//   ButtonPresets,
+// } from "@/components/Buttons/Buttons";
 
 import Link from "next/link";
 import Text from "@/components/Typography/Text";
@@ -30,10 +30,10 @@ const Header = function({
         <span className="ml-3 text-sm tracking-wide text-logo">
           A repository of 
           &nbsp;
-          <StatelessLink href="https://www.wizard101.com/" 
-          className={ButtonPresets.underlineLink}>
+          <a href="https://www.wizard101.com/" 
+          className="underline text-primary">
             Wizard101
-          </StatelessLink> 
+          </a> 
           &nbsp;
           statistics
         </span>
