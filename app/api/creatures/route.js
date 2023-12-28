@@ -38,9 +38,12 @@ export async function GET(req) {
     let creature;
 
     if (match_name) {
+      const queryStr = escapeRegex(match_name);
+      console.log("Searching for match... ", queryStr, "original: ", match_name);
+
       creature = await Creature
         .find({
-          "name": { "$regex": escapeRegex(match_name), "$options": "i" }
+          "name": { "$regex": queryStr, "$options": "i" }
         })
         .limit(query_limit);
 

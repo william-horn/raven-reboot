@@ -173,6 +173,8 @@ const CreaturePage = function() {
         </Page.Content>
       </Page>
     )
+  } else {
+    creatureData.name = creatureData.name.replaceAll('&amp;', '&');
   }
 
   return (
@@ -199,6 +201,7 @@ const CreaturePage = function() {
                   alt=''
                   src="/images/monster_placeholder_image.png"
                   fill
+                  sizes="512px"
                   className="p-2 rounded-[50%] shadow-[0_0_10px_black]"
                   />
                 </div>

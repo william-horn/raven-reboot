@@ -114,8 +114,16 @@ const SearchResultPartition = function({
   const creatureData = resultData.data;
 
   // todo: eventually find the icons for these images. remove them in the meantime.
-  let desc = jsonToHTML(creatureData.description);
-  desc = desc.replaceAll(new RegExp(`<img.+?>`, 'g'), '');
+  let desc;
+
+  // console.log("TEST: ", jsonToHTML(["<p>lol</p>"]));
+
+  if (typeof creatureData.description[0] === "object") {
+    desc = jsonToHTML(creatureData.description);
+    desc = desc.replaceAll(new RegExp(`<img.+?>`, 'g'), '');
+  } else {
+    desc = "[Error loading description]";
+  }
 
   return (
     <div className={styles.self}>
@@ -192,18 +200,20 @@ const SearchContent = function({
       return;
     };
 
-    console.log("Preparing search for... ", result);
+    console.log("Original search... ", result);
+    console.log("Database search... ", result.replaceAll('&', '%26amp;'));
+    console.log("Url search... ", result.replaceAll('&', '%26'));
     
     setSearchQuery(result);
     setLoading(true);
 
-    router.replace(`?search=${result}`);
+    router.replace(`?search=${result.replaceAll('&', '%26')}`);
   }
 
   if (searchQuery && loading) { 
     console.log("Searched: ", searchQuery);
 
-    fetch(`/api/creatures?matchName=${searchQuery}`)
+    fetch(`http://localhost:3000/api/creatures?matchName=${searchQuery.replaceAll('&', '%26amp;')}`)
       .then(res => res.json())
       .then(data => {
         // console.log("Got: ", data);

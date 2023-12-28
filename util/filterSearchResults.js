@@ -55,7 +55,7 @@ export const filterSearchResults = (searchResults, searchInput, searchResultType
     // const resultName = isHistoryResult ? searchResults[key] : searchResults[key].name;
     // const resultBase = resultName.toLowerCase();
     const isResultData = typeof searchResults[key] === "object";
-    const resultName = isResultData ? searchResults[key].name : searchResults[key];
+    const resultName = (isResultData ? searchResults[key].name : searchResults[key]).replaceAll('&amp;', '&');
     const resultBase = resultName.toLowerCase();
 
     const resultData = {

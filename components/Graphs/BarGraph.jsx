@@ -113,8 +113,6 @@ const BarGraph = function({
     })
   }
 
-  console.log("Width: ", x_axis_width);
-
   return (
     <div className="chart">
       <Heading className={{ self: "text-3xl" }}>{graph_title} {x_axis_width}</Heading>
@@ -147,70 +145,6 @@ const BarGraph = function({
         </div>
       </div> 
     </div> 
-
-    /*
-    {Main chart content}
-    {/*
-    <div className="pb-2 overflow-x-auto chart-content">
-      
-      <div className="flex w-full chart-upper">
-        <div className="w-[3rem] y-axis flex flex-col justify-evenly gap-6 items-end pr-2">
-          {
-            getYAxisMarkers().map(marker => {
-              return <p key={marker} className="">{marker}</p>
-            })
-          }
-        </div>
-        <div className="flex w-full gap-2 bg-blue-500 chart-canvas">
-          {
-            x_axis.map(data => {
-              return (
-                <div 
-                key={uuidv4()} 
-                className="bg-green-500">
-                  {data.quantity}
-                </div>
-              )
-            })
-          }
-        </div>
-      </div>
-
-      <div className="ml-[3rem] chart-lower flex flex-col">
-        <div className="bg-gray-500 h-[1px] my-1 w-full"></div>
-        <div className={`${x_axis_padding} ${x_axis_y_overflow} x-axis w-fit relative flex justify-evenly gap-4`} ref={x_axis_ref}>
-          {
-            x_axis.map((data, index) => {
-              // const pos_x_shift = x_axis_spread/2;
-              // const pos_x = x_axis_spread*index + pos_x_shift;
-              const rot = x_axis_marker_tilt || 0;
-
-              let tr_x = "";
-
-              if (x_axis_marker_tilt !== undefined) {
-                tr_x = "translate-x-1/2";
-              }
-
-              return (
-                <p 
-                key={index} 
-                style={{
-                  // top: "0.3rem",
-                  // left: `${pos_x}%`,
-                  rotate: `${rot}deg`,
-                  // transform: "translate(-50%, 0)";
-                }}
-                className={`${tr_x} w-fit h-fit text-sm text-center whitespace-nowrap relative group cursor-default`}>
-                  {data.name}
-                  <span className="absolute top-0 left-0 hidden text-white transition-all bg-black group-hover:inline">test</span>
-                </p>
-              );
-            })
-          }
-        </div>
-      </div>
-    </div>
-    */
   );
 }
 
