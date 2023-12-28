@@ -6,9 +6,10 @@ import Text from "@/components/Typography/Text";
 import Link from "next/link";
 import Heading from "@/components/Typography/Heading";
 import { useSearchParams, useParams } from "next/navigation";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import getWikiUrlFromName from "@/util/getWikiUrlFromName";
 import Icon from "@/components/Graphics/Icon";
+import BarGraph from "@/components/Graphs/BarGraph";
 
 
 const StatsRow = function({
@@ -82,15 +83,26 @@ const StatsTable = function({
   );
 }
 
+const Loading = function() {
+  return (
+    <div className="flex flex-row items-center justify-center w-full gap-2 pt-10">
+      <Heading 
+      className={{ self: "text-3xl text-center" }}>
+        Loading... 
+      </Heading>
+      
+      <Icon
+      src="/icons/loading_icon.svg"
+      className={{ self: "animate-spin w-8 h-8" }}
+      />
+    </div>
+  );
+}
+
 const CreaturePage = function() {
   const params = useParams();
   const [loaded, setLoaded] = useState(false);
-  const [creatureData, setCreatureData] = useState({
-    name: "[ Loading... ]",
-    drops: [],
-    stats: {},
-    description: "[ Loading... ]"
-  });
+  const [creatureData, setCreatureData] = useState(null);
 
   useEffect(() => {
     if (!loaded) {
@@ -142,23 +154,25 @@ const CreaturePage = function() {
   // console.log(creatureData.drops);
 
   if (!loaded) {
-    return <Page>
-      <Page.Content max className="min-h-screen px-0">
-        <div className=" bg-[#13141c] h-screen">
-          <div className="flex flex-row items-center justify-center w-full gap-2 pt-10">
-            <Heading 
-            className={{ self: "text-3xl text-center" }}>
-              Loading... 
-            </Heading>
-            
-            <Icon
-            src="/icons/loading_icon.svg"
-            className={{ self: "animate-spin w-8 h-8" }}
-            />
+    return (
+      <Page>
+        <Page.Content max className="min-h-screen px-0">
+          <div className="h-screen bg-primary">
+            <div className="flex flex-row items-center justify-center w-full gap-2 pt-10">
+              <Heading 
+              className={{ self: "text-3xl text-center" }}>
+                Loading... 
+              </Heading>
+              
+              <Icon
+              src="/icons/loading_icon.svg"
+              className={{ self: "animate-spin w-8 h-8" }}
+              />
+            </div>
           </div>
-        </div>
-      </Page.Content>
-    </Page>
+        </Page.Content>
+      </Page>
+    )
   }
 
   return (
@@ -197,40 +211,62 @@ const CreaturePage = function() {
 
             </div>
           </div>
-
-          <Page.Content large className="mb-20 middle-section">
-            <div className="flex flex-col gap-2 inner-middle-section sm:flex-row">
-              
-              <StatsTable title="Stats">
-                {
-                  getStats(creatureData.stats).map(data => {
-                    return <StatsRow key={data[0]} name={data[0]} value={data[1]}/>
-                  })
-                } 
-              </StatsTable>
-
-              <StatsTable title="Dropped Items">
-                {
-                  creatureData.drops.map(drop => {
-
-                  })
-                }
-              </StatsTable>
-
-            </div>
-          </Page.Content>
-
-
-          <Page.Content large className="bottom-section">
-            <div className="flex flex-col inner-bottom-section sm:flex-row">
-              
-              <StatsTable title="Drop Rates">
-                
-              </StatsTable>
-
-            </div>
-          </Page.Content>
         </div>
+
+
+
+      {/* CHART TESTING ONLY */}
+      <Page.Content large className="bottom-section">
+        <div className="chart-parent">
+
+          <BarGraph
+          graph_title="Drop Rates"
+          x_axis_title="entities"
+          y_axis_title="drop %"
+          x_axis_scale_to_fit={true}
+          // x_axis_bar_width="45px"
+          // x_axis_marker_tilt={45}
+          // x_axis_overflow=""
+          // x_axis_padding="pb-2"
+          // x_axis_max_markers={10}
+          x_axis={[
+            { name: "Malistaire's Robe of Malice", quantity: 132 },
+            { name: "Waterworks Hat", quantity: 23 },
+            { name: "Aeon Hood of Something", quantity: 56 },
+            { name: "Some Longass Name of Longassary", quantity: 12 },
+            { name: "Malistaire's Robe of Malice", quantity: 65 },
+            { name: "Waterworks Hat", quantity: 32 },
+            { name: "Aeon Hood of Something", quantity: 45 },
+            { name: "Some Longass Name of Longassary", quantity: 12 },
+            { name: "Malistaire's Robe of Malice", quantity: 13 },
+            { name: "Waterworks Hat", quantity: 8 },
+            { name: "Aeon Hood of Something", quantity: 98 },
+            { name: "Some Longass Name of Longassary", quantity: 12 },
+            { name: "Malistaire's Robe of Malice", quantity: 0 },
+            { name: "Waterworks Hat", quantity: 8 },
+            { name: "Aeon Hood of Something", quantity: 30 },
+            { name: "Some Longass Name of Longassary", quantity: 12 },
+          ]}
+          y_axis={{
+            min: 0,
+            max: 100,
+            step: 25,
+            fromFormat: val => `${val}%`
+          }}
+          />
+
+        </div>
+
+
+        {/* <div className="w-[400px] h-[200px] bg-red-500 overflow-x-auto">
+          <div className="w-full h-[20px] bg-blue-500">
+          </div>
+
+          <div className="w-[600px] h-[20px] bg-green-500">
+          </div>
+        </div> */}
+      </Page.Content>
+
       </Page.Content>
     </Page>
   );

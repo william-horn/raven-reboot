@@ -18,7 +18,7 @@ const InfoRow = ({
   externalLink
 }) => {
   return (
-    <li className="flex justify-center mt-2 font-bold text-muted">
+    <li className="flex justify-center mt-2 font-bold text-center text-muted">
       {
         externalLink 
           ? <a href={externalLink}>
@@ -56,7 +56,7 @@ const Footer = function({
   return (
     <footer className="py-20 bg-secondary">
 
-      <div className="flex flex-wrap justify-between gap-12 pb-20 w-[70%] mx-auto">
+      <div className="flex flex-wrap justify-center items-center gap-12 pb-20 w-[70%] mx-auto">
 
         <InfoSection title="Contributors">
           <InfoRow name="Dev: " value="William J. Horn"/>
