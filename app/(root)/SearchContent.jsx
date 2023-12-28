@@ -213,7 +213,7 @@ const SearchContent = function({
   if (searchQuery && loading) { 
     console.log("Searched: ", searchQuery);
 
-    fetch(`http://localhost:3000/api/creatures?matchName=${searchQuery.replaceAll('&', '%26amp;')}`)
+    fetch(`/api/creatures?matchName=${searchQuery.replaceAll('&', '%26amp;')}`)
       .then(res => res.json())
       .then(data => {
         // console.log("Got: ", data);
