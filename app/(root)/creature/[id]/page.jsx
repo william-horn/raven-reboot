@@ -9,7 +9,9 @@ import { useSearchParams, useParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import getWikiUrlFromName from "@/util/getWikiUrlFromName";
 import Icon from "@/components/Graphics/Icon";
-import BarGraph from "@/components/Graphs/BarGraph";
+import ReactBarGraph from "@/components/Graphs/ReactBarGraph";
+// import BarGraph from "@/components/Graphs/BarGraph";
+
 
 
 const StatsRow = function({
@@ -219,45 +221,54 @@ const CreaturePage = function() {
 
 
       {/* CHART TESTING ONLY */}
-      <Page.Content large className="bottom-section">
-        <div className="chart-parent">
+      <Page.Content large className="mb-10 bottom-section">
+        <div className="chart-parent w-[100%]">
+          <Heading h3 className={{ self: "text-center text-heading-primary xl:text-2xl lg:text-xl mb-5 underline" }}>Drop Rates 2023</Heading>
+          <Text className={{ self: "text-center font-normal text-muted text-md" }}>This is currently placeholder data until further updates.</Text>
+          <ReactBarGraph
+          title="Robe Drop Rates 2023"
+          data={[
+            { label: "Soldier's Vibrant Charm", value: 3 },
+            { label: "Rubal Necklace of Renewal", value: 6 },
+            { label: "Shadowmark's Charm of Making (Level 45+)", value: 2 },
+            { label: "Scales of Justice Charm", value: 22 },
+            { label: "Burrower's Pyromancy Amulet (Level 160+)", value: 34 },
+            { label: "Adventurous Ranger's Wayfinder (Level 30+)", value: 65 },
+            { label: "Adept's Spear of Fortitude", value: 1 },
 
-          <BarGraph
-          graph_title="Drop Rates"
-          x_axis_title="entities"
-          y_axis_title="drop %"
-          x_axis_scale_to_fit={true}
-          // x_axis_bar_width="45px"
-          // x_axis_marker_tilt={45}
-          // x_axis_overflow=""
-          // x_axis_padding="pb-2"
-          // x_axis_max_markers={10}
-          x_axis={[
-            { name: "Malistaire's Robe of Malice", quantity: 132 },
-            { name: "Waterworks Hat", quantity: 23 },
-            { name: "Aeon Hood of Something", quantity: 56 },
-            { name: "Some Longass Name of Longassary", quantity: 12 },
-            { name: "Malistaire's Robe of Malice", quantity: 65 },
-            { name: "Waterworks Hat", quantity: 32 },
-            { name: "Aeon Hood of Something", quantity: 45 },
-            { name: "Some Longass Name of Longassary", quantity: 12 },
-            { name: "Malistaire's Robe of Malice", quantity: 13 },
-            { name: "Waterworks Hat", quantity: 8 },
-            { name: "Aeon Hood of Something", quantity: 98 },
-            { name: "Some Longass Name of Longassary", quantity: 12 },
-            { name: "Malistaire's Robe of Malice", quantity: 0 },
-            { name: "Waterworks Hat", quantity: 8 },
-            { name: "Aeon Hood of Something", quantity: 30 },
-            { name: "Some Longass Name of Longassary", quantity: 12 },
+            { label: "Soldier's Vibrant Charm 2", value: 3 },
+            { label: "Rubal Necklace of Renewal 2", value: 6 },
+            { label: "Shadowmark's Charm of Making (Level 45+) 2", value: 2 },
+            { label: "Scales of Justice Charm 2", value: 22 },
+            { label: "Burrower's Pyromancy Amulet (Level 160+) 2", value: 34 },
+            { label: "Adventurous Ranger's Wayfinder (Level 30+) 2", value: 65 },
+            { label: "Adept's Spear of Fortitude 2", value: 1 },
           ]}
-          y_axis={{
-            min: 0,
-            max: 100,
-            step: 25,
-            fromFormat: val => `${val}%`
-          }}
           />
 
+          <br/>
+
+          {/* <ReactBarGraph
+          title="Hat Drop Rates 2023"
+          data={[
+            { label: "Wand", value: 3 },
+            { label: "Robe", value: 6 },
+            // { label: "Boots", value: 2 },
+            // { label: "Deck", value: 22 },
+            // { label: "Jewel", value: 34 },
+            { label: "Hood", value: 65 },
+            { label: "Spell", value: 1 },
+          ]}
+          /> */}
+
+          {/* <br/>
+
+          <ReactBarGraph
+          title="Boot Drop Rates 2023"
+          data={[
+            { label: "Jewel", value: 34 },
+          ]}
+          /> */}
         </div>
 
 

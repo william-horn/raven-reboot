@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@vercel/speed-insights": "^1.0.2",
+    "ag-charts-react": "^9.0.1",
+    "chart.js": "^4.4.1",
     "himalaya": "^1.1.0",
     "mongoose": "^8.0.3",
     "next": "14.0.3",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "tailwind-merge": "^2.1.0",
     "uuid": "^9.0.1"
