@@ -19,7 +19,11 @@ const connectMongoDB = async () => {
 
       // mongoose.set("strictQuery", false);
 
-      cached.promise = mongoose.connect(DEV ? "mongodb://localhost/raven-dev" : "mongodb+srv://williamjosephhorn:2775KRI5x7ntlzbn@cluster0.2m9gcsc.mongodb.net/Raven")
+      cached.promise = mongoose.connect(
+        DEV 
+          ? "mongodb://localhost/raven-dev" 
+          : "mongodb+srv://williamjosephhorn:2775KRI5x7ntlzbn@cluster0.2m9gcsc.mongodb.net/Raven"
+        )
         .then(mongoose => mongoose);
 
     } catch(error) {
