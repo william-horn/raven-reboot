@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Providers from "@/providers/Providers";
-import mergeClass from "@/util/mergeClass";
-import emptyFunc from "@/util/defaultFunctions";
+import mergeClass from "@/libs/utils/mergeClass";
+import emptyFunc from "@/libs/utils/defaultFunctions";
 import { StatelessButton } from "./Buttons";
 
 const DropdownSelection = function({
@@ -54,7 +54,7 @@ const DropdownSelection = function({
     self: "w-fit bg-button-primary rounded relative hover:bg-button-hover-primary",
 
     dropButton: {
-      self: "w-full h-full justify-center",
+      self: "w-full justify-center",
 
       inner: {
         self: "w-full"
@@ -67,13 +67,13 @@ const DropdownSelection = function({
 
     menuItems: {
       self: "w-full bg-transparent justify-center",
-      __menuItemSelected: {
+      __dropdownItemSelected: {
         self: "bg-button-hover-primary hover:bg-button-hover-primary"
       }
     },
 
     outerList: {
-      self: "absolute hidden w-full list-container p-2 min-h-[5rem] bg-button-primary z-[9999] rounded-b"
+      self: "absolute hidden w-full list-container p-2 bg-button-primary z-[9999] rounded-b"
     },
 
     innerList: {
@@ -81,7 +81,6 @@ const DropdownSelection = function({
     },
 
     __dropdownSelected: {
-      self: "drop-shadow-[0_4px_5px_#1c1c1c]",
       outerList: {
         self: "flex"
       }
@@ -116,11 +115,11 @@ const DropdownSelection = function({
   }, []);
   // <<
 
-  // useEffect(() => {
-  //   console.log("selected: ", selectedId);
-  //   console.log("registered: ", registeredIds.current);
-  //   console.log("active data: ", activeData.current);
-  // });
+  useEffect(() => {
+    console.log("selected: ", selectedId);
+    console.log("registered: ", registeredIds.current);
+    console.log("active data: ", activeData.current);
+  });
 
   return (
     <Providers.DropdownSelection

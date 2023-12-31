@@ -4,53 +4,66 @@
 
 @layer base {
 
-  :root {
-    --text-small: 1rem;
-  }
+  .theme-default {
+    --google-font-1: 'Titan One', sans-serif;
+    --google-font-2: 'Paytone One', sans-serif;
 
-  .theme-dark {
-    --logo-font: 'Titan One', sans-serif;
-    --logo-font-2: 'Paytone One', sans-serif;
+    --bg-color-landing-page: #0c0c0c;
 
+    /* General BACKGROUND COLOR */
     --bg-color-primary: #0c0c0c;
-    /* --bg-color-primary: #2a2a32; */
-    /* --bg-color-secondary: #1c1d25; */
+    --bg-color-primary-inset: #020202;
     --bg-color-secondary: #020202;
+    --bg-color-secondary-inset: #020202;
 
-    /* --color-logo-primary: #94b8c7; */
-    --color-logo-primary: #a7a4ab;
-    --color-logo-secondary: #f36161;
-    --color-logo-third: #ce9454;
-
-    /* --bg-color-search-result: #0c0c0c; */
-    --bg-color-search-result: #020202;
-    /* --bg-color-search-result-hover: #121212; */
-    --bg-color-search-result-hover: #060606;
-
+    /* SCROLLBAR */
     --bg-color-scroll-bar: #505059;
+    --bg-color-scroll-bar-hover: #505059;
 
+    /* General BUTTONS */
+    --bg-color-button-primary: #181817;
+    --bg-color-button-primary-hover: #272729;
+
+    /* HEADING config */
+    --text-color-heading: white;
+    --text-color-heading-muted: gray;
+    --text-color-sub-heading: white;
+    --text-color-sub-heading-muted: gray;
+
+    /* General TEXT */
+    --text-color-primary: #e3e3e3;
+
+    --text-color-hyperlink: #d58eff;
+    --text-color-hyperlink-hover: #c874f9;
+
+    --text-color-muted: #959595;
+    --text-color-error: red;
+
+    /* Logo */
+    --text-color-logo-first-half: #f36161;
+    --text-color-logo-second-half: #ce9454;
+
+    --shadow-color-logo-first-half-hover: #7d212d;
+    --shadow-color-logo-second-half-hover: #7d5d21;
+
+    --drop-shadow-logo-first-half-hover: 0px 0px 10px var(--shadow-color-logo-first-half-hover);
+    --drop-shadow-logo-second-half-hover: 0px 0px 10px var(--shadow-color-logo-second-half-hover);
+
+    /* FOOTER */
+    --text-color-footer-heading-primary: orange;
+
+    /* SEARCH BAR config */
     --bg-color-search-bar: #404049;
-    --bg-color-search-bar-list: #404049;
+    --bg-color-search-bar-dropdown: #404049;
     --bg-color-search-bar-result: #404049;
-    --bg-color-hover-search-bar-result: #272729;
+    --bg-color-hover-search-bar-result: #33333b;
 
-    --text-color-href-primary: #cc7aff;
     --text-color-search-bar-result: white;
     --text-color-search-bar-input: #d9d8df;
     --text-color-search-history-result: #dbdbdb;
-
-    /* --button-color-primary: #404049; */
-    --button-color-primary: #181817;
-    --button-color-secondary: blue;
-    --button-hover-color-primary: #272729;
-
-    --text-color-heading-primary: #e7e4e4;
-    --text-color-heading-muted: #959595;
-
-    --text-color-primary: #e3e3e3;
-    --text-color-secondary: orange;
-    --text-color-muted: #959595;
-    --text-color-error: red;
+    --text-color-search-bar-result-match-word: #fff7b9;
+    --text-color-search-bar-result-match-first: #d58eff;
+    --text-color-search-bar-result-match-any: #a7ff73;
   }
 
   input {

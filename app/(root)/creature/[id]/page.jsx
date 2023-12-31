@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Page from "@/components/Page";
+import Content from "@/components/Content";
 import Text from "@/components/Typography/Text";
 import Link from "next/link";
 import Heading from "@/components/Typography/Heading";
 import { useSearchParams, useParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
-import getWikiUrlFromName from "@/util/getWikiUrlFromName";
+import getWikiUrlFromName from "@/libs/utils/getWikiUrlFromName";
 import Icon from "@/components/Graphics/Icon";
 import ReactBarGraph from "@/components/Graphs/ReactBarGraph";
 // import BarGraph from "@/components/Graphs/BarGraph";
@@ -64,9 +65,9 @@ const StatsRow = function({
 
   return (
     <div className="flex flex-wrap justify-between mt-2">
-      <Text className={{ self: "text-xl min-w-fit" }}>{name}</Text>
+      <Text className="text-xl min-w-fit">{name}</Text>
       <div className="bg-button-primary flex-1 h-[1px] mx-3 my-auto min-w-[10%]"></div>
-      <Text className={{ self: `font-normal min-w-fit text-xl ${valCol}` }}>{value}</Text>
+      <Text className={`font-normal min-w-fit text-xl ${valCol}`}>{value}</Text>
     </div>
   );
 }
@@ -77,7 +78,7 @@ const StatsTable = function({
 }) {
   return (
     <div className="flex-wrap flex-1 mb-10 min-w-fit">
-      <Heading h3 className={{ self: "text-3xl text-center mb-4 underline" }}>{title}</Heading>
+      <Heading type="h3" className="mb-4 text-3xl text-center underline">{title}</Heading>
       <div className="sm:w-[80%] lg:w-[60%] md:w-[75%] w-[85%] mx-auto">
         {children}
       </div>
@@ -89,7 +90,7 @@ const Loading = function() {
   return (
     <div className="flex flex-row items-center justify-center w-full gap-2 pt-10">
       <Heading 
-      className={{ self: "text-3xl text-center" }}>
+      className="text-3xl text-center">
         Loading... 
       </Heading>
       
@@ -158,11 +159,11 @@ const CreaturePage = function() {
   if (!loaded) {
     return (
       <Page>
-        <Page.Content max className="min-h-screen px-0">
+        <Content span="max" className="min-h-screen px-0">
           <div className="h-screen bg-primary">
             <div className="flex flex-row items-center justify-center w-full gap-2 pt-10">
               <Heading 
-              className={{ self: "text-3xl text-center" }}>
+              className="text-3xl text-center">
                 Loading... 
               </Heading>
               
@@ -172,7 +173,7 @@ const CreaturePage = function() {
               />
             </div>
           </div>
-        </Page.Content>
+        </Content>
       </Page>
     )
   } else {
@@ -181,7 +182,7 @@ const CreaturePage = function() {
 
   return (
     <Page>
-      <Page.Content max className="min-h-screen px-0">
+      <Content span="max" className="min-h-screen px-0">
         <div className=" bg-primary">
 
            {/* Top bar */}
@@ -192,9 +193,7 @@ const CreaturePage = function() {
               <div className="flex flex-col items-center title-headshot">
                 
                 <Heading 
-                className={{ 
-                  self: "text-3xl text-muted mb-4 font-normal rounded text-center p-4 font-logo" 
-                }}>
+                className="p-4 mb-4 text-3xl font-normal text-center rounded text-muted font-logo">
                   <a href={getWikiUrlFromName('Creature', creatureData.name)}><span className="text-[#a35bff] underline font-sans">{creatureData.name}</span></a>
                 </Heading>
 
@@ -209,8 +208,8 @@ const CreaturePage = function() {
                 </div>
 
                 <div className="mt-4">
-                  <Text className={{ self: "text-3xl text-muted font-normal rounded text-center p-2 font-logo" }}>Rank: <span className={`${getColorFromRank(parseInt(creatureData.stats.rank))}`}>{creatureData.stats.rank}</span></Text>
-                  <Text className={{ self: "text-3xl text-muted mb-4 font-normal rounded text-center p-2 font-logo" }}>Health: <span className="font-medium text-green-400 ">{creatureData.stats.health}</span></Text>
+                  <Text className="p-2 text-3xl font-normal text-center rounded text-muted font-logo">Rank: <span className={`${getColorFromRank(parseInt(creatureData.stats.rank))}`}>{creatureData.stats.rank}</span></Text>
+                  <Text className="p-2 mb-4 text-3xl font-normal text-center rounded text-muted font-logo">Health: <span className="font-medium text-green-400 ">{creatureData.stats.health}</span></Text>
                 </div>
               </div>
 
@@ -221,10 +220,10 @@ const CreaturePage = function() {
 
 
       {/* CHART TESTING ONLY */}
-      <Page.Content large className="mb-10 bottom-section">
+      <Content span="lg" className="mb-10 bottom-section">
         <div className="chart-parent w-[100%]">
-          <Heading h3 className={{ self: "text-center text-heading-primary xl:text-2xl lg:text-xl mb-5 underline" }}>Drop Rates 2023</Heading>
-          <Text className={{ self: "text-center font-normal text-muted text-md" }}>This is currently placeholder data until further updates.</Text>
+          <Heading type="h3" className="mb-5 underline text-heading-primary xl:text-2xl lg:text-xl">Drop Rates 2023</Heading>
+          <Text className="font-normal text-center text-muted text-md">This is currently placeholder data until further updates.</Text>
           <ReactBarGraph
           title="Robe Drop Rates 2023"
           data={[
@@ -279,9 +278,9 @@ const CreaturePage = function() {
           <div className="w-[600px] h-[20px] bg-green-500">
           </div>
         </div> */}
-      </Page.Content>
+      </Content>
 
-      </Page.Content>
+      </Content>
     </Page>
   );
 }

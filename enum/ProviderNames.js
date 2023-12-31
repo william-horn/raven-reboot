@@ -3,7 +3,7 @@ import { EnumCollection, EnumItem } from './Enum';
 const ProviderNames = new EnumCollection({
   // * value: provider name
   // UTILITY PROVIDERS
-  ButtonGroup: new EnumItem({ value: 'ButtonGroup', name: 'ButtonGroup' }),
+  ButtonGroup: new EnumItem({ value: 'ButtonGroup' }),
   DropdownSelection: new EnumItem({ value: 'DropdownSelection' }),
 
   // PAGE PROVIDERS

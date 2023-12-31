@@ -13,10 +13,10 @@
   File imports
 */
 import React, { useEffect, useState } from "react";
-import mergeClass from "@/util/mergeClass";
+import mergeClass from "@/libs/utils/mergeClass";
 import Icon from "../Graphics/Icon";
 import Link from "next/link";
-import emptyFunc from "@/util/defaultFunctions";
+import emptyFunc from "@/libs/utils/defaultFunctions";
 import { usePathname } from "next/navigation";
 import { useButtonGroupContext } from "@/providers/ButtonGroupProvider";
 import { useDropdownSelectionContext } from "@/providers/DropdownSelectionProvider";

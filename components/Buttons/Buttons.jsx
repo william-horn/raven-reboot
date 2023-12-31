@@ -5,16 +5,14 @@ import { usePathname } from "next/navigation";
 import { useContextController } from "@/hooks/useContextController";
 import Link from "next/link";
 import Icon from "../Graphics/Icon";
-import mergeClass from "@/util/mergeClass";
-import compileButtonPresets from "@/util/compileButtonPresets";
+import mergeClass from "@/libs/utils/mergeClass";
 
 // ============================ //
 // ----- COMPONENT STYLES ----- //
 // ============================ //
 const className = {
   // the outer-most element of the button, or "master element"
-  // used to have "align-middle" in here
-  self: "bg-button-primary text-primary inline-flex items-center rounded justify-center transition-colors w-fit text-sm px-1 hover:bg-button-hover-primary font-medium",
+  self: "bg-button-primary text-primary inline-flex items-center align-middle rounded justify-center transition-colors w-fit text-sm px-1 hover:bg-button-hover-primary",
 
   // the inner-container sitting between the outer-layer and button content
   inner: {
@@ -48,27 +46,21 @@ const baseClass = className;
   * note: button presets are functions to use the tailwind
   * class auto-complete feature
 */
-// className="align-baseline align-middle"
-export const ButtonPresets = compileButtonPresets({
+export const ButtonPresets = {
 
-  blendIn: {
-    self: "bg-transparent hover:bg-transparent rounded-none p-0",
+  blendIn: ((className={
+    self: "bg-transparent hover:bg-transparent rounded-none",
 
     inner: { 
       self: "p-0" 
     }
-  },
+  }) => mergeClass(baseClass, className))(),
 
-  sharpBorder: {
+  sharpBorder: ((className={
     self: "rounded-none",
-  },
+  }) => mergeClass(baseClass, className))(),
 
-  underlineLink: {
-    self: "bg-transparent hover:bg-transparent rounded-none p-0 underline",
-    inner: { self: "p-0" }
-  }
-
-}, baseClass);
+}
 
 const renderIcon = (icon, iconClass) => {
   if (icon) {

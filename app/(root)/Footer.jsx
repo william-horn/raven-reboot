@@ -22,7 +22,7 @@ const InfoRow = ({
       {
         externalLink 
           ? <a href={externalLink}>
-              {name}<span className={`font-normal text-[#d58eff] ${underline ? 'underline' : ''}`}>{value}</span>
+              {name}<span className={`font-normal text-hyperlink hover:text-hyperlink-hover ${underline ? 'underline' : ''}`}>{value}</span>
             </a>
           
           : <span>
@@ -41,7 +41,7 @@ const InfoSection = ({
 }) => {
   return (
     <div>
-      <Heading className={{ self: "text-secondary text-center text-2xl" }}>{title}</Heading>
+      <Heading type="h2" className="text-2xl font-bold text-center text-footer-heading-primary">{title}</Heading>
       <ul>
         {children}
       </ul>
@@ -89,7 +89,7 @@ const Footer = function({
 
       <div className="w-[60%] mx-auto flex justify-center flex-col items-center">
         <Heading>Disclaimer: </Heading>
-        <Text className={{ self: " font-normal text-muted text-md leading-8 text-center" }}><b>Please note:</b> Raven is in no way affiliated with the Wizard101 team or Kingsisle corporation. We are entirely a private and separate entity. All concerns about Wizard101 or inquiries to Wizard101 leadership should be directed towards actual Wizard101 staff. If you need assistance beyond what a normal player can grant you, then you may send an email to support@wizard101.com or help@kingsisle.com, but do not seek our help for such assistance. We also do not represent the thoughts, beliefs, strategies, ideals, or intentions of Kingsisle in any way.</Text>
+        <Text className="font-normal leading-8 text-center text-muted text-md"><b>Please note:</b> Raven is in no way affiliated with the Wizard101 team or Kingsisle corporation. We are entirely a private and separate entity. All concerns about Wizard101 or inquiries to Wizard101 leadership should be directed towards actual Wizard101 staff. If you need assistance beyond what a normal player can grant you, then you may send an email to support@wizard101.com or help@kingsisle.com, but do not seek our help for such assistance. We also do not represent the thoughts, beliefs, strategies, ideals, or intentions of Kingsisle in any way.</Text>
       </div>
 
     </footer>

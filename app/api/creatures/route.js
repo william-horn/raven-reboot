@@ -1,6 +1,6 @@
-import connectMongoDB from "@/libs/mongodb";
+import connectMongoDB from "@/libs/db/mongodb";
 import { NextResponse } from "next/server";
-import { escapeRegex } from "@/util/escapeRegex";
+import { escapeRegex } from "@/libs/utils/escapeRegex";
 
 import Creature from "@/models/creatures";
 

@@ -4,43 +4,66 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/utils/*.js'
   ],
   theme: {
     extend: {
       backgroundColor: {
-        "search-result": "var(--bg-color-search-result)",
-        "search-result-hover": "var(--bg-color-search-result-hover)",
-        "logo": "var(--color-logo-primary)",
-        "primary": "var(--bg-color-primary)",
-        "secondary": "var(--bg-color-secondary)",
-        "button-primary": "var(--button-color-primary)",
-        "button-hover-primary": "var(--button-hover-color-primary)",
+        // General
+        "landing-page": "var(--bg-color-landing-page)",
+        "button-primary": "var(--bg-color-button-primary)",
+        "button-hover-primary": "var(--bg-color-button-primary-hover)",
+
+        // Search bar
         "search-bar": "var(--bg-color-search-bar)",
-        "search-bar-list": "var(--bg-color-search-bar-list)",
+        "search-bar-dropdown": "var(--bg-color-search-bar-dropdown)",
         "search-bar-result": "var(--bg-color-search-bar-result)",
         "search-bar-result-hover": "var(--bg-color-hover-search-bar-result)",
+
+        // General background colors
+        "primary": "var(--bg-color-primary)",
+        "primary-inset": "var(--bg-color-primary-inset)",
+        "secondary": "var(--bg-color-secondary)",
+        "secondary-inset": "var(--bg-color-secondary-inset)",
+
+        // Scrollbar
+        "scrollbar": "var(--bg-color-scroll-bar)",
+        "scrollbar-hover": "var(--bg-color-scroll-bar-hover)",
       },
 
       fontFamily: {
-        "logo": "var(--logo-font)",
-        "logo-2": "var(--logo-font-2)",
+        "gf-1": "var(--google-font-1)",
+        "gf-2": "var(--google-font-2)",
       },
 
       textColor: {
-        "heading-muted": "var(--text-color-heading-muted)",
-        "heading-primary": "var(--text-color-heading-primary)",
-        "logo-third": "var(--color-logo-third)",
-        "href-primary": "var(--text-color-href-primary)",
+        // General
         "primary": "var(--text-color-primary)",
-        "secondary": "var(--text-color-secondary)",
+        "muted": "var(--text-color-muted)",
+        "error": "var(--text-color-error)",
+        "hyperlink": "var(--text-color-hyperlink)",
+        "hyperlink-hover": "var(--text-color-hyperlink-hover)",
+
+        // Footer
+        "footer-heading-primary": "var(--text-color-footer-heading-primary)",
+
+        // logo
+        "logo-first-half": "var(--text-color-logo-first-half)",
+        "logo-second-half": "var(--text-color-logo-second-half)",
+
+        // Search bar
         "search-bar-result": "var(--text-color-search-bar-result)",
-        "logo-secondary": "var(--color-logo-secondary)",
-        "logo": "var(--color-logo-primary)",
         "search-bar-input": "var(--text-color-search-bar-input)",
         "search-history-result": "var(--text-color-search-history-result)",
-        "muted": "var(--text-color-muted)",
-        "error": "var(--text-color-error)"
+        "search-bar-result-match-word": "var(--text-color-search-bar-result-match-word)",
+        "search-bar-result-match-first": "var(--text-color-search-bar-result-match-first)",
+        "search-bar-result-match-any": "var(--text-color-search-bar-result-match-any)"
       },
+
+      dropShadow: {
+        "logo-first-half-hover": "var(--drop-shadow-logo-first-half-hover)",
+        "logo-second-half-hover": "var(--drop-shadow-logo-second-half-hover)",
+      }
     },
   },
   plugins: [],

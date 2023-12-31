@@ -1,9 +1,9 @@
 "use client";
 
-import mergeClass from "@/util/mergeClass";
+import mergeClass from "@/libs/utils/mergeClass";
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import Providers from "@/providers/Providers";
-import emptyFunc from "@/util/defaultFunctions";
+import emptyFunc from "@/libs/utils/defaultFunctions";
 
 const ButtonGroup = function({ 
   children,

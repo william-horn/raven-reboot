@@ -1,9 +1,8 @@
 
 "use client";
 
-import { StatelessButton, StatefulLink } from "@/components/Buttons/Buttons";
-import { useRouter, usePathname } from "next/navigation";
-import ButtonGroup from "@/components/Buttons/ButtonGroup";
+import { StatefulLink } from "@/components/Buttons/Buttons";
+import {usePathname } from "next/navigation";
 
 const NavLink = function({
   children,
@@ -14,7 +13,7 @@ const NavLink = function({
     className={{
       self: "transition-all",
       __locallySelected: {
-        self: "translate-y-2 rounded-b-none bg-primary hover:bg-primary underline transition-all"
+        self: "translate-y-2 rounded-b-none bg-primary hover:bg-primary transition-all"
       } 
     }}
     {...rest}>
@@ -44,7 +43,7 @@ const Nav = function({
       <NavSection>
         <NavLink leftIcon="/icons/home_icon.svg" href="/">Home</NavLink>
         <NavLink leftIcon="/icons/menu_book_icon.svg" href="/about">About Us</NavLink>
-        <NavLink leftIcon="/icons/world_icon.svg" href="/stats">Raven News</NavLink>
+        <NavLink leftIcon="/icons/world_icon.svg" href="/news">Raven News</NavLink>
       </NavSection>
     </nav>
   );

@@ -2,8 +2,8 @@
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { StatelessImageButton } from "./ImageButtons";
 import Text from "../Typography/Text";
-import mergeClass from "@/util/mergeClass";
-import emptyFunc from "@/util/defaultFunctions";
+import mergeClass from "@/libs/utils/mergeClass";
+import emptyFunc from "@/libs/utils/defaultFunctions";
 
 const Quantifier = function({
   children,
@@ -73,7 +73,7 @@ const Quantifier = function({
       //   minWidth: "fit-content"
       // }}
       ref={numberRef}
-      className={className.text}>
+      className={className.text.self}>
         {_numberVal}
       </Text>
 

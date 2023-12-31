@@ -18,20 +18,19 @@ const Header = function({
     <header className="flex bg-secondary">
 
       {/* Heading Text */}
-      <h1 
-      className="p-4 text-6xl text-logo-third font-logo-2">
+      <h1 className="p-4 text-6xl text-primary font-gf-2">
         <Link 
         href="/" 
         className="group">
-          <span className="text-logo-secondary group-hover:drop-shadow-[0_0_10px_#7d212d] transition-all">Ra</span>
-          <span className="group-hover:drop-shadow-[0_0_10px_#7d5d21] transition-all">ven</span>
+          <span className="transition-all text-logo-first-half group-hover:drop-shadow-logo-first-half-hover">Ra</span>
+          <span className="transition-all text-logo-second-half group-hover:drop-shadow-logo-second-half-hover">ven</span>
         </Link>
         
-        <span className="ml-3 text-sm tracking-wide text-logo">
+        <span className="ml-3 text-sm tracking-wide">
           A repository of 
           &nbsp;
           <a href="https://www.wizard101.com/" 
-          className="underline text-primary">
+          className="font-sans underline text-hyperlink hover:text-hyperlink-hover">
             Wizard101
           </a> 
           &nbsp;

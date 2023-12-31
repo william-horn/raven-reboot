@@ -1,5 +1,5 @@
 import Image from "next/image"
-import mergeClass from "@/util/mergeClass"
+import mergeClass from "@/libs/utils/mergeClass"
 
 const Icon = ({
   src, 

@@ -1,4 +1,5 @@
 import Page from "@/components/Page";
+import Content from "@/components/Content";
 import Link from "next/link";
 import Image from "next/image";
 import Text from "@/components/Typography/Text";
@@ -8,11 +9,11 @@ const AboutPage = function() {
   
   return (
     <Page>
-      <Page.Content max>
-        <Page.Content large>
-          <Heading className={{ self: "text-center font-logo-2 text-4xl" }}>About Raven</Heading>
-        </Page.Content>
-      </Page.Content>
+      <Content span="max">
+        <Content span="lg">
+          <Heading type="h2" className="text-4xl text-center font-logo-2">About Raven</Heading>
+        </Content>
+      </Content>
     </Page>
   );
 }

@@ -24,7 +24,7 @@ const RootLayout = function({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Titan+One&display=swap" rel="stylesheet"/>
       </head>
 
-      <body className="theme-dark bg-primary">
+      <body className="theme-default bg-primary">
         <Header/>
         <Nav/>
 

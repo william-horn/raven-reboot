@@ -1,9 +1,13 @@
 "use client";
 
+// import { useComponentContext } from "@/providers/Providers";
+// import Enum from "@/enum";
+// import emptyFunc, { truthyFunc } from "@/lib/utils/defaultFunctions";
+// import mergeClass from "@/lib/utils/mergeClass";
 import { useComponentContext } from "@/providers/Providers";
 import Enum from "@/enum";
-import emptyFunc, { truthyFunc } from "@/util/defaultFunctions";
-import mergeClass from "@/util/mergeClass";
+import emptyFunc, { truthyFunc } from "@/libs/utils/defaultFunctions";
+import mergeClass from "@/libs/utils/mergeClass";
 
 const {
   ButtonGroup: enum_ButtonGroup,
@@ -151,6 +155,7 @@ const groupContexts = {
             value: this.value,
             text: this.text,
             state: this.__getState(),
+            id: this.id,
             controller: this,
             ...this.eventData
           }
@@ -166,7 +171,7 @@ const groupContexts = {
         __setStateInitial() {
           this.__setState({
             __dropdownSelected: this.__provider.selectedId === this.id,
-            __menuItemSelected: this.__provider.activeData.current.active.id === this.id,
+            __dropdownItemSelected: this.__provider.activeData.current.active.id === this.id,
             ...this.__provider.importedState,
             ...this.__props.importedState,
           });
@@ -188,21 +193,18 @@ const groupContexts = {
           } = dropdownGroup;
 
           const {
-            onClick=truthyFunc,
+            _onClick=truthyFunc,
           } = this.__props;
 
           const fireOnClick = () => {
-            if (onClick(this.__getEventData())) dropdownGroup.onClick(this.__getEventData());
+            if (_onClick(this.__getEventData())) dropdownGroup.onClick(this.__getEventData());
           }
 
-          if (!this.__getState().__dropdownSelected && !this.__getState().__menuItemSelected) {
+          if (!this.__getState().__dropdownItemSelected) {
             activeData.current.active = this.__getEventData();
             setSelectedId(this.id);
             setMenuOpen(false);
             fireOnClick();
-            // selectedItemData.current = buttonData;
-            // group_setSelectedId(buttonProps.id);
-            // group_setMenuOpen(false);
           }
         }
       }
