@@ -10,6 +10,7 @@
 import Link from "next/link";
 import Text from "@/components/Typography/Text";
 import Heading from "@/components/Typography/Heading";
+import Image from "next/image";
 
 const InfoRow = ({
   name,
@@ -40,7 +41,7 @@ const InfoSection = ({
   title
 }) => {
   return (
-    <div>
+    <div className="min-w-[150px] max-w-[200px]">
       <Heading type="h2" className="text-2xl font-bold text-center text-footer-heading-primary">{title}</Heading>
       <ul>
         {children}
@@ -91,6 +92,15 @@ const Footer = function({
         <Heading>Disclaimer: </Heading>
         <Text className="font-normal leading-8 text-center text-muted text-md"><b>Please note:</b> Raven is in no way affiliated with the Wizard101 team or Kingsisle corporation. We are entirely a private and separate entity. All concerns about Wizard101 or inquiries to Wizard101 leadership should be directed towards actual Wizard101 staff. If you need assistance beyond what a normal player can grant you, then you may send an email to support@wizard101.com or help@kingsisle.com, but do not seek our help for such assistance. We also do not represent the thoughts, beliefs, strategies, ideals, or intentions of Kingsisle in any way.</Text>
       </div>
+
+      {/* Logo branding */}
+      <Image
+      src="/images/logo3-128.png"
+      width={48}
+      height={48}
+      alt=""
+      className="mx-auto mt-10"
+      />
 
     </footer>
   );

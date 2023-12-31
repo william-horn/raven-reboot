@@ -477,7 +477,7 @@ const SearchBar = ({
               */}
               {
                 (isDeadRoot && searchResults.length === 0)
-                  ? <Text>No matches found for this search</Text>
+                  ? <Text className="mt-2">No matches found for this search</Text>
                   : <></>
               }
             </div>
@@ -490,10 +490,10 @@ const SearchBar = ({
   }
 
   let className = {
-    self: "relative rounded bg-search-bar",
+    self: "relative rounded bg-search-bar custom-search-bar",
 
     searchTextbox: {
-      self: "w-full h-full mx-2 text-search-bar-result"
+      self: "w-full h-full mx-2 text-search-bar-result custom-search-bar-input"
     },
 
     historyList: {
@@ -501,12 +501,11 @@ const SearchBar = ({
       inner: {
         self: "overflow-y-auto overflow-x-clip max-h-[200px]",
         resultButton: {
-          //text-search-bar-result bg-search-bar-result hover:bg-search-bar-result-hover
           self: "w-full text-left justify-start text-search-bar-result bg-search-bar-result font-medium transition-colors duration-200 rounded hover:bg-search-bar-result-hover hover:underline",
           iconButton: {
-            self: "hover:bg-transparent h-fit",
+            self: "bg-search-bar-result-icon h-fit",
             inner: {
-              self: "hover:bg-button-hover-primary hover:rounded"
+              self: "hover:bg-search-bar-result-hover hover:rounded"
             }
           }
         },

@@ -13,6 +13,8 @@ const responsivePadding = {
   "3xl": "xl:p-6 lg:p-5 md:p-4 sm:p-4 p-3",
   "2xl": "xl:p-5 lg:p-5 md:p-4 sm:p-3 p-2",
   "xl": "xl:p-4 lg:p-4 md:p-3 sm:p-2 p-2",
+  "lg": "xl:p-3 lg:p-3 md:p-2 sm:p-1 p-1",
+  "md": "xl:p-2 lg:p-2 md:p-1 sm:p-1 p-1",
   // "lg"
   // "md"
   // "sm"
@@ -25,6 +27,10 @@ const responsiveDividerSize = {
     "xl": "xl:h-20 lg:h-16 md:h-14 sm:h-12 h-10",
     "lg": "xl:h-16 lg:h-14 md:h-12 sm:h-10 h-8",
     "md": "xl:h-14 lg:h-12 md:h-10 sm:h-8 h-6",
+    "sm": "xl:h-12 lg:h-10 md:h-8 sm:h-6 h-4",
+    "xs": "xl:h-9 lg:h-8 md:h-6 sm:h-5 h-3",
+    "2xs": "xl:h-7 lg:h-6 md:h-5 sm:h-4 h-2",
+    "3xs": "xl:h-5 lg:h-4 md:h-3 sm:h-2 h-1",
   },
 
   vertical: {

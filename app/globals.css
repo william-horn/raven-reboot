@@ -5,30 +5,66 @@
 @layer base {
 
   .theme-default {
+    /* Misc. */
     --google-font-1: 'Titan One', sans-serif;
     --google-font-2: 'Paytone One', sans-serif;
 
+    /* LANDING PAGE */
     --bg-color-landing-page: #0c0c0c;
+    --bg-color-landing-page-entry-button: #dc2626;
+    --bg-color-landing-page-entry-button-hover: #b91c1c;
 
-    /* General BACKGROUND COLOR */
+
+    /* NAV BAR */
+    --bg-color-navbar-button-primary: rgba(0, 0, 0, 0);
+    --bg-color-navbar-button-primary-hover: #272729;
+
+    --bg-color-navbar-button-secondary: rgba(0, 0, 0, 0);
+    --bg-color-navbar-button-secondary-hover: #272729;
+
+    --bg-color-navbar-button-primary-selected: #dc2626; 
+    --bg-color-navbar-button-primary-selected-hover: #b91c1c;
+
+    --bg-color-navbar-button-secondary-selected: #3b82f6; 
+    --bg-color-navbar-button-secondary-selected-hover: #2563eb;
+
+
+    /* General BACKGROUND */
     --bg-color-primary: #0c0c0c;
-    --bg-color-primary-inset: #020202;
+    --bg-color-primary-inset: #080808;
     --bg-color-secondary: #020202;
     --bg-color-secondary-inset: #020202;
 
+    --bg-color-primary-line: #454545;
+    --bg-color-primary-inset-line: #454545;
+
+    --bg-color-secondary-line: #454545;
+    --bg-color-secondary-inset-line: #454545;
+
+
+
     /* SCROLLBAR */
-    --bg-color-scroll-bar: #505059;
-    --bg-color-scroll-bar-hover: #505059;
+    --bg-color-scroll-bar: #4d4d4d;
+    --bg-color-scroll-bar-hover: #4d4d4d;
+    --bg-color-scroll-bar-track: rgba(47, 47, 51, 0.7);
+
+    --scroll-bar-width: 10px;
+
+
 
     /* General BUTTONS */
     --bg-color-button-primary: #181817;
     --bg-color-button-primary-hover: #272729;
+
+
 
     /* HEADING config */
     --text-color-heading: white;
     --text-color-heading-muted: gray;
     --text-color-sub-heading: white;
     --text-color-sub-heading-muted: gray;
+
+
 
     /* General TEXT */
     --text-color-primary: #e3e3e3;
@@ -38,6 +74,7 @@
 
     --text-color-muted: #959595;
     --text-color-error: red;
+
 
     /* LOGO */
     --text-color-logo-first-half: var(--bg-color-secondary);
@@ -59,23 +96,69 @@
     --drop-shadow-logo-first-half-hover: 0px 0px 2px var(--shadow-color-logo-first-half-hover);
     --drop-shadow-logo-second-half-hover: 0px 0px 10px var(--shadow-color-logo-second-half-hover);
 
+
+
     /* FOOTER */
     --text-color-footer-heading-primary: orange;
+
+
 
     /* SEARCH BAR config */
     --bg-color-search-bar: #404049;
     --bg-color-search-bar-dropdown: #404049;
     --bg-color-search-bar-result: #404049;
     --bg-color-hover-search-bar-result: #33333b;
+    --bg-color-search-bar-result-icon: rgba(0, 0, 0, 0);
+
+    --bg-color-search-bar-scroll-bar-thumb: #6f6f7a;
+    --bg-color-search-bar-scroll-bar-thumb-hover: #6f6f7a;
+    --bg-color-search-bar-scroll-bar-track: rgba(47, 47, 51, 0.7);
+
+    --search-bar-scroll-bar-width: 5px;
+    --search-bar-scroll-bar-radius: 10px;
 
     --text-color-search-bar-result: white;
     --text-color-search-bar-input: #d9d8df;
     --text-color-search-history-result: #dbdbdb;
+
     --text-color-search-bar-result-match-word: #fff7b9;
     --text-color-search-bar-result-match-first: #d58eff;
     --text-color-search-bar-result-match-any: #a7ff73;
+
+    --text-color-search-bar-placeholder: var(--text-color-muted);
   }
 
+
+  /* 
+    sleek, transparent search bar that blends in with background 
+  */
+  .search-bar-sleek {
+    --bg-color-search-bar: #24242400;
+    --bg-color-search-bar-dropdown: #404049;
+    --bg-color-search-bar-result: #bdbdbd00;
+    --bg-color-hover-search-bar-result: #3f3f3f;
+
+    --bg-color-search-bar-scroll-bar-thumb: rgb(70, 70, 70);
+    --bg-color-search-bar-scroll-bar-thumb-hover: rgb(70, 70, 70);
+
+    --bg-color-search-bar-scroll-bar-track: rgba(47, 47, 51, 0.7);
+
+    --search-bar-scroll-bar-width: 5px;
+    --search-bar-scroll-bar-radius: 10px;
+
+    --text-color-search-bar-result: white;
+    --text-color-search-bar-input: #d9d8df;
+    --text-color-search-history-result: #dbdbdb;
+
+    --text-color-search-bar-result-match-word: #fff7b9;
+    --text-color-search-bar-result-match-first: #d58eff;
+    --text-color-search-bar-result-match-any: #a7ff73;
+
+    --text-color-search-bar-placeholder: #474747;
+  }
+
+
+  /* DEFAULT INPUT */
   input {
     all: unset;
   }
@@ -84,35 +167,62 @@
     color: var(--text-color-muted);
   }
 
+  
+  /* WIREFRAME CLASS */
   .wireframe * {
     outline: 1px solid red !important;
   } 
 
-    /* width */
+
+  /* DEFAULT SCROLLBAR */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: var(--scroll-bar-width);
   }
 
-  /* Track */
   ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 15px rgba(47, 47, 51, 0.7); 
+    box-shadow: inset 0 0 15px var(--bg-color-scroll-bar-track); 
     border-radius: 10px;
   }
-  
-  /* Handle */
+
   ::-webkit-scrollbar-thumb {
     /* background: #5f677e;  */
     background: var(--bg-color-scroll-bar);
-    /* border-radius: 10px; */
+    border-radius: 10px;
   }
 
-  /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: var(--bg-color-scroll-bar); 
   }
 
 
+
+  /* CUSTOMIZED SCROLLBAR FOR SEARCH COMPONENT */
+  .custom-search-bar ::-webkit-scrollbar-track {
+    /* box-shadow: inset 0 0 15px rgba(47, 47, 51, 0.7);  */
+    box-shadow: inset 0 0 15px var(--bg-color-search-bar-scroll-bar-track);
+    border-radius: 10px;
+  }
+
+  .custom-search-bar ::-webkit-scrollbar {
+    width: var(--search-bar-scroll-bar-width);
+  }
+
+  .custom-search-bar ::-webkit-scrollbar-thumb {
+    /* background: #5f677e;  */
+    background: var(--bg-color-search-bar-scroll-bar-thumb);
+    border-radius: var(--search-bar-scroll-bar-radius);
+  }
+
+  .custom-search-bar ::-webkit-scrollbar-thumb:hover {
+    background: var(--bg-color-search-bar-scroll-bar-thumb-hover); 
+  }
+
+  .custom-search-bar ::placeholder {
+    color: var(--text-color-search-bar-placeholder);
+  }
+
+
+  /* CUSTOMIZED CSS FOR WIZARD101 DESCRIPTIONS */
   .wiz-description-box {
     color: rgb(194, 194, 194);
     /* font-weight: lighter; */
