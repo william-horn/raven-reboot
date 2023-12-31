@@ -2,7 +2,7 @@
 import "../globals.css";
 import Link from "next/link";
 
-// import Wireframe from "@/components/Wireframe";
+import Wireframe from "@/components/Wireframe";
 import Nav from "@/app/(root)/Nav";
 import Header from "@/app/(root)/Header";
 import Heading from "@/components/Typography/Heading";
@@ -13,7 +13,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const RootLayout = function({ children }) {
   return (
     <html lang="en">
-      {/* <Wireframe/> */}
+      <Wireframe/>
 
       {/* METADATA */}
       <head>
@@ -26,7 +26,7 @@ const RootLayout = function({ children }) {
 
       <body className="theme-default bg-primary">
         <Header/>
-        <Nav/>
+        {/* <Nav/> */}
 
         {children}
         

@@ -1,8 +1,10 @@
 import { twMerge } from "tailwind-merge";
 import React from "react";
+import { getResponsiveTextSize } from "@/libs/utils/responsiveStyles";
 
 const Text = React.forwardRef(function({ 
   children, 
+  textSize="md",
   className: importedClassName="",
   ...rest
 }, ref) {
@@ -11,7 +13,7 @@ const Text = React.forwardRef(function({
     <p 
     ref={ref}
     className={twMerge(
-      "general-text leading-6 text-primary align-middle text-sm block",
+      `${getResponsiveTextSize(textSize)} general-text leading-6 text-primary align-middle block`,
       importedClassName
     )}
     {...rest}>

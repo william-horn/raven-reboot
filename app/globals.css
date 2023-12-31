@@ -39,14 +39,24 @@
     --text-color-muted: #959595;
     --text-color-error: red;
 
-    /* Logo */
-    --text-color-logo-first-half: #f36161;
-    --text-color-logo-second-half: #ce9454;
+    /* LOGO */
+    --text-color-logo-first-half: var(--bg-color-secondary);
+    /* --text-color-logo-second-half: #ce9454; */
+    /* --text-color-logo-second-half: black; */
+    --text-color-logo-second-half: white;
 
-    --shadow-color-logo-first-half-hover: #7d212d;
-    --shadow-color-logo-second-half-hover: #7d5d21;
+    --shadow-color-logo-first-half-hover: #ffffff;
+    --shadow-color-logo-second-half-hover: #ffffff;
+    
+    --shadow-color-logo-first-half: white;
+    --shadow-color-logo-second-half: white;
 
-    --drop-shadow-logo-first-half-hover: 0px 0px 10px var(--shadow-color-logo-first-half-hover);
+    /* LOGO - Default shadow */
+    --drop-shadow-logo-first-half: 0 0 1px var(--shadow-color-logo-first-half);
+    --drop-shadow-logo-second-half: 0 0 1px var(--shadow-color-logo-second-half);
+
+    /* LOGO - Shadow on hover */
+    --drop-shadow-logo-first-half-hover: 0px 0px 2px var(--shadow-color-logo-first-half-hover);
     --drop-shadow-logo-second-half-hover: 0px 0px 10px var(--shadow-color-logo-second-half-hover);
 
     /* FOOTER */
@@ -72,10 +82,6 @@
 
   input::placeholder {
     color: var(--text-color-muted);
-  }
-
-  h1, h2, h3, h4, h5, h6, p {
-    color: var(--text-color-primary);
   }
 
   .wireframe * {

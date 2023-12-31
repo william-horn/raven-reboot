@@ -4,7 +4,7 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './lib/utils/*.js'
+    './libs/utils/*.js'
   ],
   theme: {
     extend: {
@@ -61,6 +61,8 @@ module.exports = {
       },
 
       dropShadow: {
+        "logo-first-half": "var(--drop-shadow-logo-first-half)",
+        "logo-second-half": "var(--drop-shadow-logo-second-half)",
         "logo-first-half-hover": "var(--drop-shadow-logo-first-half-hover)",
         "logo-second-half-hover": "var(--drop-shadow-logo-second-half-hover)",
       }

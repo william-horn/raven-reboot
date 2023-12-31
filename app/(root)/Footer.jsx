@@ -54,7 +54,7 @@ const Footer = function({
 }) {
 
   return (
-    <footer className="py-20 bg-secondary">
+    <footer className="py-20 bg-secondary shadow-[0_-10px_20px_black] relative z-[10]">
 
       <div className="flex flex-wrap justify-center items-center gap-12 pb-20 w-[70%] mx-auto">
 
