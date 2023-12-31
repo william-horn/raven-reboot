@@ -19,7 +19,7 @@ const InfoRow = ({
   externalLink
 }) => {
   return (
-    <li className="flex justify-center mt-2 font-bold text-center text-muted">
+    <li className="flex justify-center mt-2 font-bold text-center text-search-bar-result-match-word">
       {
         externalLink 
           ? <a href={externalLink}>

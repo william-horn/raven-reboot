@@ -5,7 +5,7 @@ const className = {
 
   historyList: {
     inner: {
-      self: "pr-2",
+      self: "pr-2 max-h-[15rem]",
       resultButton: {
         self: "",
         iconButton: {

@@ -54,7 +54,7 @@ const LandingPage = function() {
             <Text 
             textSize="xl"
             className="font-normal text-center drop-shadow-[0_0_15px_black]">
-              Wizard101's largest repository for user-collected game statistics such as drop
+              Wizard101&apos;s largest repository for user-collected game statistics such as drop
               rates for <span className="underline cursor-pointer text-hyperlink">Packs</span>,&nbsp;
               <span className="underline cursor-pointer text-hyperlink">Creatures</span>,&nbsp;
               <span className="underline cursor-pointer text-hyperlink">Chests</span>,&nbsp;
