@@ -71,6 +71,7 @@ const SearchBar = ({
   displayHistorySize=3,
   displayResultsSize=10,
   fetchBatchLoad=displayResultsSize,
+  fetchFrom,
 
   // historyResultIcon,
   // searchResultIcon,
@@ -136,7 +137,7 @@ const SearchBar = ({
   // Determines if current search input is 'dead' or not (if there are no database matches left)
   const isDeadSearchRoot = (searchInput) => {
     const deadRoot = remainingResults.current.deadSearchRoot;
-    return fetchResults ? deadRoot && searchInput.match(deadRoot) : true;
+    return fetchResults ? ((deadRoot !== null) && searchInput.match(deadRoot)) : true;
   }
 
   // Window events for detecting when using is unfocusing the search bar
@@ -172,11 +173,13 @@ const SearchBar = ({
     // console.log('current cache: ', searchCache);
     const remaining = remainingResults.current;
 
+    console.log("dead search root: ", isDeadSearchRoot(searchInput));
+
     if (fetchResults && !remaining.isLoading && remaining.amount > 0 && !isDeadSearchRoot(searchInput)) {
       remainingResults.current.isLoading = true;
 
-      // console.log(`Preparing fetch for [${remaining.amount}] items`);
-      // console.log('with exclude: ', remainingResults.current.exclude);
+      console.log(`Preparing fetch for [${remaining.amount}] items`);
+      console.log('with exclude: ', remainingResults.current.exclude);
       /*
         * note:
         Alternatively, we can use 'remaining.amount' as the fetchBatchLoad, if we only
@@ -187,53 +190,58 @@ const SearchBar = ({
           @param: remaining.exclude - the array of already-cached search results to ignore in the db query
           @param: searchInput - the search query string
       */
-      fetchResults(fetchBatchLoad, remaining.exclude, searchInput)
-        .then(data => {
-          console.log('search fetch: ', new Date());
-          remainingResults.current.isLoading = false;
-          remainingResults.current.exclude = [];
+      fetchResults({
+        limit: fetchBatchLoad, 
+        exclude: remaining.exclude, 
+        query: searchInput,
+        db_env: fetchFrom,
+      })
+      .then(data => {
+        console.log('search fetch: ', new Date());
+        remainingResults.current.isLoading = false;
+        remainingResults.current.exclude = [];
 
-          /*
-            From the returned fetch results, format the data into an array of names
-            to be stored in cache and displayed in the search bar.
-          */
-          const fetchedResults = data.map(d => d.name);
-          // console.log('fetched names: ', names, '| remaining after fetch: ', remainingResults.current.amount);
+        /*
+          From the returned fetch results, format the data into an array of names
+          to be stored in cache and displayed in the search bar.
+        */
+        const fetchedResults = data.map(d => d.name);
+        console.log('fetched names: ', fetchedResults, '| remaining after fetch: ', remainingResults.current.amount);
 
-          /*
-            If the amount of returned results is less than what we requested, then
-            proceeding search queries should be ignored. I'm calling this a 'dead search root',
-            or 'dead root'. The dead root will equal the search value from which the results
-            stopped flowing in.
-          */
-          remainingResults.current.amount = Math.max(remaining.amount - fetchedResults.length, 0);
-          
-          if (remainingResults.current.amount > 0) {
-            // console.log('setting dead search root to: ', searchInput);
-            remainingResults.current.deadSearchRoot = searchInput;
-            // console.log('DEAD ROOT: ', remainingResults.current.deadSearchRoot);
+        /*
+          If the amount of returned results is less than what we requested, then
+          proceeding search queries should be ignored. I'm calling this a 'dead search root',
+          or 'dead root'. The dead root will equal the search value from which the results
+          stopped flowing in.
+        */
+        remainingResults.current.amount = Math.max(remaining.amount - fetchedResults.length, 0);
+        
+        if (remainingResults.current.amount > 0) {
+          console.log('setting dead search root to: ', searchInput);
+          remainingResults.current.deadSearchRoot = searchInput;
+          console.log('DEAD ROOT: ', remainingResults.current.deadSearchRoot);
+        }
+
+        /*
+          When fetch has returned the search results from the database, update the internal
+          search cache to prevent re-fetching.
+        */
+        setSearchCache(prev => {
+          let cache = prev[cacheDomain];
+
+          // add the results to the existing cache array
+          for (let i = 0; i < fetchedResults.length; i++) {
+            cache.push(fetchedResults[i]);
           }
 
-          /*
-            When fetch has returned the search results from the database, update the internal
-            search cache to prevent re-fetching.
-          */
-          setSearchCache(prev => {
-            let cache = prev[cacheDomain];
+          // obey data cache limit
+          if (cache.length > cacheLimit) {
+            cache = cache.slice(cache.length - cacheLimit, cache.length);
+          }
 
-            // add the results to the existing cache array
-            for (let i = 0; i < fetchedResults.length; i++) {
-              cache.push(fetchedResults[i]);
-            }
-
-            // obey data cache limit
-            if (cache.length > cacheLimit) {
-              cache = cache.slice(cache.length - cacheLimit, cache.length);
-            }
-
-            return {...prev, [cacheDomain]: cache };
-          });
+          return {...prev, [cacheDomain]: cache };
         });
+      });
     }
   });
 
@@ -361,7 +369,7 @@ const SearchBar = ({
       remainingResults.current.exclude = [];
     }
 
-    // console.log('Remaining...', remainingSearchResultRequestSize);
+    console.log('Remaining...', remainingSearchResultRequestSize);
 
     return allResults;
   }
@@ -446,41 +454,39 @@ const SearchBar = ({
       const isDeadRoot = isDeadSearchRoot(searchInput);
       
       return (
-        <div className={className.historyList.self}>
-          <div className="px-3 py-2">
-            <div className={className.historyList.inner.self}>
-              {/* 
-                If the search root is not dead, and we still have a remaining request size,
-                then display a loading message until the data comes back, if there is any.
-              */}
-              {
-                ((!isDeadRoot) && (remainingResultsRequestSize > 0))
-                ? <div className="flex items-center gap-1">
-                    <Text>Loading results...</Text>
-                    <Icon src="/icons/loading_icon.svg" className={{ self: 'animate-spin w-4 h-4 min-w-fit min-h-fit' }}/>
-                  </div>
+        <div className="px-3 py-2">
+          <div className={className.historyList.inner.self}>
+            {/* 
+              If the search root is not dead, and we still have a remaining request size,
+              then display a loading message until the data comes back, if there is any.
+            */}
+            {
+              ((!isDeadRoot) && (remainingResultsRequestSize > 0))
+              ? <div className="flex items-center gap-1 my-2">
+                  <Text>Loading results...</Text>
+                  <Icon src="/icons/loading_icon.svg" className={{ self: 'animate-spin w-4 h-4 min-w-fit min-h-fit' }}/>
+                </div>
+              : <></>
+            }
+
+            {/* 
+              If there are currently any search results, display them
+            */}
+            { 
+              searchResults.length > 0
+                ? searchResults.map(renderSearchResult)
                 : <></>
-              }
+            }
 
-              {/* 
-                If there are currently any search results, display them
-              */}
-              { 
-                searchResults.length > 0
-                  ? searchResults.map(renderSearchResult)
-                  : <></>
-              }
-
-              {/*  
-                If the search root is dead and there are no search results to be displayed,
-                then display a 'no-results' message
-              */}
-              {
-                (isDeadRoot && searchResults.length === 0)
-                  ? <Text className="mt-2">No matches found for this search</Text>
-                  : <></>
-              }
-            </div>
+            {/*  
+              If the search root is dead and there are no search results to be displayed,
+              then display a 'no-results' message
+            */}
+            {
+              (isDeadRoot && searchResults.length === 0)
+                ? <Text className="mt-2">No matches found for this search</Text>
+                : <></>
+            }
           </div>
         </div>
       );
@@ -496,10 +502,13 @@ const SearchBar = ({
       self: "w-full h-full mx-2 text-search-bar-result custom-search-bar-input"
     },
 
+    leftIcon: {},
+    rightIcon: {},
+
     historyList: {
       self: "absolute w-full rounded-b-md top-full z-[1000] bg-search-bar",
       inner: {
-        self: "overflow-y-auto overflow-x-clip max-h-[200px]",
+        self: "overflow-y-auto overflow-x-clip max-h-[200px] pr-2",
         resultButton: {
           self: "w-full text-left justify-start text-search-bar-result bg-search-bar-result font-medium transition-colors duration-200 rounded hover:bg-search-bar-result-hover hover:underline",
           iconButton: {
@@ -533,7 +542,7 @@ const SearchBar = ({
     className={className.self}>
       
       <div className="flex items-center p-2">
-        <Icon src={leftIcon}/>
+        <Icon src={leftIcon} className={className.leftIcon}/>
 
         <input 
         ref={searchFieldRef} 
@@ -545,10 +554,12 @@ const SearchBar = ({
         placeholder={placeholder} 
         />
 
-        <Icon src={rightIcon}/>
+        <Icon src={rightIcon} className={className.rightIcon}/>
       </div>
 
-      {renderSearchResults()}
+      <div className={className.historyList.self}>
+        {renderSearchResults()}
+      </div>
     </div>
   );
 };

@@ -179,7 +179,7 @@ export const StatelessLink = function({
   children,
   className: importedClassName={},
   state: importedState={},
-  href="/",
+  href,
   ...rest
 }) {
 

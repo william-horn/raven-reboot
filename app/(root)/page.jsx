@@ -15,6 +15,7 @@ import { getResponsivePadding, getResponsiveTextSize } from "@/libs/utils/respon
 import { StatelessLink, StatelessButton } from "@/components/Buttons/Buttons";
 import Divider from "@/components/Divider";
 
+
 const LandingPage = function() {
 
   return (

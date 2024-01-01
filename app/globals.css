@@ -138,13 +138,13 @@
     --bg-color-search-bar-result: #bdbdbd00;
     --bg-color-hover-search-bar-result: #3f3f3f;
 
-    --bg-color-search-bar-scroll-bar-thumb: rgb(70, 70, 70);
+    --bg-color-search-bar-scroll-bar-thumb: rgb(31, 31, 31);
     --bg-color-search-bar-scroll-bar-thumb-hover: rgb(70, 70, 70);
 
-    --bg-color-search-bar-scroll-bar-track: rgba(47, 47, 51, 0.7);
+    --bg-color-search-bar-scroll-bar-track: rgba(47, 47, 51, 0);
 
-    --search-bar-scroll-bar-width: 5px;
-    --search-bar-scroll-bar-radius: 10px;
+    --search-bar-scroll-bar-width: 7px;
+    --search-bar-scroll-bar-radius: 0px;
 
     --text-color-search-bar-result: white;
     --text-color-search-bar-input: #d9d8df;
@@ -156,6 +156,10 @@
 
     --text-color-search-bar-placeholder: #474747;
   }
+  
+  /* .selected::placeholder  {
+    --text-color-search-bar-placeholder: white;
+  } */
 
 
   /* DEFAULT INPUT */
