@@ -27,6 +27,13 @@ const SearchPage__SearchBar = function({
       fetchResults={ItemsAPI.searchBarFetch}
       fetchFrom="production"
       />
+
+      <SearchBar 
+      displayResultsSize={30}
+      // className={SearchBarSleek}
+      fetchResults={ItemsAPI.searchBarFetch}
+      fetchFrom="production"
+      />
     </div>
   );
 }

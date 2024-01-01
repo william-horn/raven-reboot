@@ -45,6 +45,14 @@ export async function ping() {
   console.log(document);
 }
 
+export async function pingAmulet() {
+  await connectMongoDB(dbLocation);
+  const document = await Items.findOne({ type: "Amulet" });
+
+  console.log(`Database is successfully connected. Pinged one document:`);
+  console.log(document);
+}
+
 export function getMetadata() {
   return {
     name: "Items",
