@@ -1,6 +1,6 @@
 
 import "../globals.css";
-import Wireframe from "@/components/Wireframe";
+// import Wireframe from "@/components/Wireframe";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Header from "./Header";
 import Footer from "../(root)/Footer";
@@ -8,7 +8,7 @@ import Footer from "../(root)/Footer";
 const DemoLayout = function({ children }) {
   return (
     <html lang="en">
-      <Wireframe/>
+      {/* <Wireframe/> */}
 
       {/* METADATA */}
       <head>
