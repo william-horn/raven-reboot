@@ -46,7 +46,11 @@ const getTagData = (results, type, resultSource) => {
   return tagData;
 }
 
-export const filterSearchResults = (searchResults, searchInput, searchResultType) => {
+export const filterSearchResults = ({
+  results: searchResults, 
+  query: searchInput, 
+  type: searchResultType
+}) => {
   const results = [];
   // const isHistoryResult = searchResultType === Enum.SearchResultType.History.value;
   const searchInputBase = searchInput.toLowerCase();
@@ -55,7 +59,7 @@ export const filterSearchResults = (searchResults, searchInput, searchResultType
     // const resultName = isHistoryResult ? searchResults[key] : searchResults[key].name;
     // const resultBase = resultName.toLowerCase();
     const isResultData = typeof searchResults[key] === "object";
-    const resultName = (isResultData ? searchResults[key].name : searchResults[key]).replaceAll('&amp;', '&');
+    const resultName = (isResultData ? searchResults[key].name : searchResults[key]);
     const resultBase = resultName.toLowerCase();
 
     const resultData = {

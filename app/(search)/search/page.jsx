@@ -18,7 +18,7 @@ const SearchPage = function({
     <Page className="">
       <Content span="max" className="h-[200vh] flex">
 
-        <Content className="xl:w-[20%] lg:w-[25%] md:w-[30%] sm:w-[30%] sm:max-w-[20rem] max-w-[15rem] min-w-[15rem] h-screen bg-primary-inset sticky top-0">
+        <Content className="w-[300px] min-w-[15rem] h-screen bg-primary-inset sticky top-0">
           <SearchBar/>
         </Content>
 

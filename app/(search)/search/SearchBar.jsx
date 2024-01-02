@@ -22,18 +22,20 @@ const SearchPage__SearchBar = function({
   return (
     <div className={`${getResponsivePadding('2xl')}`}>
       <SearchBar 
-      displayResultsSize={30}
+      displayHistorySize={0}
+      displayResultsSize={4}
+      // fetchBatchLoad={1}
       className={SearchBarSleek}
       fetchResults={ItemsAPI.searchBarFetch}
       fetchFrom="production"
       />
-
+{/* 
       <SearchBar 
       displayResultsSize={30}
       // className={SearchBarSleek}
       fetchResults={ItemsAPI.searchBarFetch}
       fetchFrom="production"
-      />
+      /> */}
     </div>
   );
 }

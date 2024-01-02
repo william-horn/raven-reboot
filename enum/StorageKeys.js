@@ -6,23 +6,28 @@ const StorageKeys = new EnumCollection({
     info: 'the currently selected theme'
   }),
 
-  SearchHistory: new EnumItem({
-    value: 'search-history',
-    info: 'locally saved search queries'
-  }),
+  // SearchHistory: new EnumItem({
+  //   value: 'search-history',
+  //   info: 'locally saved search queries'
+  // }),
 
-  SearchCache: new EnumItem({
-    value: 'search-cache',
-    info: 'locally saved searches from a database'
-  }),
+  // SearchCache: new EnumItem({
+  //   value: 'search-cache',
+  //   info: 'locally saved searches from a database'
+  // }),
 
-  SearchCacheDomain: new EnumCollection({
-    Primary: new EnumItem({ value: 'primary' }),
-  }),
+  // RavenData: new EnumItem({
+  //   value: 'data',
+  //   info: 'misc data related to raven'
+  // }),
 
-  SearchHistoryDomain: new EnumCollection({
-    Primary: new EnumItem({ value: 'primary' }),
-  }),
+  // SearchCacheDomain: new EnumCollection({
+  //   Primary: new EnumItem({ value: 'primary' }),
+  // }),
+
+  // SearchHistoryDomain: new EnumCollection({
+  //   Primary: new EnumItem({ value: 'primary' }),
+  // }),
 }, {
   valuePrefix: 'raven:'
 })

@@ -29,11 +29,12 @@ import removeExtraWhitespace from '@/libs/utils/removeExtraWhitespace';
 import { filterSearchResults } from "@/libs/utils/filterSearchResults";
 import mergeClass from '@/libs/utils/mergeClass';
 import emptyFunc from "@/libs/utils/defaultFunctions";
-
+import sleep from '@/libs/utils/sleep';
+import { escapeRegex } from '@/libs/utils/escapeRegex';
 /*
   React hooks/custom hooks
 */
-import { useLocalStorageState } from '@/hooks/useLocalStorageRequest';
+import { useLocalStorageRequest, useLocalStorageState } from '@/hooks/useLocalStorageRequest';
 import { useState, useRef, useEffect } from 'react';
 
 /*
@@ -45,6 +46,56 @@ import Enum from '../enum';
   External libraries
 */
 import { v4 as uuidv4 } from 'uuid';
+
+
+/*
+  todo: new custom types, organize into enums later
+*/
+const SearchDomain = {
+  Primary: { value: "primary" }
+}
+
+
+
+
+const SIMULATE_FETCH = async({
+  limit,
+  query,
+  exclude
+}) => {
+  await sleep(3);
+
+  let db = [
+    {name: 'asd'}, 
+    {name: 'tfdg'}, 
+    {name: 'joil'},
+    {name: 'fth'}, 
+    {name: 'george'}, 
+    {name: 'william'}, 
+    {name: 'bryan'}, 
+    {name: 'frank'},
+    {name: 'fred'}, 
+    {name: 'george'}, 
+    {name: 'jacob'},
+    {name: 'josh'}, 
+    {name: 'olive'}, 
+    {name: 'bob'},
+    {name: 'billy'},
+    {name: 'bobby'},
+    {name: 'brownie'}
+  ];
+
+  let data = [];
+
+  for (let i = 0; i < db.length; i++) {
+    const v = db[i];
+    if (v.name.match(query) && !exclude.find(e => e === v.name)) {
+      data.push(v);
+    }
+  }
+
+  return data.slice(0, limit);
+}
 
 
 /*
@@ -63,8 +114,9 @@ const SearchBar = ({
   initialCache=[],
   initialHistory=[],
 
-  historyDomain=Enum.StorageKeys.SearchHistoryDomain.Primary.value,
-  cacheDomain=Enum.StorageKeys.SearchCacheDomain.Primary.value,
+  // historyDomain=Enum.StorageKeys.SearchHistoryDomain.Primary.value,
+  // cacheDomain=Enum.StorageKeys.SearchCacheDomain.Primary.value,
+  domain=SearchDomain.Primary.value,
 
   cacheLimit=2500,
   historyLimit=100,
@@ -73,34 +125,110 @@ const SearchBar = ({
   fetchBatchLoad=displayResultsSize,
   fetchFrom,
 
+  clearSearchBarOnFocus=false,
+
   // historyResultIcon,
   // searchResultIcon,
 
   leftIcon="/icons/search_icon.svg",
   rightIcon,
 }) => {
-  // Get search history getters/setters for local storage
-  const [getSearchHistory, updateSearchHistory] = useLocalStorageState(
-    Enum.StorageKeys.SearchHistory.value, { [historyDomain]: initialHistory }
-  );
-
   // Create search state for when the search bar is interacted with
   const [searchState, setSearchState] = useState(Enum.SearchState.Idle.value);
-  const [searchInput, setSearchInput] = useState("");
-  const [lastSearchInput, setLastSearchInput] = useState("");
-  const [getSearchCache, setSearchCache] = useLocalStorageState(
-    Enum.StorageKeys.SearchCache.value, { [cacheDomain]: initialCache }
+  const [searchInput, setSearchInput] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
+  // if deadRoot is empty (''), set it back to null to continue querying every keystroke
+  const [deadRoot, setDeadRoot] = useState(null);
+
+  // Get search history getters/setters for local storage
+  const [getSearchHistory, updateSearchHistory] = useLocalStorageState(
+    "raven:search_history", { [domain]: initialHistory }
+  );
+  const [getSearchCache, updateSearchCache] = useLocalStorageState(
+    "raven:search_cache", { [domain]: initialCache }
   );
 
-  const remainingResults = useRef({ 
-    amount: 0,
-    exclude: [],
-    isLoading: false,
-    deadSearchRoot: null,
-  });
-
+  // const isFetchingRef = useRef(false);
+  // const searchResults = useRef(null);
   const searchBarRef = useRef(null);
   const searchFieldRef = useRef(null);
+
+  // short-hand globals
+  const isNotIdle = searchState !== Enum.SearchState.Idle.value;
+  const isIdle = searchState === Enum.SearchState.Idle.value;
+  const isListening = searchState === Enum.SearchState.Listening.value;
+  const searchInputExists = searchInput !== null;
+  const isDeadRoot = Boolean(deadRoot && (searchInput.match("^" + escapeRegex(deadRoot))));
+
+  let allResults = null;
+  let cachedResults = null;
+  let historyResults = null;
+  let remainingResults = null;
+  let foundResults = null;
+
+  //* EXPENSIVE function
+  const getSearchResults = (searchInput) => {
+    // pull from search result arrays
+    const historyLogs = (getSearchHistory(domain) || []);
+
+    /*
+      * IMPORTANT OPTIMIZATION NOTE:
+
+      It is more expensive to sort the filter results BEFORE slicing the array, since
+      the array could be fairly large. 
+      
+      Optimally, it would be nice to sort everything
+      first to present the user with the most relevant results, but if performance becomes
+      and issue it's not a big deal for slice() and sort() to switch places.
+    */
+
+    // convert search result arrays to arrays of result data
+    const historyResults = filterSearchResults({
+      results: historyLogs, 
+      query: searchInput,
+      type: Enum.SearchResultType.History.value
+    })
+    .sort((a, b) => b.priority - a.priority)
+    .slice(0, displayHistorySize);
+
+    const cachedResults = filterSearchResults({
+      results: getSearchCache(domain),
+      query: searchInput,
+      type: Enum.SearchResultType.Database.value
+    })
+    .sort((a, b) => b.priority - a.priority)
+    .slice(0, displayResultsSize);
+
+    // compile all result data arrays down to one, and sort by search match type
+    const allResults = [
+      ...historyResults,
+      ...cachedResults
+    ]
+    // .slice(0, displayResultsSize)
+    // .sort((a, b) => b.priority - a.priority);
+
+    return {
+      allResults,
+      cachedResults,
+      historyResults
+    };
+  }
+
+  if (isNotIdle && searchInputExists) {
+    const searchResults = getSearchResults(searchInput);
+
+    allResults = searchResults.allResults;
+    cachedResults = searchResults.cachedResults;
+    historyResults = searchResults.historyResults;
+    remainingResults = Math.max(displayResultsSize - cachedResults.length, 0);
+    foundResults = cachedResults.map(data => data.source);
+
+    console.log('2) computed search results');
+  }
+
+  if (isIdle && searchFieldRef.current) {
+    searchFieldRef.current.blur();
+  }
 
   // TODO: add focus mover for search results
   const moveSearchResultFocus = (event) => {
@@ -116,28 +244,14 @@ const SearchBar = ({
     // }
   }
 
-  // Force unfocus on search bar
-  const unfocusSearch = () => {
-    searchFieldRef.current.blur();
-    searchFieldRef.current.value = removeExtraWhitespace(searchFieldRef.current.value);
-
-    setSearchState(Enum.SearchState.Idle.value);
-  }
-
   // When search bar is unfocused
   const onSearchUnfocus = (event) => {
     event.stopPropagation();
 
     if (!searchBarRef.current.contains(event.target)) {
-      unfocusSearch();
+      setSearchState(Enum.SearchState.Idle.value);
       return;
     }
-  }
-
-  // Determines if current search input is 'dead' or not (if there are no database matches left)
-  const isDeadSearchRoot = (searchInput) => {
-    const deadRoot = remainingResults.current.deadSearchRoot;
-    return fetchResults ? ((deadRoot !== null) && searchInput.match(deadRoot)) : true;
   }
 
   // Window events for detecting when using is unfocusing the search bar
@@ -146,92 +260,73 @@ const SearchBar = ({
   //* important: when using more than one search bar, you may get repeating messages in output window. this is okay for now.
   useEffect(() => {
     window.addEventListener('mousedown', onSearchUnfocus);
-    window.addEventListener('keyup', moveSearchResultFocus);
+    // window.addEventListener('keyup', moveSearchResultFocus);
     // window.addEventListener('blur', removeSearchResultFocus);
     return () => {
       window.removeEventListener('mousedown', onSearchUnfocus);
-      window.removeEventListener('keyup', moveSearchResultFocus);
+      // window.removeEventListener('keyup', moveSearchResultFocus);
       // window.removeEventListener('blur', removeSearchResultFocus);
     }
   }, []);
 
-  /*  
-    Handle auto-fetching of new search results as the user is typing.
+  console.log("current found: ", foundResults, " | for: ", searchInput);
 
-    Possible future updates:
-      - only auto-fetch between small time intervals of user typing
-
-      - add memory for "dead roots", to ignore re-fetching when the user 
-        starts typing a dead-end query. 
-        
-          - for example: currently, if the user types in "zoo" with no matching 
-            results, it will remember "zoo" as a dead root only until the user
-            clears "zoo" from their search bar. Every subsequent search for 
-            "zoo" after that will result in another query attempt.
+  /*
+    Process and handle changes AFTER render
   */
   useEffect(() => {
-    // console.log('current cache: ', searchCache);
-    const remaining = remainingResults.current;
+    console.log('----------------------------');
+    console.log('isIdle: ', isIdle);
+    console.log('isFetching: ', isFetching);
+    console.log('isDeadRoot: ', isDeadRoot);
+    console.log('remaining results: ', remainingResults);
+    console.log('----------------------------');
+    
+    if (isIdle || isFetching || isDeadRoot) return;
 
-    console.log("dead search root: ", isDeadSearchRoot(searchInput));
+    console.log('3) getting result data');
 
-    if (fetchResults && !remaining.isLoading && remaining.amount > 0 && !isDeadSearchRoot(searchInput)) {
-      remainingResults.current.isLoading = true;
+    // if no results remain, then return
+    if (remainingResults === 0) return;
 
-      console.log(`Preparing fetch for [${remaining.amount}] items`);
-      console.log('with exclude: ', remainingResults.current.exclude);
-      /*
-        * note:
-        Alternatively, we can use 'remaining.amount' as the fetchBatchLoad, if we only
-        ever want to fetch what is needed. This, however, will result in more fetch calls.
+    console.log('4) insufficient results, begining FETCH');
 
-        fetchResults():
-          @param: fetchBatchLoad - the limit of documents to fetch
-          @param: remaining.exclude - the array of already-cached search results to ignore in the db query
-          @param: searchInput - the search query string
-      */
-      fetchResults({
-        limit: fetchBatchLoad, 
-        exclude: remaining.exclude, 
-        query: searchInput,
-        db_env: fetchFrom,
-      })
-      .then(data => {
-        console.log('search fetch: ', new Date());
-        remainingResults.current.isLoading = false;
-        remainingResults.current.exclude = [];
+    /*  
+      Data-fetching phase
+      * case: remaining results is > 0
+    */
 
-        /*
-          From the returned fetch results, format the data into an array of names
-          to be stored in cache and displayed in the search bar.
-        */
-        const fetchedResults = data.map(d => d.name);
-        console.log('fetched names: ', fetchedResults, '| remaining after fetch: ', remainingResults.current.amount);
+    setIsFetching(true);
 
-        /*
-          If the amount of returned results is less than what we requested, then
-          proceeding search queries should be ignored. I'm calling this a 'dead search root',
-          or 'dead root'. The dead root will equal the search value from which the results
-          stopped flowing in.
-        */
-        remainingResults.current.amount = Math.max(remaining.amount - fetchedResults.length, 0);
-        
-        if (remainingResults.current.amount > 0) {
-          console.log('setting dead search root to: ', searchInput);
-          remainingResults.current.deadSearchRoot = searchInput;
-          console.log('DEAD ROOT: ', remainingResults.current.deadSearchRoot);
+    fetchResults({
+      limit: fetchBatchLoad,
+      exclude: foundResults,
+      query: searchInput,
+      db_env: fetchFrom,
+    })
+      .then(results => {
+        const formattedResults = results.map(d => d.name);
+
+        const remainingAfterFetch = remainingResults - formattedResults.length;
+
+        console.log("got back: ", formattedResults, " | for: ", searchInput);
+        console.log("remaining after: ", remainingAfterFetch);
+
+        if (remainingAfterFetch > 0 && searchInput !== '') {
+          console.log('setting dead root for result data: ', searchInput);
+          setDeadRoot(searchInput);
+        } else {
+          setDeadRoot(null);
         }
 
-        /*
-          When fetch has returned the search results from the database, update the internal
-          search cache to prevent re-fetching.
-        */
-        setSearchCache(prev => {
-          let cache = prev[cacheDomain];
+        setIsFetching(false);
+
+        updateSearchCache(prev => {
+          let cache = prev[domain];
 
           // add the results to the existing cache array
-          for (let i = 0; i < fetchedResults.length; i++) {
-            cache.push(fetchedResults[i]);
+          for (let i = 0; i < formattedResults.length; i++) {
+            cache.push(formattedResults[i]);
           }
 
           // obey data cache limit
@@ -239,33 +334,40 @@ const SearchBar = ({
             cache = cache.slice(cache.length - cacheLimit, cache.length);
           }
 
-          return {...prev, [cacheDomain]: cache };
+          return {...prev, [domain]: cache };
         });
+
+        console.log('6) finished FETCH phase, next is re-render from setting isFetching to false');
+
       });
-    }
-  });
 
+  }, [searchInput, isFetching]);
 
-  // When the search bar is focused
   const onSearchFocus = () => {
-    setSearchState(Enum.SearchState.Typing.value);
+    setSearchState(Enum.SearchState.Listening.value);
+
+    if (searchInput === null || clearSearchBarOnFocus) {
+      setSearchInput('');
+    }
+
+    console.log('1) focused search bar');
   }
 
   const removeFromHistory = (resultStr) => {
     updateSearchHistory(prev => {
-      let finalResults = prev[historyDomain];
+      let finalResults = prev[domain];
       
       finalResults.splice(
         finalResults.indexOf(resultStr), 
         1
       );
 
-      return {...prev, [historyDomain]: finalResults }
+      return {...prev, [domain]: finalResults }
     });
   }
 
-  const filterSearch = (searchQuery) => {
-    unfocusSearch();
+  const submitSearch = (searchQuery) => {
+    setSearchState(Enum.SearchState.Idle.value);
 
     const filteredQuery = removeExtraWhitespace(searchQuery);
 
@@ -276,7 +378,7 @@ const SearchBar = ({
 
     // Update search history
     updateSearchHistory(prev => {
-      let finalResults = prev[historyDomain] || [];
+      let finalResults = prev[domain];
       const duplicateIndex = finalResults.indexOf(filteredQuery);
 
       // Check for duplicate searches. If duplicate is found, just re-order the search results
@@ -293,207 +395,40 @@ const SearchBar = ({
         finalResults = finalResults.slice(0, historyLimit);
       }
       
-      return {...prev, [historyDomain]: finalResults };
+      return {...prev, [domain]: finalResults };
     });
     
     onSearch(filteredQuery);
   }
 
   // When a search is invoked through the search result drop-down menu
-  const onSearchResultQuery = (result) => {
-    searchFieldRef.current.value = result;
+  const autoSubmitSearch = (result) => {
+    // searchFieldRef.current.value = result;
     setSearchInput(result);
-    filterSearch(result);
+    submitSearch(result);
   }
 
   // When a search is submitted in the search bar
   const onEnter = (event) => {
     if (event.key === Enum.Keys.Enter.value) {
-      // filterSearch(searchFieldRef.current.value);
-      filterSearch(searchInput);
+      submitSearch(searchInput);
     }
   }
 
-  //* EXPENSIVE function
-  const getSearchResults = (searchInput) => {
-    // pull from search result arrays
-    const historyLogs = (getSearchHistory(historyDomain) || []);
+  // const onSearchTyping = () => {
+  //   const currentSearchInput = searchFieldRef.current.value;
 
-    /*
-      * IMPORTANT OPTIMIZATION NOTE:
+  //   if (!isDeadSearchRoot(currentSearchInput)) {
+  //     remainingResults.current.deadSearchRoot = null;
+  //   }
 
-      It is more expensive to sort the filter results BEFORE slicing the array, since
-      the array could be fairly large. 
-      
-      Optimally, it would be nice to sort everything
-      first to present the user with the most relevant results, but if performance becomes
-      and issue it's not a big deal for slice() and sort() to switch places.
-    */
-
-    // convert search result arrays to arrays of result data
-    const historyResults = filterSearchResults(
-      historyLogs, 
-      searchInput,
-      Enum.SearchResultType.History.value
-    )
-    .sort((a, b) => b.priority - a.priority)
-    .slice(0, displayHistorySize);
-
-    const searchCacheResults = filterSearchResults(
-      getSearchCache(cacheDomain),
-      searchInput,
-      Enum.SearchResultType.Database.value
-    )
-    .sort((a, b) => b.priority - a.priority)
-    .slice(0, displayResultsSize);
-
-    // compile all result data arrays down to one, and sort by search match type
-    const allResults = [
-      ...historyResults,
-      ...searchCacheResults
-    ]
-    // .slice(0, displayResultsSize)
-    // .sort((a, b) => b.priority - a.priority);
-
-
-    /*
-      This job is to only worry about updating the search result request size data. All logic
-      for handling the fetch and re-render is in the useEffect at the top level of the component.
-    */
-    const remainingSearchResultRequestSize = Math.max(displayResultsSize - searchCacheResults.length, 0);
-    remainingResults.current.amount = remainingSearchResultRequestSize;
-
-    if (searchCacheResults.length > 0) {
-      remainingResults.current.exclude = searchCacheResults.map(data => data.source);
-    } else {
-      remainingResults.current.exclude = [];
-    }
-
-    console.log('Remaining...', remainingSearchResultRequestSize);
-
-    return allResults;
-  }
-
-  const onSearchTyping = () => {
-    const currentSearchInput = searchFieldRef.current.value;
-
-    if (!isDeadSearchRoot(currentSearchInput)) {
-      remainingResults.current.deadSearchRoot = null;
-    }
-
-    setLastSearchInput(searchInput);
-    setSearchState(Enum.SearchState.Typing.value);
-    setSearchInput(currentSearchInput);
-    onTyping(currentSearchInput);
-  }
+  //   // setLastSearchInput(searchInput);
+  //   // setSearchState(Enum.SearchState.Typing.value);
+  //   setSearchInput(currentSearchInput);
+  //   onTyping(currentSearchInput);
+  // }
 
   // Render out a single search result
-  const renderSearchResult = (resultData) => {
-    const key = uuidv4();
-    
-    return (
-      <div key={key} className="flex items-center">
-
-        {
-          // Render interactive result icon for result history
-          resultData.type === Enum.SearchResultType.History.value
-            ? <StatefulImageButton
-              onClick={() => removeFromHistory(resultData.source)}
-              className={className.historyList.inner.resultButton.iconButton}
-              srcHovered="/icons/trash_icon.svg"
-              src="/icons/history_icon.svg"
-              />
-
-            // Render stateless icon for other search results
-            : <StatelessImageButton
-              onClick={() => onSearchResultQuery(resultData.source)}
-              className={className.historyList.inner.resultButton.iconButton}
-              src="/icons/search_icon.svg"
-              />
-        }
-
-        {/* Render search result button */}
-        <StatelessButton 
-        key={key}
-        onClick={() => onSearchResultQuery(resultData.source)}
-        className={mergeClass(
-          className.historyList.inner.resultButton, 
-          resultData.type === Enum.SearchResultType.History.value 
-            ? className.historyList.inner.historyResult
-            : className.historyList.inner.databaseResult
-        )}>
-          {
-            resultData.tags.map(tagData => {
-              switch (tagData.type) {
-                case Enum.SearchMatchType.FirstMatch:
-                  return <span key={tagData.key} className="font-bold text-search-bar-result-match-first">{tagData.source}</span>
-
-                case Enum.SearchMatchType.WordMatch:
-                  return <span key={tagData.key} className="font-bold text-search-bar-result-match-word">{tagData.source}</span>
-
-                case Enum.SearchMatchType.AnyMatch:
-                  return <span key={tagData.key} className="font-bold text-search-bar-result-match-any">{tagData.source}</span>
-
-                case Enum.SearchMatchType.Normal:
-                  return <span key={tagData.key}>{tagData.source}</span>
-              }
-            })
-          }
-        </StatelessButton>
-      </div>
-    );
-  };
-
-
-  // The drop-down search results when the search bar is focused
-  const renderSearchResults = () => {
-    if ((searchState !== Enum.SearchState.Idle.value)) {
-      const searchResults = getSearchResults(searchState === Enum.SearchState.Focused.value ? '' : searchInput);
-
-      const remainingResultsRequestSize = remainingResults.current.amount;
-      const isDeadRoot = isDeadSearchRoot(searchInput);
-      
-      return (
-        <div className="px-3 py-2">
-          <div className={className.historyList.inner.self}>
-            {/* 
-              If the search root is not dead, and we still have a remaining request size,
-              then display a loading message until the data comes back, if there is any.
-            */}
-            {
-              ((!isDeadRoot) && (remainingResultsRequestSize > 0))
-              ? <div className="flex items-center gap-1 my-2">
-                  <Text>Loading results...</Text>
-                  <Icon src="/icons/loading_icon.svg" className={{ self: 'animate-spin w-4 h-4 min-w-fit min-h-fit' }}/>
-                </div>
-              : <></>
-            }
-
-            {/* 
-              If there are currently any search results, display them
-            */}
-            { 
-              searchResults.length > 0
-                ? searchResults.map(renderSearchResult)
-                : <></>
-            }
-
-            {/*  
-              If the search root is dead and there are no search results to be displayed,
-              then display a 'no-results' message
-            */}
-            {
-              (isDeadRoot && searchResults.length === 0)
-                ? <Text className="mt-2">No matches found for this search</Text>
-                : <></>
-            }
-          </div>
-        </div>
-      );
-    }
-
-    return <></>;
-  }
 
   let className = {
     self: "relative rounded bg-search-bar custom-search-bar",
@@ -533,8 +468,110 @@ const SearchBar = ({
   className = mergeClass(
     className,
     importedClassName,
-    { __selected: searchState !== Enum.SearchState.Idle.value }
+    { __selected: isNotIdle }
   );
+
+  const renderSearchResult = (resultData, index) => {
+    // todo: replace uuid() with key based on data, as recommended by React
+    // const key = uuidv4();
+    
+    return (
+      <div key={index} className="flex items-center">
+
+        {
+          // Render interactive result icon for result history
+          resultData.type === Enum.SearchResultType.History.value
+            ? <StatefulImageButton
+              onClick={() => removeFromHistory(resultData.source)}
+              className={className.historyList.inner.resultButton.iconButton}
+              srcHovered="/icons/trash_icon.svg"
+              src="/icons/history_icon.svg"
+              />
+
+            // Render stateless icon for other search results
+            : <StatelessImageButton
+              onClick={() => autoSubmitSearch(resultData.source)}
+              className={className.historyList.inner.resultButton.iconButton}
+              src="/icons/search_icon.svg"
+              />
+        }
+
+        {/* Render search result button */}
+        <StatelessButton 
+        key={index}
+        onClick={() => autoSubmitSearch(resultData.source)}
+        className={mergeClass(
+          className.historyList.inner.resultButton, 
+          resultData.type === Enum.SearchResultType.History.value 
+            ? className.historyList.inner.historyResult
+            : className.historyList.inner.databaseResult
+        )}>
+          {
+            resultData.tags.map(tagData => {
+              switch (tagData.type) {
+                case Enum.SearchMatchType.FirstMatch:
+                  return <span key={tagData.key} className="font-bold text-search-bar-result-match-first">{tagData.source}</span>
+
+                case Enum.SearchMatchType.WordMatch:
+                  return <span key={tagData.key} className="font-bold text-search-bar-result-match-word">{tagData.source}</span>
+
+                case Enum.SearchMatchType.AnyMatch:
+                  return <span key={tagData.key} className="font-bold text-search-bar-result-match-any">{tagData.source}</span>
+
+                case Enum.SearchMatchType.Normal:
+                  return <span key={tagData.key}>{tagData.source}</span>
+              }
+            })
+          }
+        </StatelessButton>
+      </div>
+    );
+  };
+
+
+  // The drop-down search results when the search bar is focused
+  const renderSearchResults = () => {
+    // State condition for rendering the results
+    if (isIdle) {
+      return <></>;
+    }
+
+    return (
+      <>
+        {/* 
+          If the search root is not dead, and we still have a remaining request size,
+          then display a loading message until the data comes back, if there is any.
+        */}
+        {
+          (false)
+          ? <div className="flex items-center gap-1 my-2">
+              <Text>Loading results...</Text>
+              <Icon src="/icons/loading_icon.svg" className={{ self: 'animate-spin w-4 h-4 min-w-fit min-h-fit' }}/>
+            </div>
+          : <></>
+        }
+
+        {/* 
+          If there are currently any search results, display them
+        */}
+        { 
+          allResults.length > 0
+            ? allResults.map(renderSearchResult)
+            : <></>
+        }
+
+        {/*  
+          If the search root is dead and there are no search results to be displayed,
+          then display a 'no-results' message
+        */}
+        {
+          (false)
+            ? <Text className="mt-2">No matches found for this search</Text>
+            : <></>
+        }
+      </>
+    );
+  }
 
   return (
     <div
@@ -548,17 +585,23 @@ const SearchBar = ({
         ref={searchFieldRef} 
         onKeyUp={onEnter}
         onFocus={onSearchFocus} 
-        onChange={onSearchTyping}
+        onChange={() => setSearchInput(searchFieldRef.current.value)}
         className={className.searchTextbox.self}
         type="text" 
         placeholder={placeholder} 
+        value={searchInput || ''}
         />
 
         <Icon src={rightIcon} className={className.rightIcon}/>
       </div>
 
+      {/* Search result list */}
       <div className={className.historyList.self}>
-        {renderSearchResults()}
+        <div className="px-3 py-2">
+          <div className={className.historyList.inner.self}>
+            {allResults ? renderSearchResults() : <></>}
+          </div>
+        </div>
       </div>
     </div>
   );

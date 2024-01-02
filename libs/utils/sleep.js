@@ -1,0 +1,1 @@
+export default async timeout => await new Promise(r => setTimeout(r, timeout*1000));
