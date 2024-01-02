@@ -39,5 +39,5 @@ const className = {
   }
 }
 
-const SearchBarPrimary = className;
-export default SearchBarPrimary;
+const SearchBarSleek = className;
+export default SearchBarSleek;
