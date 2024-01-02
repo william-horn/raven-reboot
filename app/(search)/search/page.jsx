@@ -35,7 +35,7 @@ const SearchPage = function({
           </Content>
 
           <Content className="px-6">
-            <Heading type="h2" textSize="3xl" className="text-left font-extralight">See what's new on the Raven News page</Heading>
+            <Heading type="h2" textSize="3xl" className="text-left font-extralight">See what&apos;s new on the Raven News page</Heading>
           </Content>
         </Content>
 
