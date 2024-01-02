@@ -68,6 +68,7 @@
 
     /* General TEXT */
     --text-color-primary: #e3e3e3;
+    --text-color-inset-bg-secondary: #696969;
 
     --text-color-hyperlink: #d58eff;
     --text-color-hyperlink-hover: #c874f9;
@@ -165,9 +166,10 @@
 
     --bg-color-search-bar-scroll-bar-thumb: rgb(65, 65, 65);
     --bg-color-search-bar-scroll-bar-track: rgb(34, 34, 34);
-    /* --bg-color-search-bar-scroll-bar-thumb-hover: rgb(255, 255, 255); */
+    --bg-color-search-bar-scroll-bar-thumb-hover: rgb(95, 95, 95);
 
     --search-bar-scroll-bar-width: 10px;
+    --search-bar-scroll-bar-radius: 0px;
   }
 
 

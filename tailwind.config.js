@@ -75,6 +75,7 @@ module.exports = {
 
       textColor: {
         // General
+        "inset-secondary": "var(--text-color-inset-bg-secondary)",
         "primary": "var(--text-color-primary)",
         "muted": "var(--text-color-muted)",
         "error": "var(--text-color-error)",

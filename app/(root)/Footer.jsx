@@ -11,6 +11,7 @@ import Link from "next/link";
 import Text from "@/components/Typography/Text";
 import Heading from "@/components/Typography/Heading";
 import Image from "next/image";
+import Logo from "@/components/Logo";
 
 const InfoRow = ({
   name,
@@ -94,13 +95,7 @@ const Footer = function({
       </div>
 
       {/* Logo branding */}
-      <Image
-      src="/images/logo3-128.png"
-      width={48}
-      height={48}
-      alt=""
-      className="mx-auto mt-10"
-      />
+      <Logo className="mx-auto mt-10"/>
 
     </footer>
   );

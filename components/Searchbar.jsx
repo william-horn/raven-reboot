@@ -412,7 +412,7 @@ const SearchBar = ({
     rightIcon: {},
 
     historyList: {
-      self: "absolute w-full rounded-b-md top-full z-[1000] bg-search-bar",
+      self: "absolute w-full rounded-b-md top-full z-[1000] bg-search-bar opacity-0",
       inner: {
         self: "overflow-y-auto overflow-x-clip max-h-[200px] pr-2",
         resultButton: {
@@ -432,7 +432,10 @@ const SearchBar = ({
     },
 
     __selected: {
-      self: "rounded-b-none"
+      self: "rounded-b-none",
+      historyList: {
+        self: "opacity-100"
+      }
     }
   }
 

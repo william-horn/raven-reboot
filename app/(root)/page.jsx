@@ -24,6 +24,7 @@ const LandingPage = function() {
         src="/images/novus-black-and-white-room-bg.jpg"
         priority
         fill
+        alt=""
         sizes="(min-width: 1024px) 1920px, (min-width: 640px) 96px, 512px"
         className="absolute object-cover pointer-events-none select-none brightness-[0.6]"
         />
@@ -43,7 +44,8 @@ const LandingPage = function() {
               bg-landing-page-entry-button hover:bg-landing-page-entry-button-hover shadow-[5px_5px_30px_black] 
               relative transition-all group-hover:animate-bounce select-none
             `}}>
-              <span className="drop-shadow-[0_0_10px_black]">Explore Raven</span>
+              {/* <span className="drop-shadow-[0_0_10px_black]">Explore Raven</span> */}
+              Explore Raven
             </StatelessLink>
           </div>
         </Content>

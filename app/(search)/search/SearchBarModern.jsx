@@ -13,7 +13,7 @@ const SearchPage__SearchBarModern = function({
   
 }) {
   return (
-    <div className={``}>
+    <div className={`w-full`}>
       <SearchBar 
       leftIcon="/icons/search_light_icon.svg"
       placeholder="Begin Your Research..."
