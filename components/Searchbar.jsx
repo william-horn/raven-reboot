@@ -9,8 +9,18 @@
     - options to customize display of search results
     - smart built-in data fetching for displaying database search queries
 
-  * No known bugs
   * Early version
+  * 
+  * // todo:
+  * 
+  * - Fix issue with 'domain' prop, and useLocalStorageState as a whole. 
+  *   - make compatible with creating sub-directories
+  * 
+  * - may need to add conditional logic for 'fetchResults' prop to make sure it exists,
+  *   for cases where search bar is not fetching from a database.
+  * 
+  * - Add new custom enums for storage keys * sub-domains
+  * 
 */
 
 /*
@@ -53,48 +63,6 @@ import { v4 as uuidv4 } from 'uuid';
 */
 const SearchDomain = {
   Primary: { value: "primary" }
-}
-
-
-
-
-const SIMULATE_FETCH = async({
-  limit,
-  query,
-  exclude
-}) => {
-  await sleep(3);
-
-  let db = [
-    {name: 'asd'}, 
-    {name: 'tfdg'}, 
-    {name: 'joil'},
-    {name: 'fth'}, 
-    {name: 'george'}, 
-    {name: 'william'}, 
-    {name: 'bryan'}, 
-    {name: 'frank'},
-    {name: 'fred'}, 
-    {name: 'george'}, 
-    {name: 'jacob'},
-    {name: 'josh'}, 
-    {name: 'olive'}, 
-    {name: 'bob'},
-    {name: 'billy'},
-    {name: 'bobby'},
-    {name: 'brownie'}
-  ];
-
-  let data = [];
-
-  for (let i = 0; i < db.length; i++) {
-    const v = db[i];
-    if (v.name.match(query) && !exclude.find(e => e === v.name)) {
-      data.push(v);
-    }
-  }
-
-  return data.slice(0, limit);
 }
 
 
@@ -160,6 +128,8 @@ const SearchBar = ({
   const searchInputExists = searchInput !== null;
   const isDeadRoot = Boolean(deadRoot && (searchInput.match("^" + escapeRegex(deadRoot))));
 
+  let noResultsFound;
+
   let allResults = null;
   let cachedResults = null;
   let historyResults = null;
@@ -222,8 +192,9 @@ const SearchBar = ({
     historyResults = searchResults.historyResults;
     remainingResults = Math.max(displayResultsSize - cachedResults.length, 0);
     foundResults = cachedResults.map(data => data.source);
+    noResultsFound = allResults.length === 0;
 
-    console.log('2) computed search results');
+    // console.log('2) computed search results');
   }
 
   if (isIdle && searchFieldRef.current) {
@@ -269,27 +240,27 @@ const SearchBar = ({
     }
   }, []);
 
-  console.log("current found: ", foundResults, " | for: ", searchInput);
+  // console.log("current found: ", foundResults, " | for: ", searchInput);
 
   /*
     Process and handle changes AFTER render
   */
   useEffect(() => {
-    console.log('----------------------------');
-    console.log('isIdle: ', isIdle);
-    console.log('isFetching: ', isFetching);
-    console.log('isDeadRoot: ', isDeadRoot);
-    console.log('remaining results: ', remainingResults);
-    console.log('----------------------------');
+    // console.log('----------------------------');
+    // console.log('isIdle: ', isIdle);
+    // console.log('isFetching: ', isFetching);
+    // console.log('isDeadRoot: ', isDeadRoot);
+    // console.log('remaining results: ', remainingResults);
+    // console.log('----------------------------');
     
     if (isIdle || isFetching || isDeadRoot) return;
 
-    console.log('3) getting result data');
+    // console.log('3) getting result data');
 
     // if no results remain, then return
     if (remainingResults === 0) return;
 
-    console.log('4) insufficient results, begining FETCH');
+    // console.log('4) insufficient results, begining FETCH');
 
     /*  
       Data-fetching phase
@@ -309,11 +280,11 @@ const SearchBar = ({
 
         const remainingAfterFetch = remainingResults - formattedResults.length;
 
-        console.log("got back: ", formattedResults, " | for: ", searchInput);
-        console.log("remaining after: ", remainingAfterFetch);
+        // console.log("got back: ", formattedResults, " | for: ", searchInput);
+        // console.log("remaining after: ", remainingAfterFetch);
 
         if (remainingAfterFetch > 0 && searchInput !== '') {
-          console.log('setting dead root for result data: ', searchInput);
+          // console.log('setting dead root for result data: ', searchInput);
           setDeadRoot(searchInput);
         } else {
           setDeadRoot(null);
@@ -337,7 +308,7 @@ const SearchBar = ({
           return {...prev, [domain]: cache };
         });
 
-        console.log('6) finished FETCH phase, next is re-render from setting isFetching to false');
+        // console.log('6) finished FETCH phase, next is re-render from setting isFetching to false');
 
       });
 
@@ -350,7 +321,7 @@ const SearchBar = ({
       setSearchInput('');
     }
 
-    console.log('1) focused search bar');
+    // console.log('1) focused search bar');
   }
 
   const removeFromHistory = (resultStr) => {
@@ -454,7 +425,7 @@ const SearchBar = ({
           }
         },
         historyResult: {
-          self: "italic text-search-history-result"
+          self: "italic text-search-history-result opacity-50"
         },
         databaseResult: {},
       }
@@ -543,7 +514,7 @@ const SearchBar = ({
           then display a loading message until the data comes back, if there is any.
         */}
         {
-          (false)
+          (isFetching)
           ? <div className="flex items-center gap-1 my-2">
               <Text>Loading results...</Text>
               <Icon src="/icons/loading_icon.svg" className={{ self: 'animate-spin w-4 h-4 min-w-fit min-h-fit' }}/>
@@ -565,7 +536,7 @@ const SearchBar = ({
           then display a 'no-results' message
         */}
         {
-          (false)
+          (!isFetching && noResultsFound)
             ? <Text className="mt-2">No matches found for this search</Text>
             : <></>
         }
