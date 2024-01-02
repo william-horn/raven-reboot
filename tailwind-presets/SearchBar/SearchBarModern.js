@@ -9,7 +9,7 @@ const className = {
     self: "text-3xl font-light pl-2 pb-1 text-[#757575]"
   },
   historyList: {
-    self: "bg-primary pb-2 rounded-none shadow-[0_5px_5px_#080808]", //border-b-[1px] border-b-[#272727]
+    self: "bg-primary pb-2 rounded-none shadow-[0_5px_5px_#080808] pointer-events-none", //border-b-[1px] border-b-[#272727]
     inner: {
       resultButton: {
         self: "bg-transparent group my-1 text-lg font-light",
@@ -25,7 +25,7 @@ const className = {
       self: "text-primary"
     },
     historyList: {
-      self: "transition-all",
+      self: "transition-all pointer-events-auto",
     }
   }
 }

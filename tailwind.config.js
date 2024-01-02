@@ -33,6 +33,7 @@ module.exports = {
         // Landing page
         "landing-page-entry-button": "var(--bg-color-landing-page-entry-button)",
         "landing-page-entry-button-hover": "var(--bg-color-landing-page-entry-button-hover)",
+        "landing-page-header-and-footer": "var(--bg-color-landing-page-header-and-footer)",
 
         // Nav bar buttons
         "navbar-button-primary": "var(--bg-color-navbar-button-primary)",
@@ -104,6 +105,11 @@ module.exports = {
         "logo-second-half": "var(--drop-shadow-logo-second-half)",
         "logo-first-half-hover": "var(--drop-shadow-logo-first-half-hover)",
         "logo-second-half-hover": "var(--drop-shadow-logo-second-half-hover)",
+      },
+
+      boxShadow: {
+        "landing-page-header": "var(--shadow-landing-page-header)",
+        "landing-page-footer": "var(--shadow-landing-page-footer)",
       }
     },
   },

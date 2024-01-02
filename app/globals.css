@@ -14,6 +14,11 @@
     --bg-color-landing-page-entry-button: #dc2626;
     --bg-color-landing-page-entry-button-hover: #b91c1c;
 
+    /* LANDING PAGE HEADER */
+    --bg-color-landing-page-header-and-footer: #161616;
+
+    --shadow-landing-page-header: 0px 10px 20px #080808;
+    --shadow-landing-page-footer: 0px -10px 20px #080808;
 
     /* NAV BAR */
     --bg-color-navbar-button-primary: rgba(0, 0, 0, 0);
@@ -78,7 +83,7 @@
 
 
     /* LOGO */
-    --text-color-logo-first-half: var(--bg-color-secondary);
+    --text-color-logo-first-half: var(--bg-color-landing-page-entry-button);
     /* --text-color-logo-second-half: #ce9454; */
     /* --text-color-logo-second-half: black; */
     --text-color-logo-second-half: white;
@@ -90,11 +95,11 @@
     --shadow-color-logo-second-half: white;
 
     /* LOGO - Default shadow */
-    --drop-shadow-logo-first-half: 0 0 1px var(--shadow-color-logo-first-half);
+    --drop-shadow-logo-first-half: 0;
     --drop-shadow-logo-second-half: 0 0 1px var(--shadow-color-logo-second-half);
 
     /* LOGO - Shadow on hover */
-    --drop-shadow-logo-first-half-hover: 0px 0px 2px var(--shadow-color-logo-first-half-hover);
+    --drop-shadow-logo-first-half-hover: 0px 0px 2px #ff0000;
     --drop-shadow-logo-second-half-hover: 0px 0px 10px var(--shadow-color-logo-second-half-hover);
 
 

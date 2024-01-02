@@ -16,7 +16,7 @@ const Header = function({
 }) {
 
   return (
-    <header className="flex bg-secondary shadow-[0_10px_20px_black] pb-3 sticky top-0 z-[99999] md:flex-row flex-col justify-between">
+    <header className="flex bg-landing-page-header-and-footer shadow-landing-page-header pb-3 sticky top-0 z-[99999] md:flex-row flex-col justify-between">
       {/* Heading Text */}
       <div className="flex flex-col items-center gap-2 p-5 mx-auto md:mx-0 sm:block">
         <h1 className="inline-block mr-3 text-6xl text-primary font-gf-2">
