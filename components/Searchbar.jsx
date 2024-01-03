@@ -16,9 +16,6 @@
   * - Fix issue with 'domain' prop, and useLocalStorageState as a whole. 
   *   - make compatible with creating sub-directories
   * 
-  * - may need to add conditional logic for 'fetchResults' prop to make sure it exists,
-  *   for cases where search bar is not fetching from a database.
-  * 
   * - Add new custom enums for storage keys * sub-domains
   * 
 */
@@ -94,6 +91,7 @@ const SearchBar = ({
   fetchFrom,
 
   clearSearchBarOnFocus=false,
+  requireAutoSubmit=false,
 
   // historyResultIcon,
   // searchResultIcon,
@@ -253,7 +251,7 @@ const SearchBar = ({
     // console.log('remaining results: ', remainingResults);
     // console.log('----------------------------');
     
-    if (isIdle || isFetching || isDeadRoot) return;
+    if (isIdle || isFetching || isDeadRoot || !fetchResults) return;
 
     // console.log('3) getting result data');
 
@@ -337,8 +335,13 @@ const SearchBar = ({
     });
   }
 
-  const submitSearch = (searchQuery) => {
+  const submitSearch = (searchQuery, autoSubmit) => {
     setSearchState(Enum.SearchState.Idle.value);
+
+    if (requireAutoSubmit && !autoSubmit) {
+      setSearchState(Enum.SearchState.Idle.value);
+      return;
+    }
 
     const filteredQuery = removeExtraWhitespace(searchQuery);
 
@@ -376,7 +379,7 @@ const SearchBar = ({
   const autoSubmitSearch = (result) => {
     // searchFieldRef.current.value = result;
     setSearchInput(result);
-    submitSearch(result);
+    submitSearch(result, true);
   }
 
   // When a search is submitted in the search bar

@@ -6,19 +6,6 @@ import Icon from "../Graphics/Icon";
 import emptyFunc from "@/libs/utils/defaultFunctions";
 import { StatelessButton } from "./Buttons";
 
-let className = {
-  // button styles
-  self: "p-0",
-
-  inner: {
-    self: "p-1"
-  },
-
-  // icon styles
-  icon: {
-    self: "",
-  }
-};
 
 export const StatelessImageButton = function({
   children,
@@ -33,6 +20,21 @@ export const StatelessImageButton = function({
 
   ...rest
 }) {
+
+  let className = {
+    // button styles
+    self: "p-0",
+  
+    inner: {
+      self: "p-1"
+    },
+  
+    // icon styles
+    icon: {
+      self: "",
+    }
+  };
+  
   className = mergeClass(
     className,
     importedClassName,

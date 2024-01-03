@@ -12,7 +12,7 @@ const Quantifier = function({
   upperLimit=100,
   lowerLimit=0,
   onValueChanged=emptyFunc,
-  className: importedClassName
+  className: importedClassName={}
 }) {
 
   const [_numberVal, _setNumberVal] = useState(defaultValue);
