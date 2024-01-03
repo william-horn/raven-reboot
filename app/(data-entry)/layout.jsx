@@ -2,10 +2,8 @@
 import "../globals.css";
 import Wireframe from "@/components/Wireframe";
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import Header from "./Header";
-import Footer from "../(root)/Footer";
 
-const SearchLayout = function({ children }) {
+const DataEntryLayout = function({ children }) {
   return (
     <html lang="en">
       <Wireframe/>
@@ -26,11 +24,10 @@ const SearchLayout = function({ children }) {
 
         {children}
         
-        <Footer/>
         <SpeedInsights/>
       </body>
     </html>
   )
 }
 
-export default SearchLayout;
+export default DataEntryLayout;

@@ -71,6 +71,7 @@ const groupContexts = {
             activeData,
             onSelectionLimitReached,
             updateActiveIds,
+            unselectionLimit
           } = buttonGroup;
 
           /*
@@ -103,6 +104,10 @@ const groupContexts = {
           const fireOnClick = (...args) => {
             if (onClick(...args)) buttonGroup.onClick(...args);
           }
+
+          if (activeIds.length <= unselectionLimit && !selected) {
+            return;
+          }
   
           if (selectionLimit > -1 && activeIds.length >= selectionLimit && selected) {
             if (unselectLastChoice) {
@@ -115,7 +120,6 @@ const groupContexts = {
                 fireOnUnselect(unselectedButtonData);
                 updateActiveIds(unselectedButtonId, unselectedButtonData.state.__groupSelected);
               }
-      
             } else {
     
               onSelectionLimitReached(this.__getEventData());

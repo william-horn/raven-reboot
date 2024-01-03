@@ -8,9 +8,9 @@ import Heading from "@/components/Typography/Heading";
 const AboutPage = function() {
   
   return (
-    <Page>
+    <Page className=" bg-primary-inset">
       <Content span="max">
-        <Content span="lg">
+        <Content span="lg" className="mx-auto">
           <Heading type="h2" className="text-4xl text-center font-logo-2">About Raven</Heading>
         </Content>
       </Content>

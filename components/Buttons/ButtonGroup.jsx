@@ -20,6 +20,7 @@ const ButtonGroup = function({
   unselectLastChoice=false,
   defaultSelect=[],
   selectionLimit=-1,
+  unselectionLimit=0,
 
   ...rest
 }) {
@@ -101,6 +102,7 @@ const ButtonGroup = function({
       unselectLastChoice,
       onSelectionLimitReached,
       onUnselect,
+      unselectionLimit,
       registeredIds,
       activeData,
       className,
