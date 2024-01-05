@@ -1,11 +1,15 @@
 
 
-export function toSimpleArray(dataArray) {
-  for (let i = 0; i < dataArray.length; i++) {
-    const v = dataArray[i];
-    dataArray[i] = v.toJSON();
-    dataArray[i]._id = v._id.toJSON();
-  }
+// export function toSimpleArray(dataArray) {
+//   for (let i = 0; i < dataArray.length; i++) {
+//     const v = dataArray[i];
+//     dataArray[i] = v.toJSON();
+//     dataArray[i]._id = v._id.toJSON();
+//   }
 
-  return dataArray;
+//   return dataArray;
+// }
+
+export function toSimpleArray(dataArray) {
+  return JSON.parse(JSON.stringify(dataArray));
 }

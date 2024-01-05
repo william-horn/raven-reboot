@@ -4,17 +4,14 @@ import mongoose, { Schema } from "mongoose";
 
 const dataRecord = new Schema(
   {
-    name: String,
-    description: [],
-    drops: [],
-    stats: statsSchema,
+
   },
   {
     timestamps: true,
   }
 );
 
-const Creature = mongoose.models.Creature || mongoose.model("Creature", creatureSchema);
+const DataRecord = mongoose.models.DataRecord || mongoose.model("DataRecord", dataRecord);
 
-export default Creature;
+export default DataRecord;
  

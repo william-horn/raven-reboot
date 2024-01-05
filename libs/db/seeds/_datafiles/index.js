@@ -1,16 +1,29 @@
 
-import WandData from "./wand-data.json";
-import AmuletData from './amulet-data.json';
+import WandData from "./wand-data-2-reformatted.json";
+import AmuletData from './amulet-data-2-reformatted.json';
 import SingleTestPost from "./single-item.json";
-import RingData from "./ring-data.json";
-import AthameData from "./athame-data.json";
-import DeckData from "./deck-data.json";
+import RingData from "./ring-data-2-reformatted.json";
+import AthameData from "./athame-data-2-reformatted.json";
+import DeckData from "./deck-data-2-reformatted.json";
+import sampleRobe from './sample-robe.json';
+import RobeData from './robe-data-3-reformatted.json';
+import HatData from './hat-data.json';
+import BootData from './boot-data.json';
+import CreatureData from './creature-data-2-reformatted.json';
 
 export {
   SingleTestPost,
+
+  CreatureData,
+
   WandData,
   AmuletData,
   RingData,
   AthameData,
   DeckData,
+  RobeData,
+  HatData,
+  BootData,
+
+  sampleRobe,
 }

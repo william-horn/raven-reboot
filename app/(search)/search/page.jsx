@@ -10,7 +10,7 @@ import Logo from "@/components/Logo.jsx";
 import SearchNavBar from "./SearchNavBar.jsx";
 
 // API
-import * as ItemsAPI from "../../../models/items/api.js";
+import * as DropsAPI from "../../../models/drops/api.js";
 import ButtonGroup from "@/components/Buttons/ButtonGroup.jsx";
 import { StatelessButton, StatelessLink } from "@/components/Buttons/Buttons.jsx";
 

@@ -7,7 +7,7 @@ import SearchBarSleek from "@/tailwind-presets/SearchBar/SearchBarSleek";
 
 import { useEffect, useState, useCallback } from "react";
 // Fetch APIs
-import * as ItemsAPI from "../../models/items/api";
+import * as DropsAPI from "../../models/drops/api";
 
 const SearchPage__SearchBarDataEntry = function({
   
@@ -39,7 +39,7 @@ const SearchPage__SearchBarDataEntry = function({
       requireAutoSubmit
       clearSearchBarOnFocus
       className={SearchBarSleek}
-      fetchResults={ItemsAPI.searchBarFetch}
+      fetchResults={DropsAPI.searchBarFetch}
       fetchFrom="production"
       />
     </div>

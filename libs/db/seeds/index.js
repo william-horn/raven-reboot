@@ -1,8 +1,11 @@
 const commandArgs = process.argv.slice(2);
 const [seedFile, fileFunc, dataFileInput, dbEnv] = commandArgs;
 
-import * as Items from "./items";
+// import * as Items from "./items";
+import * as Drops from './drops';
 import * as DataFiles from "./_datafiles";
+import * as TestModel from "./testmodel";
+import * as DropSources from "./dropsources";
 
 const runCommandOn = async (modelAPI, { fileFunc, dataFileInput }) => {
   if (!modelAPI.getMetadata) {
@@ -17,18 +20,20 @@ const runCommandOn = async (modelAPI, { fileFunc, dataFileInput }) => {
   console.log(metadata.description);
   console.log('----------------------------------------------------');
 
+  const hasDataInput = (dataFileInput !== undefined && dataFileInput !=='_');
+
   if ((fileFunc !== undefined) && !modelAPI[fileFunc]) {
     console.log(`The function '${fileFunc}' does not exist for ${metadata.name}`);
     return;
   }
 
-  if ((dataFileInput !== undefined && dataFileInput !=='_') && !DataFiles[dataFileInput]) {
+  if (hasDataInput && !DataFiles[dataFileInput]) {
     console.log(`The data file: '${dataFileInput}' does not exist or was not found`);
     return;
   }
 
   if (fileFunc) {
-    if (!dataFileInput) {
+    if (!hasDataInput) {
       console.log(`Running '${fileFunc}' on ${metadata.name}`);
       await modelAPI[fileFunc]();
 
@@ -43,8 +48,20 @@ const runCommandOn = async (modelAPI, { fileFunc, dataFileInput }) => {
 }
 
 switch (seedFile) {
-  case "items":
-    runCommandOn(Items, { fileFunc, dataFileInput });
+  // case "items":
+  //   runCommandOn(Items, { fileFunc, dataFileInput });
+  //   break;
+
+  case "drops": 
+    runCommandOn(Drops, { fileFunc, dataFileInput });
+    break;
+
+  case "testmodel": 
+    runCommandOn(TestModel, { fileFunc, dataFileInput });
+    break;
+
+  case "dropsources": 
+    runCommandOn(DropSources, { fileFunc, dataFileInput });
     break;
 
   default:

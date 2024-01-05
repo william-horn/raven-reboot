@@ -8,7 +8,7 @@ import SearchBarModern from "@/tailwind-presets/SearchBar/SearchBarModern";
 
 import { useEffect, useState, useCallback } from "react";
 // Fetch APIs
-import * as ItemsAPI from "../../../models/items/api";
+import * as DropsAPI from "../../../models/drops/api";
 
 const SearchPage__SearchBarModern = function({
   
@@ -23,7 +23,7 @@ const SearchPage__SearchBarModern = function({
       displayHistorySize={3}
       displayResultsSize={20}
       className={SearchBarModern}
-      fetchResults={ItemsAPI.searchBarFetch}
+      fetchResults={DropsAPI.searchBarFetch}
       fetchFrom="production"
       />
     </div>

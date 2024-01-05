@@ -2,7 +2,7 @@
 
 "use client";
 
-import * as ItemsAPI from "@/models/items/api";
+import * as DropsAPI from "@/models/drops/api";
 import { useEffect } from "react";
 import Heading from "../Typography/Heading";
 import Divider from "../Divider";
@@ -21,7 +21,7 @@ const _DatabaseSearchBar = function({
       <SearchBar 
       displayResultsSize={30}
       className={SearchBarPrimary}
-      fetchResults={ItemsAPI.searchBarFetch}
+      fetchResults={DropsAPI.searchBarFetch}
       fetchFrom="production"
       />
     </div>

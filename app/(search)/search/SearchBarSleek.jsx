@@ -7,7 +7,7 @@ import { getResponsivePadding } from "@/libs/utils/responsiveStyles";
 import SearchBarSleek from "@/tailwind-presets/SearchBar/SearchBarSleek";
 
 // Fetch APIs
-import * as ItemsAPI from "../../../models/items/api";
+import * as DropsAPI from "../../../models/drops/api";
 
 const SearchPage__SearchBar = function({
   
@@ -18,7 +18,7 @@ const SearchPage__SearchBar = function({
       displayHistorySize={3}
       displayResultsSize={20}
       className={SearchBarSleek}
-      fetchResults={ItemsAPI.searchBarFetch}
+      fetchResults={DropsAPI.searchBarFetch}
       fetchFrom="production"
       />
     </div>
