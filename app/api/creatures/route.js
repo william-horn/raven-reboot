@@ -2,7 +2,7 @@ import connectMongoDB from "@/libs/db/mongodb";
 import { NextResponse } from "next/server";
 import { escapeRegex } from "@/libs/utils/escapeRegex";
 
-import Creature from "@/models/creatures/creatures";
+// import Creature from "@/models/creatures/creatures";
 
 export async function POST(req) {
   try {
@@ -32,30 +32,6 @@ export async function GET(req) {
     const params = req.nextUrl.searchParams;
 
     let query_limit = params.get('limit');
-    let match_name = params.get('matchName');
-    let query_id = params.get('id');
-
-    let creature;
-
-    if (match_name) {
-      const queryStr = escapeRegex(match_name);
-      console.log("Searching for match... ", queryStr, "original: ", match_name);
-
-      creature = await Creature
-        .find({
-          "name": { "$regex": queryStr, "$options": "i" }
-        })
-        .limit(query_limit);
-
-    } else if (query_id) {
-      creature = await Creature
-        .findById(query_id);
-
-    } else {
-      creature = await Creature
-        .find()
-        .limit(query_limit);
-    }
 
     return NextResponse.json(
       creature, 
