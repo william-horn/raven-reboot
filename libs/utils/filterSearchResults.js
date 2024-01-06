@@ -71,6 +71,27 @@ export const filterSearchResults = ({
       tags: [] 
     };
 
+    // if (resultBase.match("^" + searchInputBase + "$")) {
+    //   resultData.tags = [
+    //     { 
+    //       matched: true, 
+    //       type: Enum.SearchMatchType.FirstMatch, 
+    //       source: resultName.substring(0, searchInput.length),
+    //       key: "0",
+    //     },
+    //     { 
+    //       matched: false, 
+    //       type: Enum.SearchMatchType.Normal, 
+    //       source: resultName.substring(searchInput.length),
+    //       key: "1",
+    //     }
+    //   ];
+
+    //   resultData.priority = 4;
+    //   results.push(resultData);
+    //   continue;
+    // }
+
     // If search input matches the result string from the beginning
     if (resultName.substring(0, searchInput.length).toLowerCase() === searchInputBase) {
       resultData.tags = [
