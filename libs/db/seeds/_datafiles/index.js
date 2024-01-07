@@ -10,7 +10,7 @@
 // import HatData from './hat-data.json';
 // import BootData from './boot-data.json';
 // import CreatureData from './creature-data-2-reformatted.json';
-import ReagentData from './reagent-data.json';
+// import ReagentData from './reagent-data.json';
 
 export {
   // SingleTestPost,
@@ -25,7 +25,7 @@ export {
   // RobeData,
   // HatData,
   // BootData,
-  ReagentData,
+  // ReagentData,
 
   // sampleRobe,
 }

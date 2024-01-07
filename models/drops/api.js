@@ -87,8 +87,12 @@ export async function searchBarFetch(options={}) {
 
 
   // Query 2: Find general matches
-  const newExl = data.map(v => ({ name: v }));
-  console.log(newExl);
+  const newExl = [];
+  
+  for (let k = 0; k < data.length; k++) {
+    newExl[k] = { name: data[k].name }
+  }
+
   let data2 = null;
 
   if (data.length < limit) {

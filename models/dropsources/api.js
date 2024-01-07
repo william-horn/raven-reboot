@@ -8,7 +8,7 @@ import { escapeRegex } from "@/libs/utils/escapeRegex";
 import { toSimpleArray } from "@/libs/utils/api-utils";
 
 // Data models
-import Drops from "./drops";
+import DropSources from "./dropsources";
 
 
 export async function getAll() {
@@ -16,11 +16,11 @@ export async function getAll() {
   try {
     await connectMongoDB();
 
-    const allDrops = await Drops.find();
+    const allDropSources = await DropSources.find();
 
     return {
       ok: true,
-      payload: toSimpleArray(allDrops),
+      payload: toSimpleArray(allDropSources),
     }
   } catch(error) {
 
@@ -49,7 +49,7 @@ export async function searchBarFetch(options={}) {
     exclude = exclude.map(v => ({ name: v }));
   }
 
-  const data = await Drops.find({
+  const data = await DropSources.find({
     $nor: exclude,
     $and: [ { name: {"$regex": escapeRegex(query), "$options": "i"}} ]
   })
@@ -66,7 +66,7 @@ export async function ping(options={}) {
   try {
     await connectMongoDB(options.db_env);
 
-    const oneItem = await Drops.findOne();
+    const oneItem = await DropSources.findOne();
 
     return {
       ok: true,

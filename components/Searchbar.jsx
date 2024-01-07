@@ -25,6 +25,7 @@
 */
 import Icon from './Graphics/Icon';
 import Text from "./Typography/Text";
+import Loading from './Loading/Classic';
 import { StatelessButton } from "./Buttons/Buttons";
 import { StatefulImageButton, StatelessImageButton } from './Buttons/ImageButtons';
 
@@ -72,7 +73,7 @@ const SearchBar = ({
   className: importedClassName={},
   placeholder="Search...", 
 
-  onSearch=search => console.log('searched for: ', search),
+  onSearch=emptyFunc,
   onTyping=emptyFunc,
   fetchResults,
 
@@ -82,6 +83,7 @@ const SearchBar = ({
   // historyDomain=Enum.StorageKeys.SearchHistoryDomain.Primary.value,
   // cacheDomain=Enum.StorageKeys.SearchCacheDomain.Primary.value,
   domain=SearchDomain.Primary.value,
+  setSearch=null,
 
   cacheLimit=2500,
   historyLimit=100,
@@ -101,7 +103,7 @@ const SearchBar = ({
 }) => {
   // Create search state for when the search bar is interacted with
   const [searchState, setSearchState] = useState(Enum.SearchState.Idle.value);
-  const [searchInput, setSearchInput] = useState(null);
+  const [searchInput, setSearchInput] = useState(setSearch);
   const [isFetching, setIsFetching] = useState(false);
   // if deadRoot is empty (''), set it back to null to continue querying every keystroke
   const [deadRoot, setDeadRoot] = useState(null);
@@ -222,6 +224,13 @@ const SearchBar = ({
       return;
     }
   }
+
+  // update search bar with URL query param, if any
+  useEffect(() => {
+    if (setSearch !== searchInput) {
+      setSearchInput(setSearch);
+    }
+  }, [setSearch]);
 
   // Window events for detecting when using is unfocusing the search bar
   // TODO: add support for arrow-key focus on search results
@@ -521,10 +530,7 @@ const SearchBar = ({
         */}
         {
           (isFetching)
-          ? <div className="flex items-center gap-1 my-2">
-              <Text>Loading results...</Text>
-              <Icon src="/icons/loading_icon.svg" className={{ self: 'animate-spin w-4 h-4 min-w-fit min-h-fit' }}/>
-            </div>
+          ? <Loading message="Loading results..."/>
           : <></>
         }
 

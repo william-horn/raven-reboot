@@ -12,15 +12,17 @@ const SearchPage__SearchResult = function({
 
 
   return (
-    <Content className="mb-10">
-      <Heading className="font-bold text-left" textSize="xl">Search Result Title</Heading>
-      <Content className="mt-2">
-        <Content>
-          <Text>Search result description</Text>
-        </Content>
-
+    <Content className="mb-10 transition-colors hover:bg-primary-inset">
+      <Content className="p-3">
+        <Heading className="py-0 font-bold text-left" textSize="xl">Search Result Title</Heading>
         <Content className="mt-3">
-          <StatelessButton className={{ self: "bg-pink-800 hover:bg-pink-900" }}>View on Wiki</StatelessButton>
+          <Content>
+            <Text>Search result description</Text>
+          </Content>
+
+          <Content className="mt-4">
+            <StatelessButton className={{ self: "bg-pink-800 hover:bg-pink-900", inner: {self: "text-sm py-1"} }}>View on Wiki</StatelessButton>
+          </Content>
         </Content>
       </Content>
     </Content>

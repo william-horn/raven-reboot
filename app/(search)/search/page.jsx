@@ -10,9 +10,87 @@ import Logo from "@/components/Logo.jsx";
 import SearchNavBar from "./SearchNavBar.jsx";
 
 // API
-import * as DropsAPI from "../../../models/drops/api.js";
+import Drops from "@/models/drops/drops.js";
+import DropSources from "@/models/dropsources/dropsources.js";
 import ButtonGroup from "@/components/Buttons/ButtonGroup.jsx";
 import { StatelessButton, StatelessLink } from "@/components/Buttons/Buttons.jsx";
+
+import { toSimpleArray } from "@/libs/utils/api-utils.js";
+import connectMongoDB from "@/libs/db/mongodb.js";
+import { escapeRegex } from "@/libs/utils/escapeRegex.js";
+
+import * as DropsAPI from "../../../models/drops/api.js";
+import * as DropSourcesAPI from "../../../models/dropsources/api.js";
+
+const searchBarFetch = async (options={}) => {
+  "use server";
+  
+  await connectMongoDB(options.db_env);
+
+  let {
+    exclude,
+    limit,
+    query
+  } = options;
+
+  if (exclude.length === 0) {
+    exclude = [{ name: '' }];
+  } else {
+    exclude = exclude.map(v => ({ name: v }));
+  }
+
+  // !important:
+  /*
+    Eventually, find some way to perform a single query for search bar fetching. Ideally,
+    the fetch should return all beginning-of-word matches FIRST, then start looking for 
+    general match cases.
+
+    Current solution does just that - but requires two separate queries. Find solution
+    with only one query later.
+  */
+
+  // Query 1: Find beginning-of-word matches
+  const data = await Drops.find({
+    $nor: exclude,
+    $and: [ 
+      { name: {"$regex": "^" + escapeRegex(query), "$options": "i"} },
+    ]
+  })
+  .limit(limit);
+
+
+  // Query 2: Find general matches
+  const newExl = [];
+  
+  for (let k = 0; k < data.length; k++) {
+    newExl[k] = { name: data[k].name }
+  }
+
+  let data2 = null;
+
+  if (data.length < limit) {
+    data2 = await Drops.find({
+      $nor: [...exclude, ...newExl],
+      $and: [ 
+        { name: {"$regex": escapeRegex(query), "$options": "i"} },
+      ],
+    })
+    .limit(limit - data.length);
+  } else {
+    data2 = [];
+  }
+
+  // simulated delay
+  // await new Promise(r => setTimeout(r, 6000));
+
+  return toSimpleArray([...data, ...data2]);
+}
+
+const fetchSearchResults = async (options={}) => {
+  "use server";
+
+  
+}
 
 const SearchPage = function({ 
 
@@ -39,7 +117,7 @@ const SearchPage = function({
 
           <Content span="max" className="sticky top-0 px-3 py-4 bg-primary shadow-[0_10px_30px_#0c0c0c]"> 
             <Content span="max" className="flex gap-2">
-              <SearchBarModern/>
+              <SearchBarModern fetchResults={searchBarFetch}/>
             </Content>
 
             <Content className="mt-1">
@@ -47,22 +125,8 @@ const SearchPage = function({
             </Content>
           </Content>
 
-          <Content span="max" className="px-6 pt-4 pb-4">
-            <SearchResults/>
-            {/* <Content className="sticky flex justify-end bottom-4">
-              <StatelessLink 
-              href="/data-entry"
-              rightIcon="/icons/plus_icon.svg"
-              className={{ 
-                self: "mb-3 text-xl font-bold p-2 px-4 bg-teal-800 hover:bg-teal-900",
-                inner: { self: "mr-1" },
-                rightIcon: {
-                  self: "w-7 h-7"
-                }
-              }}>
-                Create New Entry
-              </StatelessLink>
-            </Content> */}
+          <Content span="max" className="px-4 pt-4 pb-4">
+            <SearchResults fetchSearchResults={fetchSearchResults}/>
           </Content>
           
         </Content>
