@@ -89,7 +89,60 @@ const searchBarFetch = async (options={}) => {
 const fetchSearchResults = async (options={}) => {
   "use server";
 
-  
+  const {
+    query,
+    category,
+    type,
+    page
+  } = options;
+
+  try {
+
+    const clause = {
+      $and: [
+        { name: { $regex: escapeRegex(query), $options: 'i' } },
+      ]
+    }
+
+    if (type !== 'all' && type !== null) {
+      clause.$and.push({
+        'raven.category': { $regex: "^" + escapeRegex(type), $options: 'i' }
+      });
+    }
+
+    const models = [];
+    let results = [];
+
+    switch (category) {
+      case 'all':
+        models[0] = DropSources;
+        models[1] = Drops;
+        break;
+
+      case 'drops':
+        models[0] = Drops;
+        break;
+
+      case 'dropSources':
+        models[0] = DropSources;
+        break;
+    }
+
+    for (let i = 0; i < models.length; i++) {
+      const model = models[i];
+      const res = await model.find(clause).limit(40/models.length);
+      results = [...results, ...res];
+    }
+
+    results = toSimpleArray(results);
+
+    console.log('results: ', results.map(v => ({name: v.name, type: v.raven.category})));
+
+    return toSimpleArray(results);
+
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const SearchPage = function({ 

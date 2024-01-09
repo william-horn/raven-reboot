@@ -15,19 +15,23 @@ const SearchPage__SearchResults = function({
   fetchSearchResults
 }) {  
   // const searchInput = useStateStore(state => state.searchInput);
-  const params = useSearchParams();
+  const searchParams = useSearchParams();
 
   const [lastSearchInput, setLastSearchInput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const pageNumber = params.get('page');
-  const searchInput = params.get('q');
+  const pageNumber = searchParams.get('page');
+  const searchCategory = searchParams.get('category');
+  const searchType = searchParams.get('type');
+  const searchInput = searchParams.get('q');
 
   useEffect(() => {
     if (isLoading) {
       fetchSearchResults({
         query: searchInput,
-        
+        category: searchCategory,
+        type: searchType,
+        page: pageNumber,
       })
       .then(results => {
 

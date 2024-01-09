@@ -335,6 +335,7 @@ export const useCurrentContext = (props={}) => {
       return state.__groupSelected
         || state.__locallySelected
         || state.__dropdownSelected
+        || state.__dropdownItemSelected
         || false;
     },
 

@@ -13,40 +13,75 @@ import { useStateStore } from "@/hooks/useStateStore";
 const SearchPage__SearchNavBar = function({
 
 }) {
-  const setSearchCategory = useStateStore(state => state.setSearchCategory);
-  const setSearchType = useStateStore(state => state.setSearchType);
-
-  const searchCategory = useStateStore(state => state.searchCategory);
-  const searchType = useStateStore(state => state.searchType);
-
-  const params = useSearchParams();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const path = usePathname();
 
-  // useEffect(() => {
-  //   if (params.get('category') === searchCategory) return;
+  const searchCategory = searchParams.get('category') || 'all';
+  const searchType = searchParams.get('type') || 'all';
 
-  //   const newParams = new URLSearchParams(params.toString());
-  //   newParams.set('category', searchCategory);
+  const searchTypeText = searchType.substring(0, 1).toUpperCase() + searchType.substring(1);
 
-  //   router.replace(`${path}?${newParams.toString()}`);
-  //   // console.log(path, newParams.toString());
-  // }, [searchCategory]);
+  console.log('state: ', searchCategory, searchType);
 
-  useEffect(() => {
-    const newParams = new URLSearchParams(params.toString());
-    newParams.set('category', searchCategory);
-    newParams.set('type', searchType);
+  const updateCategory = (inputData) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('category', inputData.value);
+    newParams.set('type', 'all');
 
     router.replace(`${path}?${newParams.toString()}`);
-  }, [searchCategory, searchType]);
-
-  const onSearchCategoryChanged = (data) => {
-    setSearchCategory(data.value);
   }
 
-  const onSearchTypeChanged = (data) => {
-    setSearchType(data.value);
+  const updateType = (inputData) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('type', inputData.value);
+
+    router.replace(`${path}?${newParams.toString()}`);
+  }
+
+  const renderButton = ({id, value, text}) => {
+    return (
+      <StatelessButton 
+      id={id} value={value} text={text} key={id}
+      className={{ self: "bg-transparent hover:bg-transparent hover:underline" }}>
+        {text}
+      </StatelessButton>
+    );
+  }
+
+  const SearchTypeDropdown = ({
+    options=[],
+    onUpdate,
+    defaultData={}
+  }) => {
+  
+    return (
+      <DropdownSelection
+      defaultData={defaultData}
+      className={{
+        self: "min-w-[7rem]",
+        dropButton: {
+          // self: "bg-orange-600 hover:bg-orange-700 font-bold",
+          self: "font-bold",
+          __dropdownSelected: {
+            // self: "bg-orange-600 hover:bg-orange-700"
+          }
+        },
+        innerList: {
+          self: "overflow-y-auto"
+        },
+        outerList: {
+          self: "px-0 max-h-[200px]",
+        },
+        menuItems: {
+          self: "rounded-none",
+        }
+      }}
+      onClick={onUpdate}
+      >
+        {options.map(v => renderButton(v))}
+      </DropdownSelection>
+    );
   }
 
   const renderSearchTypeDropdown = () => {
@@ -54,7 +89,7 @@ const SearchPage__SearchNavBar = function({
       case 'drops':
         return (
           <SearchTypeDropdown
-          defaultData={{ id: searchType, value: searchType, text: searchType }}
+          defaultData={{ id: searchType, value: searchType, text: searchTypeText }}
           options={[
             { id: 'all', value: 'all', text: 'All' },
             { id: 'robes', value: 'robes', text: 'Robes' },
@@ -65,25 +100,25 @@ const SearchPage__SearchNavBar = function({
             { id: 'decks', value: 'decks', text: 'Decks' },
             { id: 'rings', value: 'rings', text: 'Rings' },
           ]}
-          onUpdate={onSearchTypeChanged}
+          onUpdate={updateType}
           />
         );
 
       case 'dropSources':
         return (
           <SearchTypeDropdown
-          defaultData={{ id: searchCategory, value: searchCategory, text: searchCategory }}
+          defaultData={{ id: searchType, value: searchType, text: searchTypeText }}
           options={[
             { id: 'all', value: 'all', text: 'All' },
-            { id: 'creatures', value: 'creatures', text: 'Creatures' },
-            { id: 'packs', value: 'packs', text: 'Packs' },
-            { id: 'chests', value: 'chests', text: 'Chests' },
+            { id: 'creature', value: 'creature', text: 'Creature' },
+            { id: 'pack', value: 'pack', text: 'Pack' },
+            { id: 'chest', value: 'chest', text: 'Chest' },
           ]}
-          onUpdate={onSearchTypeChanged}
+          onUpdate={updateType}
           />
         );
 
-      default:
+      case 'all':
         return <></>
     }
   }
@@ -107,14 +142,14 @@ const SearchPage__SearchNavBar = function({
               }
             }
           }}
-          onClick={onSearchCategoryChanged}
-          defaultSelect={["all"]}
+          onClick={updateCategory}
+          defaultSelect={[searchCategory]}
           selectionLimit={1}
           unselectionLimit={1}
           unselectLastChoice>
             <StatelessButton id="all" value="all" className={{ self: "px-2" }}>All</StatelessButton>
             <StatelessButton id="dropSources" value="dropSources">Drop Sources</StatelessButton>
-            <StatelessButton id="items" value="drops">Drops</StatelessButton>
+            <StatelessButton id="drops" value="drops">Drops</StatelessButton>
           </ButtonGroup>
         </Content>
 
@@ -163,51 +198,6 @@ const SearchPage__SearchNavBar = function({
       </Content>
 
     </Content>
-  );
-}
-
-const SearchTypeDropdown = function({
-  options=[],
-  onUpdate,
-  defaultData={}
-}) {
-
-  const renderButton = ({id, value, text}) => {
-    return (
-      <StatelessButton 
-      id={id} value={value} text={text} key={id}
-      className={{ self: "bg-transparent hover:bg-transparent hover:underline" }}>
-        {text}
-      </StatelessButton>
-    );
-  }
-
-  return (
-    <DropdownSelection
-    defaultData={defaultData}
-    className={{
-      self: "min-w-[7rem]",
-      dropButton: {
-        // self: "bg-orange-600 hover:bg-orange-700 font-bold",
-        self: "font-bold",
-        __dropdownSelected: {
-          // self: "bg-orange-600 hover:bg-orange-700"
-        }
-      },
-      innerList: {
-        self: "overflow-y-auto"
-      },
-      outerList: {
-        self: "px-0 max-h-[200px]",
-      },
-      menuItems: {
-        self: "rounded-none",
-      }
-    }}
-    onClick={onUpdate}
-    >
-      {options.map(v => renderButton(v))}
-    </DropdownSelection>
   );
 }
 

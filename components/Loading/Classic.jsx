@@ -11,7 +11,7 @@ const Loading = function({
   let className = {
     self: "flex items-center gap-1 my-2",
     loadingIcon: {
-      self: "animate-spin w-4 h-4 min-w-fit min-h-fit"
+      self: "animate-spin w-4 h-4 min-w-fit min-h-fit z-[-1]",
     }
   }
 

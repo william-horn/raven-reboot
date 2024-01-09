@@ -6,13 +6,13 @@ export const useStateStore = create((set) => ({
   // setSearchInput: (searchInput) => {
   //   set({searchInput});
   // }
-  searchCategory: 'all',
-  searchType: 'all',
+  // searchCategory: null,
+  // searchType: null,
 
-  setSearchCategory: (category) => {
-    set({ searchCategory: category });
-  },
-  setSearchType: (type) => {
-    set({ searchType: type });
-  }
+  // setSearchCategory: (category) => {
+  //   set({ searchCategory: category });
+  // },
+  // setSearchType: (type) => {
+  //   set({ searchType: type });
+  // }
 }));

@@ -33,34 +33,6 @@ export async function getAll() {
   }
 }
 
-export async function searchBarFetch(options={}) {
-  // "use server";
-  await connectMongoDB(options.db_env);
-
-  let {
-    exclude,
-    limit,
-    query
-  } = options;
-
-  if (exclude.length === 0) {
-    exclude = [{ name: '' }];
-  } else {
-    exclude = exclude.map(v => ({ name: v }));
-  }
-
-  const data = await DropSources.find({
-    $nor: exclude,
-    $and: [ { name: {"$regex": escapeRegex(query), "$options": "i"}} ]
-  })
-  .limit(limit);
-
-  // simulated delay
-  // await new Promise(r => setTimeout(r, 6000));
-
-  return toSimpleArray(data);
-}
-
 export async function ping(options={}) {
     // "use server";
   try {
